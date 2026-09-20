@@ -50,7 +50,7 @@ export const MoveItemModal: React.FC<MoveItemModalProps> = ({
           <div className="flex items-center gap-2">
             <MoveRight className="w-4 h-4 text-amber-600" />
             <h3 className="text-sm font-bold text-slate-900">
-              Reposition {item.type} on Wall 1
+              Reposition {item.type}
             </h3>
           </div>
           <button

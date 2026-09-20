@@ -83,15 +83,9 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
             CM
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-lg font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-                CabinetMap
-                <span className="text-[11px] font-semibold uppercase tracking-wider bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full border border-amber-300">
-                  Wall 1 Digital Twin
-                </span>
-              </h1>
-            </div>
-            <p className="text-xs text-slate-500">HR &amp; Administrative Archive System • 6 Full-Height Cabinets</p>
+            <h1 className="text-lg font-bold tracking-tight text-slate-900">
+              CabinetMap
+            </h1>
           </div>
         </div>
 
@@ -142,7 +136,7 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
               ) : (
                 <div className="divide-y divide-slate-100">
                   <div className="px-3.5 py-2 bg-slate-50 text-[11px] font-semibold uppercase text-slate-500 flex items-center justify-between border-b border-slate-200">
-                    <span>Matches in Wall 1 ({results.length})</span>
+                    <span>Search Matches ({results.length})</span>
                     <span className="flex items-center gap-1 text-amber-700 font-normal">
                       <Sparkles className="w-3.5 h-3.5" />
                       Click to auto-open cabinet doors

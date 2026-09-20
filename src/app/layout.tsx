@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CabinetMap - Wall 1 Digital Twin",
+  title: "CabinetMap - Archive System",
   description: "Office Physical Storage Digital Twin & Archive Record Management System",
 };
 

@@ -53,7 +53,6 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           </div>
           <div>
             <h3 className="text-sm font-bold text-slate-800 tracking-wide">{cabinet.name}</h3>
-            <p className="text-[10px] text-slate-500 truncate max-w-[180px]">{cabinet.description}</p>
           </div>
         </div>
 
