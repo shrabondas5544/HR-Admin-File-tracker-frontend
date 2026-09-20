@@ -426,12 +426,13 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             </div>
           )}
 
-          {/* Employee Personal File Checklist Button */}
+
+          {/* Employee Personal File Checklist Button - Files only */}
           {isFile && (
             <div className="bg-amber-50/70 p-4 rounded-xl border border-amber-200 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-bold shrink-0 shadow-2xs">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 shadow-2xs">
                     <ClipboardList className="w-4 h-4" />
                   </div>
                   <div>
@@ -460,18 +461,18 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                     {checklist.filter((i) => i.status === "NONE").length} Unchecked
                   </span>
                 </div>
-
                 <button
                   type="button"
                   onClick={() => setIsChecklistModalOpen(true)}
-                  className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                  className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <ClipboardList className="w-3.5 h-3.5" />
-                  <span>View / Edit Checklist (Pop-up)</span>
+                  <span>View / Edit Checklist</span>
                 </button>
               </div>
             </div>
           )}
+
 
           {/* Digital Twin Snapshot / Multi-Page Scan Section */}
           <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
