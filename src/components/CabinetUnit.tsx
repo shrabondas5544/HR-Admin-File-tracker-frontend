@@ -56,29 +56,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           </div>
         </div>
 
-        {/* Global Door Controls for this Cabinet */}
-        <div className="flex items-center gap-1.5">
-          <button
-            onClick={onToggleUpper}
-            className={`px-2 py-1 rounded text-[10px] font-bold font-mono tracking-wider border transition-all cursor-pointer ${
-              isUpperOpen
-                ? "bg-amber-100 text-amber-900 border-amber-300"
-                : "bg-white text-slate-600 border-slate-300 hover:bg-slate-50"
-            }`}
-          >
-            UPPER {isUpperOpen ? "OPEN" : "CLOSED"}
-          </button>
-          <button
-            onClick={onToggleLower}
-            className={`px-2 py-1 rounded text-[10px] font-bold font-mono tracking-wider border transition-all cursor-pointer ${
-              isLowerOpen
-                ? "bg-amber-100 text-amber-900 border-amber-300"
-                : "bg-white text-slate-600 border-slate-300 hover:bg-slate-50"
-            }`}
-          >
-            LOWER {isLowerOpen ? "OPEN" : "CLOSED"}
-          </button>
-        </div>
+
       </div>
 
       {/* UPPER SECTION */}
