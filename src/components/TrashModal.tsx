@@ -257,9 +257,6 @@ export const TrashModal: React.FC<TrashModalProps> = ({
                       <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 shrink-0">
                         {item.code}
                       </span>
-                      <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
-                        {item.type}
-                      </span>
                     </div>
 
                     <div className="flex items-center gap-3 mt-1 text-xs text-slate-500">
@@ -280,15 +277,15 @@ export const TrashModal: React.FC<TrashModalProps> = ({
                   <button
                     onClick={() => handleRestore(item)}
                     disabled={actionLoading}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-lg border border-emerald-200 transition-colors cursor-pointer"
+                    className="flex items-center justify-center p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg border border-emerald-200 transition-colors cursor-pointer"
+                    title="Restore Item"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
-                    Restore
                   </button>
                   <button
                     onClick={() => handlePermanentDelete(item)}
                     disabled={actionLoading}
-                    className="flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-red-50 text-red-600 text-xs font-semibold rounded-lg border border-slate-200 hover:border-red-200 transition-colors cursor-pointer"
+                    className="flex items-center justify-center p-2 bg-white hover:bg-red-50 text-red-600 rounded-lg border border-slate-200 hover:border-red-200 transition-colors cursor-pointer"
                     title="Delete Permanently"
                   >
                     <Trash2 className="w-3.5 h-3.5" />

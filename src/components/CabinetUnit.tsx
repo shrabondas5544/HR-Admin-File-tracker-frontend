@@ -104,7 +104,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
 
         {/* Upper Double Doors Overlay */}
         <div
-          className={`absolute inset-0 pointer-events-none z-30 flex transition-opacity duration-300 ${
+          className={`absolute inset-0 z-30 flex transition-opacity duration-300 ${
             isUpperOpen ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto cursor-pointer"
           }`}
           onClick={onToggleUpper}
@@ -134,11 +134,10 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           </div>
         </div>
 
-
       </div>
 
       {/* LOWER SECTION */}
-      <div className="relative bg-white perspective-1000 min-h-[384px] flex flex-col justify-between">
+      <div className="relative bg-white perspective-1000 min-h-[260px] flex flex-col justify-between">
         <div className="w-full h-full flex flex-col justify-between shelf-interior-texture py-1">
           {lowerShelves.map((shelf) => (
             <ShelfRow
@@ -159,7 +158,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
 
         {/* Lower Double Doors Overlay */}
         <div
-          className={`absolute inset-0 pointer-events-none z-30 flex transition-opacity duration-300 ${
+          className={`absolute inset-0 z-30 flex transition-opacity duration-300 ${
             isLowerOpen ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto cursor-pointer"
           }`}
           onClick={onToggleLower}
@@ -173,7 +172,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
             <div className="self-end mr-1 my-auto flex items-center">
               <div className="w-3.5 h-16 metal-handle rounded-sm shadow-md" />
             </div>
-            <div className="text-[9px] text-slate-500 font-mono">Shelves L1 - L3</div>
+            <div className="text-[9px] text-slate-500 font-mono">Shelves L1 - L2</div>
           </div>
 
           <div
@@ -188,7 +187,6 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
             <div className="text-[9px] text-slate-500 font-mono text-right">Click to Open</div>
           </div>
         </div>
-
 
       </div>
 
