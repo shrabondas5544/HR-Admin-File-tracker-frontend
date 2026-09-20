@@ -3,7 +3,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import { TrashItem } from "@/lib/types";
 import { fetchTrash, restoreTrashItem, permanentlyDeleteTrashItem, emptyTrash } from "@/lib/api";
-import { Trash2, RotateCcw, X, AlertOctagon, Clock, MapPin, FileText, Box, Folder as FolderIcon, Loader2, Filter, ChevronDown } from "lucide-react";
+import {
+  Trash2,
+  RotateCcw,
+  X,
+  AlertOctagon,
+  Clock,
+  MapPin,
+  FileText,
+  Box,
+  Folder as FolderIcon,
+  Loader2,
+  Filter,
+  ChevronDown
+} from "lucide-react";
 
 interface TrashModalProps {
   isOpen: boolean;
