@@ -53,7 +53,6 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           </div>
           <div>
             <h3 className="text-sm font-bold text-slate-800 tracking-wide">{cabinet.name}</h3>
-            <p className="text-[10px] text-slate-500 truncate max-w-[180px]">{cabinet.description}</p>
           </div>
         </div>
 
@@ -102,7 +101,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           ))}
         </div>
 
-        {/* Upper Double Doors Overlay */}
+        {/* Upper Double Doors Overlay - Click anywhere on door to open */}
         <div
           className={`absolute inset-0 z-30 flex transition-opacity duration-300 ${
             isUpperOpen ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto cursor-pointer"
@@ -133,7 +132,6 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
             <div className="text-[9px] text-slate-500 font-mono text-right">Click to Open</div>
           </div>
         </div>
-
       </div>
 
       {/* LOWER SECTION */}
@@ -156,7 +154,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           ))}
         </div>
 
-        {/* Lower Double Doors Overlay */}
+        {/* Lower Double Doors Overlay - Click anywhere on door to open */}
         <div
           className={`absolute inset-0 z-30 flex transition-opacity duration-300 ${
             isLowerOpen ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto cursor-pointer"
@@ -187,7 +185,6 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
             <div className="text-[9px] text-slate-500 font-mono text-right">Click to Open</div>
           </div>
         </div>
-
       </div>
 
       <div className="w-full h-4 bg-gradient-to-r from-slate-300 via-slate-400 to-slate-300 border-t border-slate-400" />
