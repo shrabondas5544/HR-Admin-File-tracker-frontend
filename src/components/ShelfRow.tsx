@@ -17,6 +17,7 @@ interface ShelfRowProps {
   onDropOnShelf: (e: React.DragEvent, shelfId: number, targetIndex?: number) => void;
   onDropInsideMagazine: (e: React.DragEvent, magazineId: number) => void;
   onReorderShelf?: (shelfId: number, items: Array<{ type: "Magazine" | "Folder" | "File"; id: number; orderIndex: number }>) => void;
+  onToggleSection?: () => void;
 }
 
 type ShelfItem =
@@ -34,7 +35,8 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
   onDeleteItem,
   onDropOnShelf,
   onDropInsideMagazine,
-  onReorderShelf
+  onReorderShelf,
+  onToggleSection
 }) => {
   const [isDragOverShelf, setIsDragOverShelf] = useState(false);
   const [dragOverSlot, setDragOverSlot] = useState<number | null>(null);
@@ -197,24 +199,30 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
           : "bg-transparent"
       }`}
     >
-      {/* Physical Shelf Label Badge */}
-      <div className="absolute top-1 left-2.5 z-10 flex items-center gap-1.5">
-        <span
-          className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold tracking-widest uppercase shadow-xs border ${
+      {/* Physical Shelf Label Badge - Click to Close Cabinet Section */}
+      <div className="absolute top-1 left-2.5 z-30 flex items-center gap-1.5">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onToggleSection) onToggleSection();
+          }}
+          title={onToggleSection ? "Click to Close Cabinet Doors" : undefined}
+          className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-widest uppercase shadow-xs border transition-all cursor-pointer hover:scale-105 active:scale-95 ${
             isDragOverShelf
               ? "bg-amber-500 text-white border-amber-600 ring-2 ring-amber-400"
               : isShelfHighlighted
               ? "bg-amber-400 text-slate-950 border-amber-500 ring-2 ring-amber-400"
-              : "bg-white/90 text-slate-700 border-slate-300"
+              : "bg-white/95 text-slate-700 border-slate-300 hover:bg-amber-50 hover:text-amber-900 hover:border-amber-300"
           }`}
         >
           Shelf {shelf.shelfCode} {isDragOverShelf && "• Drag & Arrange"}
-        </span>
+        </button>
       </div>
       <div className="relative w-full h-3.5 bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400 border-t border-slate-300 shadow-xs" />
 
       {/* Upright Interleaved Items Container Track */}
-      <div className="flex items-end overflow-x-auto pb-1.5 pt-6 z-20 no-scrollbar">
+      <div className="flex items-end overflow-x-auto pb-1.5 pt-6 pl-22 z-20 no-scrollbar">
         {allItems.length === 0 ? (
           <div className="w-full text-center text-[11px] text-slate-400 font-mono tracking-wide py-6 select-none italic">
             — Empty Shelf Track (Drag & Drop Items Here) —

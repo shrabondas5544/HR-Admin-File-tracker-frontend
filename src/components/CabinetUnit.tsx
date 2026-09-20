@@ -97,6 +97,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
               onDropOnShelf={onDropOnShelf}
               onDropInsideMagazine={onDropInsideMagazine}
               onReorderShelf={onReorderShelf}
+              onToggleSection={onToggleUpper}
             />
           ))}
         </div>
@@ -109,27 +110,19 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           onClick={onToggleUpper}
         >
           <div
-            className={`w-1/2 h-full cabinet-door-texture border-r border-slate-400 flex flex-col justify-between p-3 origin-left transition-transform duration-700 ease-in-out transform-style-3d ${
+            className={`w-1/2 h-full cabinet-door-texture border-r border-slate-400 flex items-center justify-end pr-2 origin-left transition-transform duration-700 ease-in-out transform-style-3d ${
               isUpperOpen ? "-rotate-y-90 scale-x-0" : "rotate-y-0 scale-x-100"
             }`}
           >
-            <div className="text-[10px] font-mono text-slate-600 font-bold uppercase tracking-wider">UPPER LEFT</div>
-            <div className="self-end mr-1 my-auto flex items-center">
-              <div className="w-3.5 h-20 metal-handle rounded-sm shadow-md" />
-            </div>
-            <div className="text-[9px] text-slate-500 font-mono">Shelves U1 - U4</div>
+            <div className="w-3.5 h-20 metal-handle rounded-sm shadow-md" />
           </div>
 
           <div
-            className={`w-1/2 h-full cabinet-door-texture border-l border-white/60 flex flex-col justify-between p-3 origin-right transition-transform duration-700 ease-in-out transform-style-3d ${
+            className={`w-1/2 h-full cabinet-door-texture border-l border-white/60 flex items-center justify-start pl-2 origin-right transition-transform duration-700 ease-in-out transform-style-3d ${
               isUpperOpen ? "rotate-y-90 scale-x-0" : "rotate-y-0 scale-x-100"
             }`}
           >
-            <div className="text-[10px] font-mono text-slate-600 font-bold uppercase tracking-wider text-right">UPPER RIGHT</div>
-            <div className="self-start ml-1 my-auto flex items-center">
-              <div className="w-3.5 h-20 metal-handle rounded-sm shadow-md" />
-            </div>
-            <div className="text-[9px] text-slate-500 font-mono text-right">Click to Open</div>
+            <div className="w-3.5 h-20 metal-handle rounded-sm shadow-md" />
           </div>
         </div>
       </div>
@@ -150,6 +143,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
               onDropOnShelf={onDropOnShelf}
               onDropInsideMagazine={onDropInsideMagazine}
               onReorderShelf={onReorderShelf}
+              onToggleSection={onToggleLower}
             />
           ))}
         </div>
@@ -162,27 +156,19 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           onClick={onToggleLower}
         >
           <div
-            className={`w-1/2 h-full cabinet-door-texture border-r border-slate-400 flex flex-col justify-between p-3 origin-left transition-transform duration-700 ease-in-out transform-style-3d ${
+            className={`w-1/2 h-full cabinet-door-texture border-r border-slate-400 flex items-center justify-end pr-2 origin-left transition-transform duration-700 ease-in-out transform-style-3d ${
               isLowerOpen ? "-rotate-y-90 scale-x-0" : "rotate-y-0 scale-x-100"
             }`}
           >
-            <div className="text-[10px] font-mono text-slate-600 font-bold uppercase tracking-wider">LOWER LEFT</div>
-            <div className="self-end mr-1 my-auto flex items-center">
-              <div className="w-3.5 h-16 metal-handle rounded-sm shadow-md" />
-            </div>
-            <div className="text-[9px] text-slate-500 font-mono">Shelves L1 - L2</div>
+            <div className="w-3.5 h-16 metal-handle rounded-sm shadow-md" />
           </div>
 
           <div
-            className={`w-1/2 h-full cabinet-door-texture border-l border-white/60 flex flex-col justify-between p-3 origin-right transition-transform duration-700 ease-in-out transform-style-3d ${
+            className={`w-1/2 h-full cabinet-door-texture border-l border-white/60 flex items-center justify-start pl-2 origin-right transition-transform duration-700 ease-in-out transform-style-3d ${
               isLowerOpen ? "rotate-y-90 scale-x-0" : "rotate-y-0 scale-x-100"
             }`}
           >
-            <div className="text-[10px] font-mono text-slate-600 font-bold uppercase tracking-wider text-right">LOWER RIGHT</div>
-            <div className="self-start ml-1 my-auto flex items-center">
-              <div className="w-3.5 h-16 metal-handle rounded-sm shadow-md" />
-            </div>
-            <div className="text-[9px] text-slate-500 font-mono text-right">Click to Open</div>
+            <div className="w-3.5 h-16 metal-handle rounded-sm shadow-md" />
           </div>
         </div>
       </div>
