@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import { FlatShelf, DocumentType, Magazine, ChecklistItem, DEFAULT_FILE_CHECKLIST } from "@/lib/types";
 import { FileChecklistTable } from "./FileChecklistTable";
+import { FileChecklistModal } from "./FileChecklistModal";
 import { createFile, createMagazine, createFolder, createDocumentType, uploadAttachment } from "@/lib/api";
-import { X, FileText, Box, FolderPlus, Settings2, Paperclip, CheckCircle } from "lucide-react";
+import { X, FileText, Box, FolderPlus, Settings2, Paperclip, CheckCircle, ClipboardList } from "lucide-react";
 
 interface SidebarDrawerProps {
   isOpen: boolean;
@@ -43,7 +44,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
   const [designation, setDesignation] = useState("");
   const [department, setDepartment] = useState("");
   const [checklist, setChecklist] = useState<ChecklistItem[]>(() => JSON.parse(JSON.stringify(DEFAULT_FILE_CHECKLIST)));
-  const [isChecklistExpanded, setIsChecklistExpanded] = useState(true);
+  const [isChecklistModalOpen, setIsChecklistModalOpen] = useState(false);
 
   // Magazine Form State
   const [magName, setMagName] = useState("");
@@ -435,31 +436,46 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                 </div>
               </div>
 
-              {/* Employee Personal File Checklist / Index */}
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              {/* Employee Personal File Checklist Button */}
+              <div className="bg-amber-50/70 p-4 rounded-xl border border-amber-200 space-y-3">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 block">
-                      Employee Personal File Checklist / Index
-                    </span>
-                    <p className="text-[11px] text-slate-500">
-                      19 Standard Documents (Transcom Electronics Limited).
-                    </p>
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-bold shrink-0 shadow-2xs">
+                      <ClipboardList className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold uppercase tracking-wider text-amber-950">
+                        Personal File Checklist
+                      </div>
+                      <div className="text-[11px] text-amber-800">
+                        Transcom Electronics Limited (19 Documents)
+                      </div>
+                    </div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsChecklistExpanded((prev) => !prev)}
-                    className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 transition-colors cursor-pointer"
-                  >
-                    {isChecklistExpanded ? "Hide Checklist" : `View Checklist (${checklist.filter((i) => i.status === "YES").length} Yes)`}
-                  </button>
+                  <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-white text-amber-900 border border-amber-300 font-bold shadow-2xs">
+                    Official Index
+                  </span>
                 </div>
 
-                {isChecklistExpanded && (
-                  <div className="mt-2 max-h-96 overflow-y-auto border border-slate-200 rounded-xl">
-                    <FileChecklistTable checklist={checklist} onChange={setChecklist} />
+                <div className="flex items-center justify-between pt-1 border-t border-amber-200/60">
+                  <div className="flex items-center gap-1.5 font-mono text-[11px]">
+                    <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold">
+                      ✓ {checklist.filter((i) => i.status === "YES").length} Yes
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-red-100 text-red-800 border border-red-300 font-bold">
+                      ✗ {checklist.filter((i) => i.status === "NO").length} No
+                    </span>
                   </div>
-                )}
+
+                  <button
+                    type="button"
+                    onClick={() => setIsChecklistModalOpen(true)}
+                    className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <ClipboardList className="w-3.5 h-3.5" />
+                    <span>Open Checklist Form</span>
+                  </button>
+                </div>
               </div>
 
               {/* Physical Destination */}
@@ -810,6 +826,17 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
           )}
         </div>
       </div>
+
+      {/* Pop-up Modal for Employee Personal File Checklist */}
+      <FileChecklistModal
+        isOpen={isChecklistModalOpen}
+        onClose={() => setIsChecklistModalOpen(false)}
+        checklist={checklist}
+        onChange={setChecklist}
+        employeeName={empName}
+        fileCode={fileType === "TEL" ? empNo : staffId}
+        documentTypeName={fileType}
+      />
     </div>
   );
 };

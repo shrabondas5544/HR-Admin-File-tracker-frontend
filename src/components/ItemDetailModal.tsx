@@ -17,10 +17,12 @@ import {
   FileText,
   CheckCircle2,
   CheckSquare,
+  ClipboardList,
   Image as ImageIcon
 } from "lucide-react";
 import { getFileUrl, uploadAttachment } from "@/lib/api";
 import { FileChecklistTable } from "./FileChecklistTable";
+import { FileChecklistModal } from "./FileChecklistModal";
 
 interface ItemDetailModalProps {
   item: { type: "File" | "Folder"; data: RecordFile | Folder } | null;
@@ -74,6 +76,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
   const [checklist, setChecklist] = useState<ChecklistItem[]>(() =>
     parseChecklist(fileData?.metadataJson)
   );
+  const [isChecklistModalOpen, setIsChecklistModalOpen] = useState(false);
 
   useEffect(() => {
     if (!item) return;
@@ -423,39 +426,50 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             </div>
           )}
 
-          {/* Employee Personal File Checklist (Files only) */}
+          {/* Employee Personal File Checklist Button */}
           {isFile && (
-            <div className="space-y-3">
+            <div className="bg-amber-50/70 p-4 rounded-xl border border-amber-200 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
-                  <CheckSquare className="w-4 h-4 text-amber-600" />
-                  Official Employee Personal File Checklist
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-bold shrink-0 shadow-2xs">
+                    <ClipboardList className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-amber-950">
+                      Personal File Checklist
+                    </div>
+                    <div className="text-[11px] text-amber-800">
+                      Transcom Electronics Limited (19 Documents Index)
+                    </div>
+                  </div>
+                </div>
+                <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-white text-amber-900 border border-amber-300 font-bold shadow-2xs">
+                  Official Form
                 </span>
-                {!isEditing ? (
-                  <button
-                    type="button"
-                    onClick={() => setIsEditing(true)}
-                    className="text-xs text-amber-800 hover:text-amber-950 bg-amber-50 hover:bg-amber-100 font-semibold px-2.5 py-1 rounded-md border border-amber-200 flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
-                  >
-                    <Edit3 className="w-3.5 h-3.5" />
-                    Edit Checklist
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleSave}
-                    className="text-xs text-emerald-800 hover:text-emerald-950 bg-emerald-50 hover:bg-emerald-100 font-semibold px-2.5 py-1 rounded-md border border-emerald-300 flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
-                  >
-                    <Save className="w-3.5 h-3.5" />
-                    Save Checklist Changes
-                  </button>
-                )}
               </div>
-              <FileChecklistTable
-                checklist={checklist}
-                onChange={setChecklist}
-                isReadOnly={!isEditing}
-              />
+
+              <div className="flex items-center justify-between pt-1 border-t border-amber-200/60">
+                <div className="flex items-center gap-1.5 font-mono text-[11px]">
+                  <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold">
+                    ✓ {checklist.filter((i) => i.status === "YES").length} Yes
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-red-100 text-red-800 border border-red-300 font-bold">
+                    ✗ {checklist.filter((i) => i.status === "NO").length} No
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-white text-slate-600 border border-slate-300">
+                    {checklist.filter((i) => i.status === "NONE").length} Unchecked
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsChecklistModalOpen(true)}
+                  className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <ClipboardList className="w-3.5 h-3.5" />
+                  <span>View / Edit Checklist (Pop-up)</span>
+                </button>
+              </div>
             </div>
           )}
 
@@ -679,6 +693,32 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Pop-up Modal for Employee Personal File Checklist */}
+      <FileChecklistModal
+        isOpen={isChecklistModalOpen}
+        onClose={() => setIsChecklistModalOpen(false)}
+        checklist={checklist}
+        onChange={setChecklist}
+        onSaveAndClose={async (updated) => {
+          setChecklist(updated);
+          if (onSaveFile && fileData) {
+            await onSaveFile({
+              ...fileData,
+              title,
+              code,
+              metadataJson: JSON.stringify({ ...metaFields, checklist: updated }),
+              attachmentsJson: JSON.stringify(attachments),
+              attachmentUrl: attachments[0]?.url || "",
+              attachmentName: attachments[0]?.name || ""
+            });
+          }
+        }}
+        isReadOnly={false}
+        employeeName={metaFields.employeeName || title}
+        fileCode={code}
+        documentTypeName={fileData?.documentType?.name}
+      />
     </div>
   );
 };
