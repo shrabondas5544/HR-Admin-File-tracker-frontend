@@ -321,11 +321,19 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-slate-600 block mb-1">Employee No. / ID</label>
+                      <label className="text-xs text-slate-600 block mb-1">
+                        {metaFields.staffId !== undefined ? "Staff ID" : "Employee No. / ID"}
+                      </label>
                       <input
                         type="text"
-                        value={metaFields.employeeNo || ""}
-                        onChange={(e) => setMetaFields({ ...metaFields, employeeNo: e.target.value })}
+                        value={metaFields.staffId !== undefined ? metaFields.staffId : (metaFields.employeeNo || "")}
+                        onChange={(e) => {
+                          if (metaFields.staffId !== undefined) {
+                            setMetaFields({ ...metaFields, staffId: e.target.value });
+                          } else {
+                            setMetaFields({ ...metaFields, employeeNo: e.target.value });
+                          }
+                        }}
                         className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900"
                       />
                     </div>
@@ -357,9 +365,11 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                       </div>
                     </div>
                     <div className="bg-white p-3 rounded-lg border border-slate-200 shadow-2xs">
-                      <div className="text-[11px] text-slate-500 uppercase font-bold">Employee No. / Reference</div>
+                      <div className="text-[11px] text-slate-500 uppercase font-bold">
+                        {metaFields.staffId ? "Staff ID" : "Employee No. / Reference"}
+                      </div>
                       <div className="text-sm font-mono text-amber-800 font-bold mt-0.5">
-                        {metaFields.employeeNo || metaFields.category || "—"}
+                        {metaFields.staffId || metaFields.employeeNo || metaFields.category || "—"}
                       </div>
                     </div>
                     <div className="bg-white p-3 rounded-lg border border-slate-200 shadow-2xs">

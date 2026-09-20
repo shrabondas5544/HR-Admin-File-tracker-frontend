@@ -28,8 +28,6 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
 
   // File Form State
   const [fileType, setFileType] = useState<"TEL" | "BLL" | "Custom">("TEL");
-  const [fileCode, setFileCode] = useState("");
-  const [fileTitle, setFileTitle] = useState("");
   const [fileDestination, setFileDestination] = useState<"magazine" | "shelf">("shelf");
   const [fileShelfId, setFileShelfId] = useState<number>(shelves[0]?.id || 1);
   const [fileMagazineId, setFileMagazineId] = useState<number>(magazines[0]?.id || 1);
@@ -40,9 +38,9 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
   // TEL & BLL Fields
   const [empName, setEmpName] = useState("");
   const [empNo, setEmpNo] = useState("");
+  const [staffId, setStaffId] = useState("");
   const [designation, setDesignation] = useState("");
   const [department, setDepartment] = useState("");
-  const [location, setLocation] = useState("");
 
   // Magazine Form State
   const [magName, setMagName] = useState("");
@@ -102,32 +100,42 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
     try {
       const docTypeObj = documentTypes.find((d) => d.name === fileType) || documentTypes[0];
 
+      let finalCode = "";
+      let finalTitle = "";
       let metaObj: Record<string, string> = {};
+
       if (fileType === "TEL") {
+        finalCode = empNo.trim() || `TEL-${Date.now().toString().slice(-6)}`;
+        finalTitle = `${empName.trim()} (${empNo.trim() || "TEL"})`;
         metaObj = {
-          employeeName: empName,
-          employeeNo: empNo,
-          designation,
-          department
+          employeeName: empName.trim(),
+          employeeNo: empNo.trim(),
+          designation: designation.trim(),
+          department: department.trim()
         };
       } else if (fileType === "BLL") {
+        finalCode = staffId.trim() || `BLL-${Date.now().toString().slice(-6)}`;
+        finalTitle = `${empName.trim()} (${staffId.trim() || "BLL"})`;
         metaObj = {
-          employeeName: empName,
-          designation,
-          department,
-          location
+          employeeName: empName.trim(),
+          staffId: staffId.trim(),
+          designation: designation.trim(),
+          department: department.trim()
         };
       } else {
+        finalCode = empNo.trim() || `FILE-${Date.now().toString().slice(-6)}`;
+        finalTitle = `${empName.trim()} (${empNo.trim() || "Custom"})`;
         metaObj = {
-          title: fileTitle,
-          employeeName: empName,
-          department
+          employeeName: empName.trim(),
+          employeeNo: empNo.trim(),
+          designation: designation.trim(),
+          department: department.trim()
         };
       }
 
       await createFile({
-        code: fileCode.trim(),
-        title: fileTitle.trim() || `${empName} - ${fileType} Dossier`,
+        code: finalCode,
+        title: finalTitle,
         documentTypeId: docTypeObj?.id,
         metadataJson: JSON.stringify(metaObj),
         magazineId: fileDestination === "magazine" ? fileMagazineId : undefined,
@@ -138,10 +146,9 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
       });
 
       setSuccessMsg("File registered successfully!");
-      setFileCode("");
-      setFileTitle("");
       setEmpName("");
       setEmpNo("");
+      setStaffId("");
       setDesignation("");
       setDepartment("");
       setFileAttachmentUrl("");
@@ -338,30 +345,6 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-slate-700 font-bold block mb-1">Unique File Code *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. TEL-EMP-2099"
-                    value={fileCode}
-                    onChange={(e) => setFileCode(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  />
-                </div>
-                <div>
-                  <label className="text-slate-700 font-bold block mb-1">File Title (Optional)</label>
-                  <input
-                    type="text"
-                    placeholder="Auto-generated if blank"
-                    value={fileTitle}
-                    onChange={(e) => setFileTitle(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  />
-                </div>
-              </div>
-
               {/* Template Fields */}
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
                 <div className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
@@ -393,6 +376,33 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                   </div>
                 )}
 
+                {fileType === "BLL" && (
+                  <div>
+                    <label className="text-slate-600 block mb-1">Staff ID *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. BLL-ST-5091"
+                      value={staffId}
+                      onChange={(e) => setStaffId(e.target.value)}
+                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-mono"
+                    />
+                  </div>
+                )}
+
+                {fileType === "Custom" && (
+                  <div>
+                    <label className="text-slate-600 block mb-1">Reference / ID No. (Optional)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. ADM-9001"
+                      value={empNo}
+                      onChange={(e) => setEmpNo(e.target.value)}
+                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-mono"
+                    />
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="text-slate-600 block mb-1">Designation</label>
@@ -415,19 +425,6 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                     />
                   </div>
                 </div>
-
-                {fileType === "BLL" && (
-                  <div>
-                    <label className="text-slate-600 block mb-1">Factory / Office Location</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Mohakhali Plant"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900"
-                    />
-                  </div>
-                )}
               </div>
 
               {/* Physical Destination */}

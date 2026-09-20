@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TrashItem } from "@/lib/types";
 import { fetchTrash, restoreTrashItem, permanentlyDeleteTrashItem, emptyTrash } from "@/lib/api";
-import { Trash2, RotateCcw, X, AlertOctagon, Clock, MapPin, FileText, Box, Folder as FolderIcon, Loader2 } from "lucide-react";
+import { Trash2, RotateCcw, X, AlertOctagon, Clock, MapPin, FileText, Box, Folder as FolderIcon, Loader2, Filter, ChevronDown } from "lucide-react";
 
 interface TrashModalProps {
   isOpen: boolean;
@@ -19,6 +19,9 @@ export const TrashModal: React.FC<TrashModalProps> = ({
   const [trashItems, setTrashItems] = useState<TrashItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [filterType, setFilterType] = useState<"All" | "File" | "Magazine" | "Folder">("All");
+  const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
 
   const loadTrash = async () => {
     setLoading(true);
@@ -35,8 +38,20 @@ export const TrashModal: React.FC<TrashModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       loadTrash();
+      setFilterType("All");
+      setIsFilterDropdownOpen(false);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+        setIsFilterDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleRestore = async (item: TrashItem) => {
     setActionLoading(true);
@@ -77,6 +92,11 @@ export const TrashModal: React.FC<TrashModalProps> = ({
     }
   };
 
+  const filteredItems = trashItems.filter((item) => {
+    if (filterType === "All") return true;
+    return item.type.toLowerCase() === filterType.toLowerCase();
+  });
+
   if (!isOpen) return null;
 
   return (
@@ -92,7 +112,9 @@ export const TrashModal: React.FC<TrashModalProps> = ({
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-bold text-slate-900 tracking-wide">Recycle Bin / Trash</h2>
                 <span className="font-mono text-xs px-2 py-0.5 rounded bg-slate-200 text-slate-700">
-                  {trashItems.length} {trashItems.length === 1 ? "Item" : "Items"}
+                  {filterType === "All"
+                    ? `${trashItems.length} ${trashItems.length === 1 ? "Item" : "Items"}`
+                    : `${filteredItems.length} of ${trashItems.length} (${filterType}s)`}
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -102,6 +124,58 @@ export const TrashModal: React.FC<TrashModalProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Filter Dropdown */}
+            <div className="relative" ref={filterRef}>
+              <button
+                type="button"
+                onClick={() => setIsFilterDropdownOpen((prev) => !prev)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
+                  filterType !== "All"
+                    ? "bg-amber-100 text-amber-900 border-amber-300 shadow-2xs"
+                    : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300"
+                }`}
+                title="Filter trash items by type"
+              >
+                <Filter className="w-3.5 h-3.5 text-amber-600" />
+                <span>{filterType === "All" ? "Filter" : filterType}</span>
+                <ChevronDown className="w-3 h-3 opacity-60" />
+              </button>
+
+              {isFilterDropdownOpen && (
+                <div className="absolute right-0 mt-1.5 w-40 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-1 text-xs animate-in fade-in zoom-in-95 duration-150">
+                  {(["All", "File", "Magazine", "Folder"] as const).map((typeOption) => {
+                    const count =
+                      typeOption === "All"
+                        ? trashItems.length
+                        : trashItems.filter((i) => i.type.toLowerCase() === typeOption.toLowerCase()).length;
+                    return (
+                      <button
+                        key={typeOption}
+                        type="button"
+                        onClick={() => {
+                          setFilterType(typeOption);
+                          setIsFilterDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-amber-50/70 transition-colors cursor-pointer ${
+                          filterType === typeOption ? "font-bold text-amber-800 bg-amber-50" : "text-slate-700"
+                        }`}
+                      >
+                        <div className="flex items-center gap-1.5">
+                          {typeOption === "File" && <FileText className="w-3.5 h-3.5 text-blue-500" />}
+                          {typeOption === "Magazine" && <Box className="w-3.5 h-3.5 text-purple-500" />}
+                          {typeOption === "Folder" && <FolderIcon className="w-3.5 h-3.5 text-emerald-500" />}
+                          <span>{typeOption === "All" ? "All Types" : typeOption}</span>
+                        </div>
+                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-100 text-slate-600">
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             {trashItems.length > 0 && (
               <button
                 onClick={handleEmptyTrash}
@@ -134,8 +208,20 @@ export const TrashModal: React.FC<TrashModalProps> = ({
               <p className="font-medium text-slate-600">Trash is currently empty</p>
               <p className="text-slate-400 mt-1">Deleted files, folders, and magazines will appear here for 30 days</p>
             </div>
+          ) : filteredItems.length === 0 ? (
+            <div className="py-16 text-center text-slate-400 text-xs">
+              <Filter className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+              <p className="font-medium text-slate-600">No trashed {filterType.toLowerCase()}s found</p>
+              <button
+                type="button"
+                onClick={() => setFilterType("All")}
+                className="mt-2 text-amber-700 hover:underline font-semibold cursor-pointer"
+              >
+                Reset filter to Show All
+              </button>
+            </div>
           ) : (
-            trashItems.map((item) => (
+            filteredItems.map((item) => (
               <div
                 key={`trash-${item.type}-${item.id}`}
                 className="pt-3 pb-3 flex items-center justify-between hover:bg-slate-50 p-2.5 rounded-xl transition-colors"
@@ -216,4 +302,3 @@ export const TrashModal: React.FC<TrashModalProps> = ({
     </div>
   );
 };
-
