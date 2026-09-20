@@ -271,6 +271,7 @@ export default function Home() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-100 text-slate-900">
         <Loader2 className="w-10 h-10 animate-spin text-amber-600 mb-4" />
+        <p className="text-slate-600 text-sm font-mono">Loading CabinetMap Wall 1 Digital Twin...</p>
         <p className="text-slate-600 text-sm font-mono">Loading CabinetMap...</p>
       </div>
     );

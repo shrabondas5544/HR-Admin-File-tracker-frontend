@@ -591,6 +591,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                 disabled={loading}
                 className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow-lg transition-all cursor-pointer"
               >
+                {loading ? "Registering File..." : "Register File on Wall 1"}
                 {loading ? "Registering File..." : "Register File Record"}
               </button>
             </form>
@@ -643,6 +644,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               </div>
 
               <div>
+                <label className="text-slate-700 font-bold block mb-1">Shelf Location (Wall 1)</label>
                 <label className="text-slate-700 font-bold block mb-1">Shelf Location</label>
                 <select
                   value={magShelfId}
@@ -714,6 +716,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               </div>
 
               <div>
+                <label className="text-slate-700 font-bold block mb-1">Shelf Location (Wall 1)</label>
                 <label className="text-slate-700 font-bold block mb-1">Shelf Location</label>
                 <select
                   value={fldShelfId}

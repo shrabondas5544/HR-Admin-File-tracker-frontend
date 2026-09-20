@@ -53,6 +53,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           </div>
           <div>
             <h3 className="text-sm font-bold text-slate-800 tracking-wide">{cabinet.name}</h3>
+            <p className="text-[10px] text-slate-500 truncate max-w-[180px]">{cabinet.description}</p>
           </div>
         </div>
 
@@ -133,16 +134,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           </div>
         </div>
 
-        {!isUpperOpen && (
-          <div
-            onClick={onToggleUpper}
-            className="absolute inset-0 z-35 flex flex-col items-center justify-center bg-slate-900/10 hover:bg-slate-900/25 transition-colors cursor-pointer group"
-          >
-            <span className="px-3 py-1.5 rounded-full bg-white text-amber-900 text-xs font-bold tracking-wide border border-amber-400 shadow-xl group-hover:scale-105 transition-transform flex items-center gap-1.5">
-              Open Upper Doors (U1-U4)
-            </span>
-          </div>
-        )}
+
       </div>
 
       {/* LOWER SECTION */}
@@ -197,16 +189,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           </div>
         </div>
 
-        {!isLowerOpen && (
-          <div
-            onClick={onToggleLower}
-            className="absolute inset-0 z-35 flex flex-col items-center justify-center bg-slate-900/10 hover:bg-slate-900/25 transition-colors cursor-pointer group"
-          >
-            <span className="px-3 py-1.5 rounded-full bg-white text-amber-900 text-xs font-bold tracking-wide border border-amber-400 shadow-xl group-hover:scale-105 transition-transform flex items-center gap-1.5">
-              Open Lower Doors (L1-L3)
-            </span>
-          </div>
-        )}
+
       </div>
 
       <div className="w-full h-4 bg-gradient-to-r from-slate-300 via-slate-400 to-slate-300 border-t border-slate-400" />
