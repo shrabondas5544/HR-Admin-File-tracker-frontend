@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { FlatShelf, DocumentType, Magazine } from "@/lib/types";
+import { FlatShelf, DocumentType, Magazine, ChecklistItem, DEFAULT_FILE_CHECKLIST } from "@/lib/types";
+import { FileChecklistTable } from "./FileChecklistTable";
 import { createFile, createMagazine, createFolder, createDocumentType, uploadAttachment } from "@/lib/api";
 import { X, FileText, Box, FolderPlus, Settings2, Paperclip, CheckCircle } from "lucide-react";
 
@@ -41,6 +42,8 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
   const [staffId, setStaffId] = useState("");
   const [designation, setDesignation] = useState("");
   const [department, setDepartment] = useState("");
+  const [checklist, setChecklist] = useState<ChecklistItem[]>(() => JSON.parse(JSON.stringify(DEFAULT_FILE_CHECKLIST)));
+  const [isChecklistExpanded, setIsChecklistExpanded] = useState(true);
 
   // Magazine Form State
   const [magName, setMagName] = useState("");
@@ -102,7 +105,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
 
       let finalCode = "";
       let finalTitle = "";
-      let metaObj: Record<string, string> = {};
+      let metaObj: Record<string, any> = {};
 
       if (fileType === "TEL") {
         finalCode = empNo.trim() || `TEL-${Date.now().toString().slice(-6)}`;
@@ -133,6 +136,8 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
         };
       }
 
+      metaObj.checklist = checklist;
+
       await createFile({
         code: finalCode,
         title: finalTitle,
@@ -154,6 +159,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
       setFileAttachmentUrl("");
       setFileAttachmentName("");
       setFileAttachments([]);
+      setChecklist(JSON.parse(JSON.stringify(DEFAULT_FILE_CHECKLIST)));
       await onRefreshData();
     } catch (err: any) {
       alert("Error: " + err.message);
@@ -427,8 +433,33 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                     />
                   </div>
                 </div>
+              </div>
 
+              {/* Employee Personal File Checklist / Index */}
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 block">
+                      Employee Personal File Checklist / Index
+                    </span>
+                    <p className="text-[11px] text-slate-500">
+                      19 Standard Documents (Transcom Electronics Limited).
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsChecklistExpanded((prev) => !prev)}
+                    className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 transition-colors cursor-pointer"
+                  >
+                    {isChecklistExpanded ? "Hide Checklist" : `View Checklist (${checklist.filter((i) => i.status === "YES").length} Yes)`}
+                  </button>
+                </div>
 
+                {isChecklistExpanded && (
+                  <div className="mt-2 max-h-96 overflow-y-auto border border-slate-200 rounded-xl">
+                    <FileChecklistTable checklist={checklist} onChange={setChecklist} />
+                  </div>
+                )}
               </div>
 
               {/* Physical Destination */}

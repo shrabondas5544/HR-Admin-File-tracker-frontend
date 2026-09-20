@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { RecordFile, Folder, FileAttachment, parseAttachments } from "@/lib/types";
+import React, { useState, useEffect } from "react";
+import { RecordFile, Folder, FileAttachment, parseAttachments, ChecklistItem, parseChecklist } from "@/lib/types";
 import {
   X,
   Paperclip,
@@ -16,9 +16,11 @@ import {
   Plus,
   FileText,
   CheckCircle2,
+  CheckSquare,
   Image as ImageIcon
 } from "lucide-react";
 import { getFileUrl, uploadAttachment } from "@/lib/api";
+import { FileChecklistTable } from "./FileChecklistTable";
 
 interface ItemDetailModalProps {
   item: { type: "File" | "Folder"; data: RecordFile | Folder } | null;
@@ -44,9 +46,9 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
   const folderData = !isFile ? (item.data as Folder) : null;
 
   const [isEditing, setIsEditing] = useState(false);
-  const [title, setTitle] = useState(isFile ? fileData!.title : folderData!.name);
-  const [code, setCode] = useState(isFile ? fileData!.code : folderData!.code);
-  const [colorHex, setColorHex] = useState(!isFile ? folderData!.colorHex : "#3b82f6");
+  const [title, setTitle] = useState(isFile ? fileData?.title || "" : folderData?.name || "");
+  const [code, setCode] = useState(isFile ? fileData?.code || "" : folderData?.code || "");
+  const [colorHex, setColorHex] = useState(!isFile ? folderData?.colorHex || "#3b82f6" : "#3b82f6");
 
   // Multi-page attachments state
   const [attachments, setAttachments] = useState<FileAttachment[]>(() =>
@@ -58,7 +60,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
   const [attachmentName, setAttachmentName] = useState(item.data.attachmentName || "");
   const [saveStatus, setSaveStatus] = useState<string>("");
 
-  const [metaFields, setMetaFields] = useState<Record<string, string>>(() => {
+  const [metaFields, setMetaFields] = useState<Record<string, any>>(() => {
     if (isFile && fileData?.metadataJson) {
       try {
         return JSON.parse(fileData.metadataJson);
@@ -68,6 +70,37 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
     }
     return {};
   });
+
+  const [checklist, setChecklist] = useState<ChecklistItem[]>(() =>
+    parseChecklist(fileData?.metadataJson)
+  );
+
+  useEffect(() => {
+    if (!item) return;
+    const isF = item.type === "File";
+    const fData = isF ? (item.data as RecordFile) : null;
+    const fldData = !isF ? (item.data as Folder) : null;
+    setTitle(isF ? fData?.title || "" : fldData?.name || "");
+    setCode(isF ? fData?.code || "" : fldData?.code || "");
+    setColorHex(!isF ? fldData?.colorHex || "#3b82f6" : "#3b82f6");
+    const parsedAtts = parseAttachments(item.data.attachmentsJson, item.data.attachmentUrl, item.data.attachmentName);
+    setAttachments(parsedAtts);
+    setActivePageIndex(0);
+    setAttachmentUrl(item.data.attachmentUrl || "");
+    setAttachmentName(item.data.attachmentName || "");
+    if (isF && fData?.metadataJson) {
+      try {
+        setMetaFields(JSON.parse(fData.metadataJson));
+      } catch {
+        setMetaFields({});
+      }
+      setChecklist(parseChecklist(fData.metadataJson));
+    } else {
+      setMetaFields({});
+      setChecklist(isF ? parseChecklist(undefined) : []);
+    }
+    setIsEditing(false);
+  }, [item]);
 
   const currentPage = attachments[Math.min(activePageIndex, Math.max(0, attachments.length - 1))];
 
@@ -80,7 +113,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           ...fileData,
           title,
           code,
-          metadataJson: JSON.stringify(metaFields),
+          metadataJson: JSON.stringify({ ...metaFields, checklist }),
           attachmentsJson: JSON.stringify(newAttachments),
           attachmentUrl: newAttachments[0]?.url || "",
           attachmentName: newAttachments[0]?.name || ""
@@ -120,9 +153,9 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
       const uploadPromises = Array.from(files).map((f) => uploadAttachment(f));
       const results = await Promise.all(uploadPromises);
 
-      const newPages: FileAttachment[] = results.map((res, i) => ({
-        url: res.url,
-        name: res.fileName || `Page ${attachments.length + i + 1}`
+      const newPages: FileAttachment[] = results.map((r, i) => ({
+        url: r.url,
+        name: r.fileName || `Page ${attachments.length + i + 1}`
       }));
 
       const updated = [...attachments, ...newPages];
@@ -156,7 +189,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
         ...fileData,
         title,
         code,
-        metadataJson: JSON.stringify(metaFields),
+        metadataJson: JSON.stringify({ ...metaFields, checklist }),
         attachmentsJson: JSON.stringify(attachments),
         attachmentUrl: attachments[0]?.url || "",
         attachmentName: attachments[0]?.name || ""
@@ -390,7 +423,42 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             </div>
           )}
 
-          {/* Digital Twin Snapshot / Attachment Card */}
+          {/* Employee Personal File Checklist (Files only) */}
+          {isFile && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+                  <CheckSquare className="w-4 h-4 text-amber-600" />
+                  Official Employee Personal File Checklist
+                </span>
+                {!isEditing ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(true)}
+                    className="text-xs text-amber-800 hover:text-amber-950 bg-amber-50 hover:bg-amber-100 font-semibold px-2.5 py-1 rounded-md border border-amber-200 flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    Edit Checklist
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleSave}
+                    className="text-xs text-emerald-800 hover:text-emerald-950 bg-emerald-50 hover:bg-emerald-100 font-semibold px-2.5 py-1 rounded-md border border-emerald-300 flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    Save Checklist Changes
+                  </button>
+                )}
+              </div>
+              <FileChecklistTable
+                checklist={checklist}
+                onChange={setChecklist}
+                isReadOnly={!isEditing}
+              />
+            </div>
+          )}
+
           {/* Digital Twin Snapshot / Multi-Page Scan Section */}
           <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
@@ -432,6 +500,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
               <div className="space-y-3">
                 {/* Active Page Navigation Bar */}
                 <div className="flex flex-wrap items-center justify-between bg-white p-3 rounded-lg border border-slate-200 shadow-2xs gap-2">
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => setActivePageIndex((prev) => Math.max(0, prev - 1))}
                       disabled={activePageIndex <= 0}
@@ -458,15 +527,6 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                       {currentPage?.name || `Page ${activePageIndex + 1}`}
                     </span>
                   </div>
-                  <a
-                    href={getFileUrl(attachmentUrl)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-1 text-xs text-amber-700 hover:underline font-semibold"
-                  >
-                    <span>View Full Scan</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
 
                   <div className="flex items-center gap-2">
                     {currentPage && (
@@ -490,6 +550,8 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                       <span>Delete Page</span>
                     </button>
                   </div>
+                </div>
+
                 {/* Main Preview for Active Page */}
                 {currentPage && (
                   <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-100 flex flex-col items-center justify-center p-3 min-h-[220px] max-h-[360px]">
@@ -575,7 +637,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           </div>
         </div>
 
-        {/* Footer (Single Delete Button + Extract + Close) */}
+        {/* Footer (Extract + Delete Button + Close) */}
         <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
             {isFile && fileData?.magazineId && onExtractFile && (
@@ -605,19 +667,6 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 Delete {item.type}
-              </button>
-            )}
-
-            {isFile && fileData?.magazineId && onExtractFile && (
-              <button
-                onClick={() => {
-                  onExtractFile(fileData.id);
-                  onClose();
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-amber-800 hover:text-amber-950 bg-amber-100 hover:bg-amber-200 text-xs font-semibold rounded-xl border border-amber-300 transition-colors cursor-pointer"
-              >
-                <FolderOutput className="w-3.5 h-3.5" />
-                Extract to Shelf Track
               </button>
             )}
           </div>

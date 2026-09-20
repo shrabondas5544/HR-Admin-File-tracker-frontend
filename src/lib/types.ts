@@ -130,3 +130,61 @@ export interface TrashItem {
   daysRemaining: number;
   originalLocation: string;
 }
+
+export interface ChecklistSubItem {
+  name: string;
+  checked: boolean;
+}
+
+export interface ChecklistItem {
+  sn: number;
+  name: string;
+  status: "YES" | "NO" | "NONE";
+  remarks: string;
+  subItems?: ChecklistSubItem[];
+}
+
+export const DEFAULT_FILE_CHECKLIST: ChecklistItem[] = [
+  { sn: 1, name: "Manpower Requisition (Approved Copy)", status: "NONE", remarks: "" },
+  { sn: 2, name: "Interview Evaluation (Approved Copy)", status: "NONE", remarks: "" },
+  { sn: 3, name: "Joining Letter", status: "NONE", remarks: "" },
+  { sn: 4, name: "Appointment / Offer Letter (Photocopy)", status: "NONE", remarks: "" },
+  { sn: 5, name: "Resume / CV with Photo (Update)", status: "NONE", remarks: "" },
+  { sn: 6, name: "Education Certificate (Photocopy)", status: "NONE", remarks: "" },
+  { sn: 7, name: "NID / Birth Certificate / Passport / DL", status: "NONE", remarks: "" },
+  { sn: 8, name: "Nominee Form (with Photo & NID)", status: "NONE", remarks: "" },
+  { sn: 9, name: "Employee Information Form (Bn & En)", status: "NONE", remarks: "" },
+  { sn: 10, name: "Guarantor Declaration Form (with Photo & NID)", status: "NONE", remarks: "If any / applicable" },
+  { sn: 11, name: "Conflict of Interest (COI)", status: "NONE", remarks: "" },
+  { sn: 12, name: "Training Certificates", status: "NONE", remarks: "If any / applicable" },
+  { sn: 13, name: "Experience Certificate", status: "NONE", remarks: "" },
+  { sn: 14, name: "Clearance / Release / Resignation Letter", status: "NONE", remarks: "If applicable" },
+  { sn: 15, name: "E-TIN & TAX return copy", status: "NONE", remarks: "If applicable" },
+  { sn: 16, name: "Bank Account Information (DBBL/Dhaka Bank/SCB/City Bank)", status: "NONE", remarks: "" },
+  { sn: 17, name: "Provident Fund Membership Form", status: "NONE", remarks: "Permanent Employees" },
+  { sn: 18, name: "Job Description", status: "NONE", remarks: "" },
+  {
+    sn: 19,
+    name: "Personal Requisition Form",
+    status: "NONE",
+    remarks: "If applicable",
+    subItems: [
+      { name: "IT Products", checked: false },
+      { name: "Email Account", checked: false },
+      { name: "Official Business Card", checked: false },
+      { name: "Corporate SIM", checked: false },
+      { name: "Official ID Card", checked: false }
+    ]
+  }
+];
+
+export function parseChecklist(metadataJson?: string): ChecklistItem[] {
+  if (!metadataJson) return JSON.parse(JSON.stringify(DEFAULT_FILE_CHECKLIST));
+  try {
+    const parsed = JSON.parse(metadataJson);
+    if (parsed.checklist && Array.isArray(parsed.checklist) && parsed.checklist.length > 0) {
+      return parsed.checklist;
+    }
+  } catch {}
+  return JSON.parse(JSON.stringify(DEFAULT_FILE_CHECKLIST));
+}
