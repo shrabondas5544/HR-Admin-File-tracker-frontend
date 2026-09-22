@@ -188,3 +188,18 @@ export function parseChecklist(metadataJson?: string): ChecklistItem[] {
   } catch {}
   return JSON.parse(JSON.stringify(DEFAULT_FILE_CHECKLIST));
 }
+
+export type WallId = "W1" | "W2" | "W3R" | "W3L";
+
+export interface WallOption {
+  id: WallId;
+  label: string;
+  fullName: string;
+}
+
+export const WALL_OPTIONS: WallOption[] = [
+  { id: "W1", label: "W1", fullName: "Wall 1" },
+  { id: "W2", label: "W2", fullName: "Wall 2" },
+  { id: "W3R", label: "W3R", fullName: "Wall 3 Right" },
+  { id: "W3L", label: "W3L", fullName: "Wall 3 Left" },
+];

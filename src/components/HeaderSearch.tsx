@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Search, MapPin, FileText, Folder as FolderIcon, Box, X, Loader2, Sparkles, Trash2, DoorClosed, DoorOpen } from "lucide-react";
 import { searchArchive, fetchTrash } from "@/lib/api";
-import { SearchResult } from "@/lib/types";
+import { SearchResult, WallId, WALL_OPTIONS } from "@/lib/types";
 
 interface HeaderSearchProps {
   onSelectResult: (result: SearchResult) => void;
@@ -13,6 +13,8 @@ interface HeaderSearchProps {
   refreshTrigger?: number;
   allDoorsOpen?: boolean;
   onToggleAllDoors?: () => void;
+  selectedWall?: WallId;
+  onSelectWall?: (wall: WallId) => void;
 }
 
 export const HeaderSearch: React.FC<HeaderSearchProps> = ({
@@ -22,7 +24,9 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
   onDropTrash,
   refreshTrigger,
   allDoorsOpen = true,
-  onToggleAllDoors
+  onToggleAllDoors,
+  selectedWall = "W1",
+  onSelectWall
 }) => {
   const [isDragOverTrash, setIsDragOverTrash] = useState(false);
   const [query, setQuery] = useState("");
@@ -271,6 +275,27 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
           >
             <span>+ Add Record</span>
           </button>
+
+          {/* Wall Navigation: 4 Boxes (W1, W2, W3R, W3L) in the Right Corner */}
+          <div className="flex items-center bg-stone-100 p-1 rounded-xl border border-stone-200 shadow-2xs gap-1 ml-1 shrink-0">
+            {WALL_OPTIONS.map((wall) => {
+              const isActive = selectedWall === wall.id;
+              return (
+                <button
+                  key={wall.id}
+                  onClick={() => onSelectWall?.(wall.id)}
+                  title={`Switch to ${wall.fullName} (${wall.label})`}
+                  className={`px-2.5 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-white text-stone-900 shadow-xs border border-stone-300 ring-1 ring-stone-400/20"
+                      : "text-stone-500 hover:text-stone-800 hover:bg-white/60"
+                  }`}
+                >
+                  {wall.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </header>

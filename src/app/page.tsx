@@ -9,7 +9,7 @@ import { ItemDetailModal } from "@/components/ItemDetailModal";
 import { MoveItemModal } from "@/components/MoveItemModal";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { TrashModal } from "@/components/TrashModal";
-import { Cabinet, FlatShelf, Magazine, Folder, RecordFile, DocumentType, SearchResult } from "@/lib/types";
+import { Cabinet, FlatShelf, Magazine, Folder, RecordFile, DocumentType, SearchResult, WallId } from "@/lib/types";
 import {
   fetchCabinets,
   fetchFlatShelves,
@@ -27,6 +27,7 @@ import {
 import { Loader2 } from "lucide-react";
 
 export default function Home() {
+  const [selectedWall, setSelectedWall] = useState<WallId>("W1");
   const [cabinets, setCabinets] = useState<Cabinet[]>([]);
   const [flatShelves, setFlatShelves] = useState<FlatShelf[]>([]);
   const [documentTypes, setDocumentTypes] = useState<DocumentType[]>([]);
@@ -114,6 +115,8 @@ export default function Home() {
   const allMagazines = cabinets.flatMap((c) => c.shelves || []).flatMap((s) => s.magazines || []);
 
   const handleSelectSearchResult = (result: SearchResult) => {
+    setSelectedWall("W1");
+
     setOpenDoorsState((prev) => ({
       ...prev,
       [result.cabinetNumber]: {
@@ -353,6 +356,8 @@ export default function Home() {
         refreshTrigger={refreshTrigger}
         allDoorsOpen={areAllDoorsOpen}
         onToggleAllDoors={handleToggleAllDoors}
+        selectedWall={selectedWall}
+        onSelectWall={setSelectedWall}
       />
 
       {/* Backend Disconnection Banner */}
@@ -373,6 +378,7 @@ export default function Home() {
 
       {/* Main Interactive Wall Elevation with Drag & Drop */}
       <WallElevation
+        selectedWall={selectedWall}
         cabinets={cabinets}
         openDoorsState={openDoorsState}
         setOpenDoorsState={setOpenDoorsState}
