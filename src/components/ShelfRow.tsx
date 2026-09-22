@@ -357,7 +357,7 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
       </div>
 
       {/* Heavy Metallic Shelf Plank */}
-      <div className="relative w-full h-3.5 bg-gradient-to-r from-[#c4b08c] via-[#d4c4a8] to-[#c4b08c] border-t border-[#b09a76]/30 shadow-xs flex items-center justify-between px-2">
+      <div className="relative w-full h-3.5 cabinet-header-texture border-t border-[#b09a76]/30 shadow-xs flex items-center justify-between px-2">
         <div className="w-2 h-1 bg-[#b09a76]/40 rounded-full" />
         <div className="flex-1 h-[1px] bg-[#e5ddd0]/60 mx-2" />
         <div className="w-2 h-1 bg-[#b09a76]/40 rounded-full" />

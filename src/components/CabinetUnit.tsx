@@ -46,7 +46,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
       className="flex-shrink-0 w-80 sm:w-84 md:w-96 flex flex-col bg-stone-100 border border-stone-300/80 rounded-lg overflow-hidden shadow-lg relative transition-all duration-300"
     >
       {/* Cabinet Header Plaque */}
-      <div className="bg-gradient-to-b from-[#d4c4a8] to-[#c4b08c] border-b border-[#b09a76]/40 px-4 py-2.5 flex items-center justify-center shadow-xs">
+      <div className="cabinet-header-texture border-b border-[#b09a76]/40 px-4 py-2.5 flex items-center justify-center shadow-xs">
         <h3 className="text-sm font-semibold text-stone-800 tracking-wide text-center drop-shadow-sm">{cabinet.name}</h3>
       </div>
 
