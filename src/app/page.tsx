@@ -269,7 +269,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 text-stone-900">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white text-stone-900">
         <Loader2 className="w-8 h-8 animate-spin text-amber-700 mb-3" />
         <p className="text-stone-500 text-sm font-medium tracking-wide">Loading CabinetMap...</p>
       </div>
@@ -288,7 +288,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-stone-50 text-stone-900">
+    <main className="min-h-screen flex flex-col bg-white text-stone-900">
       {/* Top Universal Search Bar */}
       <HeaderSearch
         onSelectResult={handleSelectSearchResult}
