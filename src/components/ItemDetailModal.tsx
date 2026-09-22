@@ -103,7 +103,14 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
       setChecklist(isF ? parseChecklist(undefined) : []);
     }
     setIsEditing(false);
-  }, [item]);
+  }, [
+    item?.type,
+    item?.data?.id,
+    isFile ? (item?.data as RecordFile)?.metadataJson : null,
+    isFile ? (item?.data as RecordFile)?.title : (item?.data as Folder)?.name,
+    item?.data?.code,
+    item?.data?.attachmentsJson
+  ]);
 
   const currentPage = attachments[Math.min(activePageIndex, Math.max(0, attachments.length - 1))];
 
@@ -188,11 +195,13 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
   const handleSave = async () => {
     if (isFile && onSaveFile && fileData) {
+      const updatedMeta = { ...metaFields, checklist };
+      setMetaFields(updatedMeta);
       await onSaveFile({
         ...fileData,
         title,
         code,
-        metadataJson: JSON.stringify({ ...metaFields, checklist }),
+        metadataJson: JSON.stringify(updatedMeta),
         attachmentsJson: JSON.stringify(attachments),
         attachmentUrl: attachments[0]?.url || "",
         attachmentName: attachments[0]?.name || ""
@@ -703,12 +712,14 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
         onChange={setChecklist}
         onSaveAndClose={async (updated) => {
           setChecklist(updated);
+          const updatedMeta = { ...metaFields, checklist: updated };
+          setMetaFields(updatedMeta);
           if (onSaveFile && fileData) {
             await onSaveFile({
               ...fileData,
               title,
               code,
-              metadataJson: JSON.stringify({ ...metaFields, checklist: updated }),
+              metadataJson: JSON.stringify(updatedMeta),
               attachmentsJson: JSON.stringify(attachments),
               attachmentUrl: attachments[0]?.url || "",
               attachmentName: attachments[0]?.name || ""

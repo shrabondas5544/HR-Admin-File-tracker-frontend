@@ -9,6 +9,7 @@ interface HeaderSearchProps {
   onSelectResult: (result: SearchResult) => void;
   onOpenSidebar: () => void;
   onOpenTrash: () => void;
+  onDropTrash?: (type: "Magazine" | "Folder" | "File", id: number) => void;
   refreshTrigger?: number;
   allDoorsOpen?: boolean;
   onToggleAllDoors?: () => void;
@@ -18,10 +19,12 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
   onSelectResult,
   onOpenSidebar,
   onOpenTrash,
+  onDropTrash,
   refreshTrigger,
   allDoorsOpen = true,
   onToggleAllDoors
 }) => {
+  const [isDragOverTrash, setIsDragOverTrash] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -194,20 +197,52 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
 
         {/* Action Buttons: Trash (Icon + Count only), Door Toggle Icon, & Add Record */}
         <div className="flex items-center gap-2.5 shrink-0">
-          {/* Trash Icon + Count only */}
+          {/* Trash Icon + Count (Drop Target for Deletion) */}
           <button
             onClick={onOpenTrash}
-            title={`Recycle Bin (${trashCount} trashed items)`}
-            className="flex items-center gap-1.5 px-2.5 py-2 bg-stone-50 hover:bg-stone-100 text-stone-700 font-semibold text-xs rounded-xl border border-stone-200 shadow-2xs transition-colors cursor-pointer"
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+              setIsDragOverTrash(true);
+            }}
+            onDragLeave={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                setIsDragOverTrash(false);
+              }
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragOverTrash(false);
+              const rawData = e.dataTransfer.getData("application/json");
+              if (!rawData) return;
+              try {
+                const parsed = JSON.parse(rawData);
+                if (parsed.type && parsed.id && onDropTrash) {
+                  onDropTrash(parsed.type, parsed.id);
+                }
+              } catch (err) {
+                console.error("Drop to trash failed:", err);
+              }
+            }}
+            title={isDragOverTrash ? "Drop here to Move to Trash" : `Recycle Bin (${trashCount} trashed items) • Drag items here to delete`}
+            className={`flex items-center gap-1.5 px-2.5 py-2 font-semibold text-xs rounded-xl border shadow-2xs transition-all cursor-pointer ${
+              isDragOverTrash
+                ? "bg-red-600 text-white border-red-700 ring-4 ring-red-300 scale-110 shadow-lg animate-pulse"
+                : "bg-stone-50 hover:bg-stone-100 text-stone-700 border-stone-200"
+            }`}
           >
-            <Trash2 className="w-4 h-4 text-stone-600" />
-            <span
-              className={`px-1.5 py-0.5 font-mono text-[10px] font-bold rounded-full ${
-                trashCount > 0 ? "bg-red-600 text-white" : "bg-stone-200 text-stone-600"
-              }`}
-            >
-              {trashCount}
-            </span>
+            <Trash2 className={`w-4 h-4 ${isDragOverTrash ? "text-white animate-bounce" : "text-stone-600"}`} />
+            {isDragOverTrash ? (
+              <span className="font-bold text-[10px] uppercase tracking-wider text-white">Drop to Delete</span>
+            ) : (
+              <span
+                className={`px-1.5 py-0.5 font-mono text-[10px] font-bold rounded-full ${
+                  trashCount > 0 ? "bg-red-600 text-white" : "bg-stone-200 text-stone-600"
+                }`}
+              >
+                {trashCount}
+              </span>
+            )}
           </button>
 
           {/* Toggle All Doors Icon Button (Beside Add Record) */}

@@ -60,8 +60,8 @@ export default function Home() {
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const loadData = async () => {
-    setLoading(true);
+  const loadData = async (isInitial = false) => {
+    if (isInitial) setLoading(true);
     setErrorMsg(null);
     try {
       const [cabs, shelves, docTypes] = await Promise.all([
@@ -78,16 +78,37 @@ export default function Home() {
         const found = cabs.flatMap((c) => c.shelves).flatMap((s) => s.magazines).find((m) => m.id === activeMagazine.id);
         if (found) setActiveMagazine(found);
       }
+
+      setDetailItem((prev) => {
+        if (!prev) return null;
+        if (prev.type === "File") {
+          const allFiles = cabs
+            .flatMap((c) => c.shelves || [])
+            .flatMap((s) => [
+              ...(s.standaloneFiles || []),
+              ...(s.magazines || []).flatMap((m) => m.files || [])
+            ]);
+          const found = allFiles.find((f) => f.id === prev.data.id);
+          return found ? { type: "File", data: found } : prev;
+        } else if (prev.type === "Folder") {
+          const allFolders = cabs
+            .flatMap((c) => c.shelves || [])
+            .flatMap((s) => s.folders || []);
+          const found = allFolders.find((f) => f.id === prev.data.id);
+          return found ? { type: "Folder", data: found } : prev;
+        }
+        return prev;
+      });
     } catch (err: unknown) {
-      console.error("Failed to load initial data:", err);
+      console.error("Failed to load data:", err);
       setErrorMsg("Unable to connect to the .NET backend API at http://localhost:5000. Please make sure the backend is running (run `dotnet run` inside the backend directory).");
     } finally {
-      setLoading(false);
+      if (isInitial) setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadData();
+    loadData(true);
   }, []);
 
   const allMagazines = cabinets.flatMap((c) => c.shelves || []).flatMap((s) => s.magazines || []);
@@ -122,6 +143,40 @@ export default function Home() {
     setTimeout(() => {
       setHighlightedItem(null);
     }, 8000);
+  };
+
+  // Drag to Trash Handler
+  const handleDropOnTrash = (type: "Magazine" | "Folder" | "File", id: number) => {
+    let name = `${type} #${id}`;
+    let fileCount: number | undefined = undefined;
+
+    if (type === "File") {
+      const file = cabinets
+        .flatMap((c) => c.shelves || [])
+        .flatMap((s) => [
+          ...(s.standaloneFiles || []),
+          ...(s.magazines || []).flatMap((m) => m.files || [])
+        ])
+        .find((f) => f.id === id);
+      if (file) name = file.title;
+    } else if (type === "Folder") {
+      const folder = cabinets
+        .flatMap((c) => c.shelves || [])
+        .flatMap((s) => s.folders || [])
+        .find((f) => f.id === id);
+      if (folder) name = folder.name;
+    } else if (type === "Magazine") {
+      const mag = cabinets
+        .flatMap((c) => c.shelves || [])
+        .flatMap((s) => s.magazines || [])
+        .find((m) => m.id === id);
+      if (mag) {
+        name = mag.name;
+        fileCount = mag.files?.length || 0;
+      }
+    }
+
+    handleDeletePrompt(type, id, name, fileCount);
   };
 
   // Drag & Drop Handlers
@@ -294,6 +349,7 @@ export default function Home() {
         onSelectResult={handleSelectSearchResult}
         onOpenSidebar={() => setIsSidebarOpen(true)}
         onOpenTrash={() => setIsTrashOpen(true)}
+        onDropTrash={handleDropOnTrash}
         refreshTrigger={refreshTrigger}
         allDoorsOpen={areAllDoorsOpen}
         onToggleAllDoors={handleToggleAllDoors}
@@ -307,7 +363,7 @@ export default function Home() {
             <span>{errorMsg}</span>
           </div>
           <button
-            onClick={loadData}
+            onClick={() => loadData(true)}
             className="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded font-medium text-xs shadow-xs transition-colors cursor-pointer"
           >
             Retry Connection
@@ -374,7 +430,7 @@ export default function Home() {
           handleDeletePrompt(type, id, name);
         }}
         onSaveFile={async (file) => {
-          await updateFile(file.id, {
+          const updated = await updateFile(file.id, {
             code: file.code,
             title: file.title,
             documentTypeId: file.documentTypeId,
@@ -385,10 +441,11 @@ export default function Home() {
             attachmentName: file.attachmentName,
             attachmentsJson: file.attachmentsJson
           });
+          setDetailItem({ type: "File", data: updated });
           await loadData();
         }}
         onSaveFolder={async (folder) => {
-          await updateFolder(folder.id, {
+          const updated = await updateFolder(folder.id, {
             name: folder.name,
             code: folder.code,
             colorHex: folder.colorHex,
@@ -397,6 +454,7 @@ export default function Home() {
             attachmentName: folder.attachmentName,
             attachmentsJson: folder.attachmentsJson
           });
+          setDetailItem({ type: "Folder", data: updated });
           await loadData();
         }}
       />

@@ -2,6 +2,9 @@
 
 @layer base {
   :root {
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --background: #f8f7f4;
     --background: #ffffff;
     --foreground: #1a1a1a;
     --oak-light: #d4c4a8;
@@ -12,33 +15,47 @@
     --handle-mid: #292524;
     --shelf-light: #f5f0e6;
     --shelf-warm: #ebe0cc;
+    --border-subtle: #e5e2db;
     --border-subtle: #e2e8f0;
     --accent-warm: #b45309;
   }
 }
 
 body {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  background-color: #f5f3ef;
   background-color: #ffffff;
   color: #1a1a1a;
   overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Custom Scrollbars for light theme */
 /* Corporate Scrollbars */
 ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
+  background: #e2e8f0;
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+  background: #c4b8a4;
   background: #cbd5e1;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+  background: #a89880;
   background: #94a3b8;
 }
 
@@ -51,15 +68,33 @@ body {
   transform-style: preserve-3d;
 }
 
+/* Metallic and Wood door textures for Light Theme */
 /* ─── Natural Light-Oak Cabinet Textures ─── */
 
+/* Outer cabinet frame — solid oak trim */
 /* Outer cabinet wall / background elevation canvas — pure crisp white wall */
 .cabinet-outer-texture {
+  background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 4px rgba(0, 0, 0, 0.15), 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(
+    160deg,
+    #ece4d4 0%,
+    #ddd2be 25%,
+    #d4c4a8 50%,
+    #c9b898 75%,
+    #bfad88 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.06),
+    0 4px 16px -4px rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
 }
 
 /* Door panels — realistic light oak wood grain with satin sheen */
 .cabinet-door-texture {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+  box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.9), inset -1px -1px 2px rgba(0, 0, 0, 0.2);
   background:
     repeating-linear-gradient(
       180deg,
@@ -98,6 +133,8 @@ body {
 
 /* Shelf interior — warm birch-oak veneer */
 .shelf-interior-texture {
+  background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.12);
   background: linear-gradient(
     180deg,
     #f0ebe0 0%,
@@ -109,6 +146,8 @@ body {
 
 /* Matte black vertical handles with chrome key cylinder detail */
 .metal-handle {
+  background: linear-gradient(90deg, #64748b, #cbd5e1, #475569);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.9);
   background: linear-gradient(
     90deg,
     #1c1917 0%,
@@ -123,14 +162,19 @@ body {
   border-radius: 2px;
 }
 
+/* Glowing Pulsing Animation for Search Highlight in Light Theme */
 /* ─── Search Highlight Animations ─── */
 
 @keyframes shelf-glow-pulse {
   0%, 100% {
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7), 0 0 15px rgba(217, 119, 6, 0.5);
+    border-color: #d97706;
     box-shadow: 0 0 0 0 rgba(180, 83, 9, 0.6), 0 0 12px rgba(180, 83, 9, 0.4);
     border-color: #b45309;
   }
   50% {
+    box-shadow: 0 0 0 8px rgba(217, 119, 6, 0), 0 0 25px rgba(217, 119, 6, 0.9);
+    border-color: #b45309;
     box-shadow: 0 0 0 6px rgba(180, 83, 9, 0), 0 0 20px rgba(180, 83, 9, 0.7);
     border-color: #92400e;
   }
@@ -144,6 +188,7 @@ body {
 
 @keyframes spine-bounce {
   0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
   50% { transform: translateY(-3px); }
 }
 
