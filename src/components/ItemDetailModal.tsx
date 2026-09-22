@@ -213,17 +213,17 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-3xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="w-full max-w-3xl bg-white border border-stone-200 rounded-xl shadow-xl overflow-hidden flex flex-col max-h-[92vh]">
         {/* Top Header */}
-        <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
+        <div className="px-6 py-4 bg-stone-50 border-b border-stone-200 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-3 h-8 rounded-full bg-amber-500" />
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base font-bold text-slate-900">
+                <h2 className="text-base font-bold text-stone-900">
                   {isFile ? "Record Dossier Digital Twin" : "Standalone Binder Specification"}
                 </h2>
-                <span className="font-mono text-xs px-2 py-0.5 rounded bg-slate-100 text-amber-800 border border-slate-300">
+                <span className="font-mono text-xs px-2 py-0.5 rounded bg-stone-100 text-amber-800 border border-stone-200">
                   {code}
                 </span>
                 {isFile && fileData?.magazineId && (
@@ -232,7 +232,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-500">Physical Archive Synchronization</p>
+              <p className="text-xs text-stone-500">Physical Archive Synchronization</p>
             </div>
           </div>
 
@@ -240,7 +240,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             {!isEditing ? (
               <button
                 onClick={() => setIsEditing(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-lg border border-slate-300 transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold rounded-lg border border-stone-200 transition-colors cursor-pointer"
               >
                 <Edit3 className="w-3.5 h-3.5" />
                 Edit Metadata
@@ -256,7 +256,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             )}
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -266,10 +266,10 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
         {/* Modal Body */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Main Info Card */}
-          <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
+          <div className="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block mb-1">
+                <label className="text-xs font-bold text-stone-600 uppercase tracking-wider block mb-1">
                   Title / Subject
                 </label>
                 {isEditing ? (
@@ -277,15 +277,15 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
                   />
                 ) : (
-                  <div className="text-base font-semibold text-slate-900">{title}</div>
+                  <div className="text-base font-semibold text-stone-900">{title}</div>
                 )}
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block mb-1">
+                <label className="text-xs font-bold text-stone-600 uppercase tracking-wider block mb-1">
                   Unique Identification Code
                 </label>
                 {isEditing ? (
@@ -293,7 +293,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                     type="text"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-sm text-stone-900 font-mono focus:outline-none focus:ring-2 focus:ring-amber-500"
                   />
                 ) : (
                   <div className="text-base font-mono text-amber-800 font-bold">{code}</div>
@@ -303,7 +303,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
             {!isFile && (
               <div>
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block mb-1">
+                <label className="text-xs font-bold text-stone-600 uppercase tracking-wider block mb-1">
                   Binder Spine Color
                 </label>
                 {isEditing ? (
@@ -318,13 +318,13 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                       type="text"
                       value={colorHex}
                       onChange={(e) => setColorHex(e.target.value)}
-                      className="w-32 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-mono text-slate-900"
+                      className="w-32 px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs font-mono text-stone-900"
                     />
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full border border-slate-300 shadow-xs" style={{ backgroundColor: colorHex }} />
-                    <span className="font-mono text-xs text-slate-700">{colorHex}</span>
+                    <div className="w-5 h-5 rounded-full border border-stone-200 shadow-xs" style={{ backgroundColor: colorHex }} />
+                    <span className="font-mono text-xs text-stone-700">{colorHex}</span>
                   </div>
                 )}
               </div>
@@ -333,13 +333,13 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
           {/* Structured Document Metadata */}
           {isFile && (
-            <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+            <div className="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-4">
+              <div className="flex items-center justify-between border-b border-stone-200 pb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-amber-800 flex items-center gap-1.5">
                   <User className="w-4 h-4 text-amber-600" />
                   Official Form Metadata (TEL / BLL / Admin)
                 </span>
-                <span className="text-[11px] text-slate-500 font-mono">
+                <span className="text-[11px] text-stone-500 font-mono">
                   Type: {fileData?.documentType?.name || "Standard Form"}
                 </span>
               </div>
@@ -348,16 +348,16 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                 {isEditing ? (
                   <>
                     <div>
-                      <label className="text-xs text-slate-600 block mb-1">Employee Name / Contact</label>
+                      <label className="text-xs text-stone-600 block mb-1">Employee Name / Contact</label>
                       <input
                         type="text"
                         value={metaFields.employeeName || ""}
                         onChange={(e) => setMetaFields({ ...metaFields, employeeName: e.target.value })}
-                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900"
+                        className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-xs text-stone-900"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-slate-600 block mb-1">
+                      <label className="text-xs text-stone-600 block mb-1">
                         {metaFields.staffId !== undefined ? "Staff ID" : "Employee No. / ID"}
                       </label>
                       <input
@@ -370,53 +370,53 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                             setMetaFields({ ...metaFields, employeeNo: e.target.value });
                           }
                         }}
-                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900"
+                        className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-xs text-stone-900"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-slate-600 block mb-1">Designation</label>
+                      <label className="text-xs text-stone-600 block mb-1">Designation</label>
                       <input
                         type="text"
                         value={metaFields.designation || ""}
                         onChange={(e) => setMetaFields({ ...metaFields, designation: e.target.value })}
-                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900"
+                        className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-xs text-stone-900"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-slate-600 block mb-1">Department</label>
+                      <label className="text-xs text-stone-600 block mb-1">Department</label>
                       <input
                         type="text"
                         value={metaFields.department || ""}
                         onChange={(e) => setMetaFields({ ...metaFields, department: e.target.value })}
-                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900"
+                        className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-xs text-stone-900"
                       />
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="bg-white p-3 rounded-lg border border-slate-200 shadow-2xs">
-                      <div className="text-[11px] text-slate-500 uppercase font-bold">Employee Name</div>
-                      <div className="text-sm font-semibold text-slate-900 mt-0.5">
+                    <div className="bg-white p-3 rounded-lg border border-stone-200 shadow-2xs">
+                      <div className="text-[11px] text-stone-500 uppercase font-bold">Employee Name</div>
+                      <div className="text-sm font-semibold text-stone-900 mt-0.5">
                         {metaFields.employeeName || metaFields.subject || "—"}
                       </div>
                     </div>
-                    <div className="bg-white p-3 rounded-lg border border-slate-200 shadow-2xs">
-                      <div className="text-[11px] text-slate-500 uppercase font-bold">
+                    <div className="bg-white p-3 rounded-lg border border-stone-200 shadow-2xs">
+                      <div className="text-[11px] text-stone-500 uppercase font-bold">
                         {metaFields.staffId ? "Staff ID" : "Employee No. / Reference"}
                       </div>
                       <div className="text-sm font-mono text-amber-800 font-bold mt-0.5">
                         {metaFields.staffId || metaFields.employeeNo || metaFields.category || "—"}
                       </div>
                     </div>
-                    <div className="bg-white p-3 rounded-lg border border-slate-200 shadow-2xs">
-                      <div className="text-[11px] text-slate-500 uppercase font-bold">Designation / Role</div>
-                      <div className="text-sm text-slate-800 mt-0.5">
+                    <div className="bg-white p-3 rounded-lg border border-stone-200 shadow-2xs">
+                      <div className="text-[11px] text-stone-500 uppercase font-bold">Designation / Role</div>
+                      <div className="text-sm text-stone-800 mt-0.5">
                         {metaFields.designation || metaFields.issuedBy || "—"}
                       </div>
                     </div>
-                    <div className="bg-white p-3 rounded-lg border border-slate-200 shadow-2xs">
-                      <div className="text-[11px] text-slate-500 uppercase font-bold">Department / Division</div>
-                      <div className="text-sm text-slate-800 mt-0.5">
+                    <div className="bg-white p-3 rounded-lg border border-stone-200 shadow-2xs">
+                      <div className="text-[11px] text-stone-500 uppercase font-bold">Department / Division</div>
+                      <div className="text-sm text-stone-800 mt-0.5">
                         {metaFields.department || metaFields.fiscalYear || "—"}
                       </div>
                     </div>
@@ -457,7 +457,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                   <span className="px-2 py-0.5 rounded bg-red-100 text-red-800 border border-red-300 font-bold">
                     ✗ {checklist.filter((i) => i.status === "NO").length} No
                   </span>
-                  <span className="px-2 py-0.5 rounded bg-white text-slate-600 border border-slate-300">
+                  <span className="px-2 py-0.5 rounded bg-white text-stone-600 border border-stone-200">
                     {checklist.filter((i) => i.status === "NONE").length} Unchecked
                   </span>
                 </div>
@@ -475,11 +475,11 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
 
           {/* Digital Twin Snapshot / Multi-Page Scan Section */}
-          <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
+          <div className="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-stone-200 pb-2.5">
               <div className="flex items-center gap-2">
                 <Paperclip className="w-4 h-4 text-amber-600" />
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                <span className="text-xs font-bold uppercase tracking-wider text-stone-800">
                   Digital Twin Scans & Pictures
                 </span>
                 {attachments.length > 0 && (
@@ -514,31 +514,31 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             ) : attachments.length > 0 ? (
               <div className="space-y-3">
                 {/* Active Page Navigation Bar */}
-                <div className="flex flex-wrap items-center justify-between bg-white p-3 rounded-lg border border-slate-200 shadow-2xs gap-2">
+                <div className="flex flex-wrap items-center justify-between bg-white p-3 rounded-lg border border-stone-200 shadow-2xs gap-2">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setActivePageIndex((prev) => Math.max(0, prev - 1))}
                       disabled={activePageIndex <= 0}
-                      className="p-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                      className="p-1 rounded-md border border-stone-200 text-stone-600 hover:bg-stone-100 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
                       title="Previous Page"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
 
-                    <span className="text-xs font-mono font-bold text-slate-800 bg-slate-100 px-2 py-1 rounded border border-slate-200">
+                    <span className="text-xs font-mono font-bold text-stone-800 bg-stone-100 px-2 py-1 rounded border border-stone-200">
                       Page {activePageIndex + 1} of {attachments.length}
                     </span>
 
                     <button
                       onClick={() => setActivePageIndex((prev) => Math.min(attachments.length - 1, prev + 1))}
                       disabled={activePageIndex >= attachments.length - 1}
-                      className="p-1 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                      className="p-1 rounded-md border border-stone-200 text-stone-600 hover:bg-stone-100 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
                       title="Next Page"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>
 
-                    <span className="text-xs text-slate-700 font-mono truncate max-w-xs ml-2">
+                    <span className="text-xs text-stone-700 font-mono truncate max-w-xs ml-2">
                       {currentPage?.name || `Page ${activePageIndex + 1}`}
                     </span>
                   </div>
@@ -569,7 +569,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
                 {/* Main Preview for Active Page */}
                 {currentPage && (
-                  <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-100 flex flex-col items-center justify-center p-3 min-h-[220px] max-h-[360px]">
+                  <div className="rounded-xl overflow-hidden border border-stone-200 bg-stone-100 flex flex-col items-center justify-center p-3 min-h-[220px] max-h-[360px]">
                     {currentPage.url.match(/\.(jpeg|jpg|png|webp|gif)$/i) ? (
                       <img
                         src={getFileUrl(currentPage.url)}
@@ -579,7 +579,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                     ) : (
                       <div className="flex flex-col items-center gap-2 py-10">
                         <FileText className="w-12 h-12 text-amber-600" />
-                        <span className="text-xs text-slate-700 font-medium font-mono">{currentPage.name}</span>
+                        <span className="text-xs text-stone-700 font-medium font-mono">{currentPage.name}</span>
                         <a
                           href={getFileUrl(currentPage.url)}
                           target="_blank"
@@ -595,8 +595,8 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
                 {/* Thumbnail Filmstrip if multiple pages attached */}
                 {attachments.length > 1 && (
-                  <div className="pt-2 border-t border-slate-200">
-                    <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                  <div className="pt-2 border-t border-stone-200">
+                    <div className="text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-2">
                       All Attached Pages ({attachments.length}):
                     </div>
                     <div className="flex items-center gap-2.5 overflow-x-auto pb-2 no-scrollbar">
@@ -609,10 +609,10 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                             className={`relative shrink-0 w-20 h-24 rounded-lg border-2 overflow-hidden cursor-pointer transition-all bg-white flex flex-col justify-between p-1 ${
                               isActive
                                 ? "border-amber-500 ring-2 ring-amber-300 shadow-md scale-102"
-                                : "border-slate-200 opacity-70 hover:opacity-100 hover:border-slate-400"
+                                : "border-stone-200 opacity-70 hover:opacity-100 hover:border-slate-400"
                             }`}
                           >
-                            <div className="w-full flex-1 overflow-hidden flex items-center justify-center bg-slate-50 rounded">
+                            <div className="w-full flex-1 overflow-hidden flex items-center justify-center bg-stone-50 rounded">
                               {att.url.match(/\.(jpeg|jpg|png|webp|gif)$/i) ? (
                                 <img
                                   src={getFileUrl(att.url)}
@@ -620,10 +620,10 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <FileText className="w-6 h-6 text-slate-400" />
+                                <FileText className="w-6 h-6 text-stone-400" />
                               )}
                             </div>
-                            <div className="mt-1 text-center font-mono font-bold text-[9px] text-slate-700 truncate">
+                            <div className="mt-1 text-center font-mono font-bold text-[9px] text-stone-700 truncate">
                               Page {idx + 1}
                             </div>
                           </div>
@@ -634,9 +634,9 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                 )}
               </div>
             ) : (
-              <div className="text-center py-10 text-slate-400 text-xs border border-dashed border-slate-300 rounded-lg bg-white flex flex-col items-center gap-2">
+              <div className="text-center py-10 text-stone-400 text-xs border border-dashed border-stone-200 rounded-lg bg-white flex flex-col items-center gap-2">
                 <ImageIcon className="w-8 h-8 text-slate-300" />
-                <span className="font-medium text-slate-600">No pictures or pages attached yet.</span>
+                <span className="font-medium text-stone-600">No pictures or pages attached yet.</span>
                 <label className="cursor-pointer text-xs font-semibold text-amber-800 hover:underline bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 transition-colors">
                   Click here to select and attach multiple pictures / pages
                   <input
@@ -653,7 +653,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
         </div>
 
         {/* Footer (Extract + Delete Button + Close) */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
+        <div className="p-4 bg-stone-50 border-t border-stone-200 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
             {isFile && fileData?.magazineId && onExtractFile && (
               <button
@@ -688,7 +688,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+            className="px-4 py-2 bg-stone-200 hover:bg-slate-300 text-stone-800 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
           >
             Close
           </button>

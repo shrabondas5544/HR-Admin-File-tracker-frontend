@@ -113,24 +113,24 @@ export const TrashModal: React.FC<TrashModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-3xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+      <div className="w-full max-w-3xl bg-white border border-stone-200 rounded-xl shadow-xl overflow-hidden flex flex-col max-h-[85vh]">
         {/* Header */}
-        <div className="p-5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <div className="p-5 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shadow-xs">
               <Trash2 className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base font-bold text-slate-900 tracking-wide">Recycle Bin / Trash</h2>
-                <span className="font-mono text-xs px-2 py-0.5 rounded bg-slate-200 text-slate-700">
+                <h2 className="text-base font-bold text-stone-900 tracking-wide">Recycle Bin / Trash</h2>
+                <span className="font-mono text-xs px-2 py-0.5 rounded bg-stone-200 text-stone-700">
                   {filterType === "All"
                     ? `${trashItems.length} ${trashItems.length === 1 ? "Item" : "Items"}`
                     : `${filteredItems.length} of ${trashItems.length} (${filterType}s)`}
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-stone-500 mt-0.5">
                 Items are stored for 30 days before automatic permanent deletion
               </p>
             </div>
@@ -145,7 +145,7 @@ export const TrashModal: React.FC<TrashModalProps> = ({
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
                   filterType !== "All"
                     ? "bg-amber-100 text-amber-900 border-amber-300 shadow-2xs"
-                    : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300"
+                    : "bg-stone-50 hover:bg-stone-100 text-stone-700 border-stone-200"
                 }`}
                 title="Filter trash items by type"
               >
@@ -155,7 +155,7 @@ export const TrashModal: React.FC<TrashModalProps> = ({
               </button>
 
               {isFilterDropdownOpen && (
-                <div className="absolute right-0 mt-1.5 w-40 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-1 text-xs animate-in fade-in zoom-in-95 duration-150">
+                <div className="absolute right-0 mt-1.5 w-40 bg-white border border-stone-200 shadow-lg rounded-lg z-50 py-1 text-xs animate-in fade-in zoom-in-95 duration-150">
                   {(["All", "File", "Magazine", "Folder"] as const).map((typeOption) => {
                     const count =
                       typeOption === "All"
@@ -170,7 +170,7 @@ export const TrashModal: React.FC<TrashModalProps> = ({
                           setIsFilterDropdownOpen(false);
                         }}
                         className={`w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-amber-50/70 transition-colors cursor-pointer ${
-                          filterType === typeOption ? "font-bold text-amber-800 bg-amber-50" : "text-slate-700"
+                          filterType === typeOption ? "font-bold text-amber-800 bg-amber-50" : "text-stone-700"
                         }`}
                       >
                         <div className="flex items-center gap-1.5">
@@ -179,7 +179,7 @@ export const TrashModal: React.FC<TrashModalProps> = ({
                           {typeOption === "Folder" && <FolderIcon className="w-3.5 h-3.5 text-emerald-500" />}
                           <span>{typeOption === "All" ? "All Types" : typeOption}</span>
                         </div>
-                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-100 text-slate-600">
+                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-stone-100 text-stone-600">
                           {count}
                         </span>
                       </button>
@@ -201,7 +201,7 @@ export const TrashModal: React.FC<TrashModalProps> = ({
             )}
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -209,22 +209,22 @@ export const TrashModal: React.FC<TrashModalProps> = ({
         </div>
 
         {/* Trash Content List */}
-        <div className="flex-1 overflow-y-auto p-5 divide-y divide-slate-100 space-y-2">
+        <div className="flex-1 overflow-y-auto p-5 divide-y divide-stone-100 space-y-2">
           {loading ? (
-            <div className="py-16 text-center text-slate-400 flex flex-col items-center justify-center">
+            <div className="py-16 text-center text-stone-400 flex flex-col items-center justify-center">
               <Loader2 className="w-6 h-6 animate-spin text-amber-600 mb-2" />
               <p className="text-xs">Loading trash items...</p>
             </div>
           ) : trashItems.length === 0 ? (
-            <div className="py-16 text-center text-slate-400 text-xs">
-              <Trash2 className="w-10 h-10 mx-auto text-slate-300 mb-2" />
-              <p className="font-medium text-slate-600">Trash is currently empty</p>
-              <p className="text-slate-400 mt-1">Deleted files, folders, and magazines will appear here for 30 days</p>
+            <div className="py-16 text-center text-stone-400 text-xs">
+              <Trash2 className="w-10 h-10 mx-auto text-stone-300 mb-2" />
+              <p className="font-medium text-stone-600">Trash is currently empty</p>
+              <p className="text-stone-400 mt-1">Deleted files, folders, and magazines will appear here for 30 days</p>
             </div>
           ) : filteredItems.length === 0 ? (
-            <div className="py-16 text-center text-slate-400 text-xs">
-              <Filter className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-              <p className="font-medium text-slate-600">No trashed {filterType.toLowerCase()}s found</p>
+            <div className="py-16 text-center text-stone-400 text-xs">
+              <Filter className="w-8 h-8 mx-auto text-stone-300 mb-2" />
+              <p className="font-medium text-stone-600">No trashed {filterType.toLowerCase()}s found</p>
               <button
                 type="button"
                 onClick={() => setFilterType("All")}
@@ -237,12 +237,12 @@ export const TrashModal: React.FC<TrashModalProps> = ({
             filteredItems.map((item) => (
               <div
                 key={`trash-${item.type}-${item.id}`}
-                className="pt-3 pb-3 flex items-center justify-between hover:bg-slate-50 p-2.5 rounded-xl transition-colors"
+                className="pt-3 pb-3 flex items-center justify-between hover:bg-stone-50 p-2.5 rounded-xl transition-colors"
               >
                 <div className="flex items-start gap-3 flex-1 min-w-0">
                   <div
                     className="p-2 rounded-lg text-white shadow-xs shrink-0 mt-0.5"
-                    style={{ backgroundColor: item.colorHex || "#64748b" }}
+                    style={{ backgroundColor: item.colorHex || "#78716c" }}
                   >
                     {item.type === "File" && <FileText className="w-4 h-4" />}
                     {item.type === "Magazine" && <Box className="w-4 h-4" />}
@@ -251,17 +251,17 @@ export const TrashModal: React.FC<TrashModalProps> = ({
 
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-slate-900 text-sm truncate">
+                      <span className="font-semibold text-stone-900 text-sm truncate">
                         {item.title}
                       </span>
-                      <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 shrink-0">
+                      <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200 shrink-0">
                         {item.code}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-3 mt-1 text-xs text-slate-500">
+                    <div className="flex items-center gap-3 mt-1 text-xs text-stone-500">
                       <div className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3 text-slate-400" />
+                        <MapPin className="w-3 h-3 text-stone-400" />
                         <span className="truncate">Prior: {item.originalLocation}</span>
                       </div>
                       <div className="flex items-center gap-1 text-amber-700 font-medium">
@@ -285,7 +285,7 @@ export const TrashModal: React.FC<TrashModalProps> = ({
                   <button
                     onClick={() => handlePermanentDelete(item)}
                     disabled={actionLoading}
-                    className="flex items-center justify-center p-2 bg-white hover:bg-red-50 text-red-600 rounded-lg border border-slate-200 hover:border-red-200 transition-colors cursor-pointer"
+                    className="flex items-center justify-center p-2 bg-white hover:bg-red-50 text-red-600 rounded-lg border border-stone-200 hover:border-red-200 transition-colors cursor-pointer"
                     title="Delete Permanently"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -297,13 +297,13 @@ export const TrashModal: React.FC<TrashModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-          <span className="text-[11px] text-slate-500">
+        <div className="p-4 bg-stone-50 border-t border-stone-200 flex items-center justify-between">
+          <span className="text-[11px] text-stone-500">
             Auto-cleanup runs periodically on every trash view.
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+            className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
           >
             Close
           </button>

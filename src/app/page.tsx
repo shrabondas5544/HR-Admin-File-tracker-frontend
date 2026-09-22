@@ -269,10 +269,9 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-100 text-slate-900">
-        <Loader2 className="w-10 h-10 animate-spin text-amber-600 mb-4" />
-        <p className="text-slate-600 text-sm font-mono">Loading CabinetMap Wall 1 Digital Twin...</p>
-        <p className="text-slate-600 text-sm font-mono">Loading CabinetMap...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 text-stone-900">
+        <Loader2 className="w-8 h-8 animate-spin text-amber-700 mb-3" />
+        <p className="text-stone-500 text-sm font-medium tracking-wide">Loading CabinetMap...</p>
       </div>
     );
   }
@@ -289,7 +288,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-slate-100 text-slate-900">
+    <main className="min-h-screen flex flex-col bg-stone-50 text-stone-900">
       {/* Top Universal Search Bar */}
       <HeaderSearch
         onSelectResult={handleSelectSearchResult}

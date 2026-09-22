@@ -63,16 +63,16 @@ export const FileChecklistModal: React.FC<FileChecklistModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-3 sm:p-6 animate-in fade-in duration-200">
-      <div className="w-full max-w-4xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="w-full max-w-4xl bg-white border border-stone-200 rounded-xl shadow-xl overflow-hidden flex flex-col max-h-[92vh]">
         {/* Top Header */}
-        <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
+        <div className="px-6 py-4 bg-stone-50 border-b border-stone-200 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold shadow-xs">
               <ClipboardList className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-base font-bold text-slate-900">
+                <h2 className="text-base font-bold text-stone-900">
                   Employee Personal File Checklist / Index
                 </h2>
                 {documentTypeName && (
@@ -81,15 +81,15 @@ export const FileChecklistModal: React.FC<FileChecklistModalProps> = ({
                   </span>
                 )}
                 {fileCode && (
-                  <span className="font-mono text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-300">
+                  <span className="font-mono text-xs px-2 py-0.5 rounded bg-stone-100 text-stone-800 border border-stone-200">
                     {fileCode}
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5">
+              <div className="flex items-center gap-3 text-xs text-stone-500 mt-0.5">
                 <span>Transcom Electronics Limited</span>
                 {employeeName && (
-                  <span className="flex items-center gap-1 font-medium text-slate-800">
+                  <span className="flex items-center gap-1 font-medium text-stone-800">
                     <User className="w-3 h-3 text-amber-600" />
                     {employeeName}
                   </span>
@@ -107,14 +107,14 @@ export const FileChecklistModal: React.FC<FileChecklistModalProps> = ({
               <span className="px-2.5 py-1 rounded-md bg-red-100 text-red-800 border border-red-300 font-bold">
                 ✗ {noCount} No
               </span>
-              <span className="px-2 py-1 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
+              <span className="px-2 py-1 rounded-md bg-stone-100 text-stone-600 border border-stone-200">
                 {pendingCount} Unchecked
               </span>
             </div>
 
             <button
               onClick={handleDone}
-              className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -143,8 +143,8 @@ export const FileChecklistModal: React.FC<FileChecklistModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
-          <div className="text-xs text-slate-500 hidden sm:block">
+        <div className="px-6 py-3.5 bg-stone-50 border-t border-stone-200 flex items-center justify-between shrink-0">
+          <div className="text-xs text-stone-500 hidden sm:block">
             {isReadOnly ? "Viewing in read-only mode." : "Changes are applied to this file automatically."}
           </div>
 

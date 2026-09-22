@@ -37,23 +37,23 @@ export const WallElevation: React.FC<WallElevationProps> = ({
   const wallScrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-slate-100">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-stone-100/60">
       {/* Interactive Elevation Canvas */}
       <div
         ref={wallScrollRef}
         className="flex-1 overflow-x-auto overflow-y-auto p-6 flex items-start gap-5 cabinet-outer-texture scroll-smooth"
-        style={{ minHeight: "calc(100vh - 72px)" }}
+        style={{ minHeight: "calc(100vh - 56px)" }}
       >
         {cabinets.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center py-24 text-center">
-            <div className="p-4 bg-amber-100/80 rounded-full text-amber-700 mb-4">
+            <div className="p-4 bg-stone-100 rounded-2xl text-stone-500 mb-4 border border-stone-200">
               <Layers className="w-10 h-10" />
             </div>
-            <h3 className="text-lg font-bold text-slate-800 mb-1">No Cabinet Data Received</h3>
-            <p className="text-slate-500 text-sm max-w-md mb-4">
-              The frontend is ready, but it needs the .NET backend API running on <code className="bg-slate-200 px-1.5 py-0.5 rounded text-xs font-mono text-slate-700">http://localhost:5000</code> to load the cabinets and archive records.
+            <h3 className="text-lg font-semibold text-stone-800 mb-1">No Cabinet Data Received</h3>
+            <p className="text-stone-500 text-sm max-w-md mb-4">
+              The frontend is ready, but it needs the .NET backend API running on <code className="bg-stone-100 px-1.5 py-0.5 rounded text-xs font-mono text-stone-700 border border-stone-200">http://localhost:5000</code> to load the cabinets and archive records.
             </p>
-            <p className="text-xs text-slate-600 bg-white border border-slate-200 px-4 py-2 rounded-lg font-mono">
+            <p className="text-xs text-stone-600 bg-white border border-stone-200 px-4 py-2 rounded-lg font-mono">
               In a separate terminal, run: <span className="text-amber-700 font-bold">cd backend && dotnet run</span>
             </p>
           </div>

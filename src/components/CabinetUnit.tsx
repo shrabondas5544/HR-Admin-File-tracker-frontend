@@ -43,15 +43,15 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
   return (
     <div
       id={`cabinet-${cabinet.cabinetNumber}`}
-      className="flex-shrink-0 w-80 sm:w-84 md:w-96 flex flex-col bg-slate-200 border-2 border-slate-300 rounded-lg overflow-hidden shadow-xl relative transition-all duration-300"
+      className="flex-shrink-0 w-80 sm:w-84 md:w-96 flex flex-col bg-stone-100 border border-stone-300/80 rounded-lg overflow-hidden shadow-lg relative transition-all duration-300"
     >
       {/* Cabinet Header Plaque */}
-      <div className="bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 border-b border-slate-300 px-4 py-2.5 flex items-center justify-center shadow-xs">
-        <h3 className="text-sm font-bold text-slate-800 tracking-wide text-center">{cabinet.name}</h3>
+      <div className="bg-gradient-to-b from-[#d4c4a8] to-[#c4b08c] border-b border-[#b09a76]/40 px-4 py-2.5 flex items-center justify-center shadow-xs">
+        <h3 className="text-sm font-semibold text-stone-800 tracking-wide text-center drop-shadow-sm">{cabinet.name}</h3>
       </div>
 
       {/* UPPER SECTION */}
-      <div className="relative border-b-4 border-slate-300 bg-white perspective-1000 min-h-[512px] flex flex-col justify-between">
+      <div className="relative border-b-2 border-stone-300/60 bg-white perspective-1000 min-h-[512px] flex flex-col justify-between">
         <div className="w-full h-full flex flex-col justify-between shelf-interior-texture py-1">
           {upperShelves.map((shelf) => (
             <ShelfRow
@@ -79,7 +79,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           onClick={onToggleUpper}
         >
           <div
-            className={`w-1/2 h-full cabinet-door-texture border-r border-slate-400 flex items-center justify-end pr-2 origin-left transition-transform duration-700 ease-in-out transform-style-3d ${
+            className={`w-1/2 h-full cabinet-door-texture border-r border-stone-400/50 flex items-center justify-end pr-2 origin-left transition-transform duration-700 ease-in-out transform-style-3d ${
               isUpperOpen ? "-rotate-y-90 scale-x-0" : "rotate-y-0 scale-x-100"
             }`}
           >
@@ -87,7 +87,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           </div>
 
           <div
-            className={`w-1/2 h-full cabinet-door-texture border-l border-white/60 flex items-center justify-start pl-2 origin-right transition-transform duration-700 ease-in-out transform-style-3d ${
+            className={`w-1/2 h-full cabinet-door-texture border-l border-[#d4c4a8]/30 flex items-center justify-start pl-2 origin-right transition-transform duration-700 ease-in-out transform-style-3d ${
               isUpperOpen ? "rotate-y-90 scale-x-0" : "rotate-y-0 scale-x-100"
             }`}
           >
@@ -125,7 +125,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           onClick={onToggleLower}
         >
           <div
-            className={`w-1/2 h-full cabinet-door-texture border-r border-slate-400 flex items-center justify-end pr-2 origin-left transition-transform duration-700 ease-in-out transform-style-3d ${
+            className={`w-1/2 h-full cabinet-door-texture border-r border-stone-400/50 flex items-center justify-end pr-2 origin-left transition-transform duration-700 ease-in-out transform-style-3d ${
               isLowerOpen ? "-rotate-y-90 scale-x-0" : "rotate-y-0 scale-x-100"
             }`}
           >
@@ -133,7 +133,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           </div>
 
           <div
-            className={`w-1/2 h-full cabinet-door-texture border-l border-white/60 flex items-center justify-start pl-2 origin-right transition-transform duration-700 ease-in-out transform-style-3d ${
+            className={`w-1/2 h-full cabinet-door-texture border-l border-[#d4c4a8]/30 flex items-center justify-start pl-2 origin-right transition-transform duration-700 ease-in-out transform-style-3d ${
               isLowerOpen ? "rotate-y-90 scale-x-0" : "rotate-y-0 scale-x-100"
             }`}
           >
@@ -142,7 +142,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
         </div>
       </div>
 
-      <div className="w-full h-4 bg-gradient-to-r from-slate-300 via-slate-400 to-slate-300 border-t border-slate-400" />
+      <div className="w-full h-4 bg-gradient-to-b from-[#b09a76] to-[#9a8566] border-t border-[#b09a76]/50" />
     </div>
   );
 };

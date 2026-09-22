@@ -29,10 +29,10 @@ export const MagazineModal: React.FC<MagazineModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+      <div className="w-full max-w-2xl bg-white border border-stone-200 rounded-xl shadow-xl overflow-hidden flex flex-col max-h-[85vh]">
         {/* Modal Top Header */}
         <div
-          className="p-5 flex items-center justify-between border-b border-slate-200"
+          className="p-5 flex items-center justify-between border-b border-stone-200"
           style={{ backgroundColor: `${magazine.colorHex}15` }}
         >
           <div className="flex items-center gap-3">
@@ -44,12 +44,12 @@ export const MagazineModal: React.FC<MagazineModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-bold text-slate-900 tracking-wide">{magazine.name}</h2>
-                <span className="font-mono text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-300">
+                <h2 className="text-lg font-bold text-stone-900 tracking-wide">{magazine.name}</h2>
+                <span className="font-mono text-xs px-2 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200">
                   {magazine.code}
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-stone-500 mt-0.5">
                 Magazine Holder Container • {magazine.files?.length || 0} Files Enclosed • Drag files out to shelves
               </p>
             </div>
@@ -57,20 +57,20 @@ export const MagazineModal: React.FC<MagazineModalProps> = ({
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Action Header */}
-        <div className="px-5 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-600">
+        <div className="px-5 py-3 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-stone-600">
             Dossiers & Files Inside
           </span>
           <button
             onClick={() => onAddNewFile(magazine.id)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-stone-800 hover:bg-stone-700 text-white font-semibold text-xs rounded-lg shadow-sm transition-colors cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             Add File Inside Box
@@ -80,7 +80,7 @@ export const MagazineModal: React.FC<MagazineModalProps> = ({
         {/* Files List View */}
         <div className="flex-1 overflow-y-auto p-5 divide-y divide-slate-100 space-y-2">
           {(!magazine.files || magazine.files.length === 0) ? (
-            <div className="text-center py-12 text-slate-400 text-sm">
+            <div className="text-center py-12 text-stone-400 text-sm">
               This magazine box is currently empty. Click &quot;Add File Inside Box&quot; to file records here.
             </div>
           ) : (
@@ -100,7 +100,7 @@ export const MagazineModal: React.FC<MagazineModalProps> = ({
                       JSON.stringify({ type: "File", id: file.id, fromMagazineId: magazine.id })
                     );
                   }}
-                  className="pt-2.5 pb-2.5 flex items-center justify-between group hover:bg-slate-50 p-2.5 rounded-xl transition-colors cursor-grab active:cursor-grabbing border border-transparent hover:border-slate-200"
+                  className="pt-2.5 pb-2.5 flex items-center justify-between group hover:bg-stone-50 p-2.5 rounded-xl transition-colors cursor-grab active:cursor-grabbing border border-transparent hover:border-stone-200"
                 >
                   <div
                     onClick={() => onInspectFile(file)}
@@ -111,10 +111,10 @@ export const MagazineModal: React.FC<MagazineModalProps> = ({
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-slate-900 text-sm group-hover:text-amber-800 transition-colors">
+                        <span className="font-semibold text-stone-900 text-sm group-hover:text-amber-800 transition-colors">
                           {file.title}
                         </span>
-                        <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
+                        <span className="font-mono text-xs px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">
                           {file.code}
                         </span>
                         {file.attachmentUrl && (
@@ -125,18 +125,18 @@ export const MagazineModal: React.FC<MagazineModalProps> = ({
                         )}
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-slate-500">
+                      <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-stone-500">
                         {parsedMeta.employeeName && (
-                          <span className="text-slate-900 font-medium">{parsedMeta.employeeName}</span>
+                          <span className="text-stone-900 font-medium">{parsedMeta.employeeName}</span>
                         )}
                         {parsedMeta.employeeNo && (
-                          <span className="font-mono text-slate-500">ID: {parsedMeta.employeeNo}</span>
+                          <span className="font-mono text-stone-500">ID: {parsedMeta.employeeNo}</span>
                         )}
                         {parsedMeta.designation && (
                           <span>• {parsedMeta.designation}</span>
                         )}
                         {parsedMeta.department && (
-                          <span className="px-1.5 py-0.5 bg-slate-100 rounded text-[11px] text-slate-700 border border-slate-200">
+                          <span className="px-1.5 py-0.5 bg-stone-100 rounded text-[11px] text-stone-700 border border-stone-200">
                             {parsedMeta.department}
                           </span>
                         )}
@@ -161,21 +161,21 @@ export const MagazineModal: React.FC<MagazineModalProps> = ({
                     <button
                       onClick={() => onInspectFile(file)}
                       title="Inspect / Edit Digital Twin"
-                      className="p-1.5 text-slate-400 hover:text-amber-700 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                      className="p-1.5 text-stone-400 hover:text-amber-700 rounded-lg hover:bg-stone-100 transition-colors cursor-pointer"
                     >
                       <ExternalLink className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => onMoveFile(file.id)}
                       title="Move to another Magazine or Shelf"
-                      className="p-1.5 text-slate-400 hover:text-blue-700 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                      className="p-1.5 text-stone-400 hover:text-blue-700 rounded-lg hover:bg-stone-100 transition-colors cursor-pointer"
                     >
                       <MoveRight className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => onDeleteFile(file.id)}
                       title="Delete Record"
-                      className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                      className="p-1.5 text-stone-400 hover:text-red-600 rounded-lg hover:bg-stone-100 transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -186,7 +186,7 @@ export const MagazineModal: React.FC<MagazineModalProps> = ({
           )}
         </div>
 
-        <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+        <div className="p-4 bg-stone-50 border-t border-stone-200 flex items-center justify-between">
           {onDeleteMagazine ? (
             <button
               onClick={() => onDeleteMagazine(magazine.id, magazine.name, magazine.files?.length || 0)}
@@ -201,7 +201,7 @@ export const MagazineModal: React.FC<MagazineModalProps> = ({
 
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+            className="px-4 py-2 bg-stone-200 hover:bg-slate-300 text-slate-800 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
           >
             Close Drawer
           </button>

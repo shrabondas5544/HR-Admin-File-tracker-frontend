@@ -193,9 +193,9 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
       onDrop={handleShelfDrop}
       className={`relative w-full h-32 flex flex-col justify-end px-3 transition-colors ${
         isDragOverShelf
-          ? "bg-amber-100/90 ring-2 ring-dashed ring-amber-500"
+          ? "bg-amber-50/70 ring-1 ring-amber-400/60"
           : isShelfHighlighted
-          ? "bg-amber-100/70"
+          ? "bg-amber-50/50"
           : "bg-transparent"
       }`}
     >
@@ -212,19 +212,19 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
             isDragOverShelf
               ? "bg-amber-500 text-white border-amber-600 ring-2 ring-amber-400"
               : isShelfHighlighted
-              ? "bg-amber-400 text-slate-950 border-amber-500 ring-2 ring-amber-400"
-              : "bg-white/95 text-slate-700 border-slate-300 hover:bg-amber-50 hover:text-amber-900 hover:border-amber-300"
+              ? "bg-amber-100 text-amber-900 border-amber-300 ring-2 ring-amber-400"
+              : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50 hover:text-stone-800 hover:border-stone-300"
           }`}
         >
           Shelf {shelf.shelfCode} {isDragOverShelf && "• Drag & Arrange"}
         </button>
       </div>
-      <div className="relative w-full h-3.5 bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400 border-t border-slate-300 shadow-xs" />
+      <div className="relative w-full h-3.5 bg-gradient-to-r from-[#c4b08c] via-[#d4c4a8] to-[#c4b08c] border-t border-[#b09a76]/30 shadow-xs" />
 
       {/* Upright Interleaved Items Container Track */}
       <div className="flex items-end overflow-x-auto pb-1.5 pt-6 pl-22 z-20 no-scrollbar">
         {allItems.length === 0 ? (
-          <div className="w-full text-center text-[11px] text-slate-400 font-mono tracking-wide py-6 select-none italic">
+          <div className="w-full text-center text-[11px] text-stone-400 font-mono tracking-wide py-6 select-none italic">
             — Empty Shelf Track (Drag & Drop Items Here) —
           </div>
         ) : (
@@ -357,10 +357,10 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
       </div>
 
       {/* Heavy Metallic Shelf Plank */}
-      <div className="relative w-full h-3.5 bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400 border-t border-slate-300 shadow-xs flex items-center justify-between px-2">
-        <div className="w-2 h-1 bg-slate-500/50 rounded-full" />
-        <div className="flex-1 h-[1px] bg-white/60 mx-2" />
-        <div className="w-2 h-1 bg-slate-500/50 rounded-full" />
+      <div className="relative w-full h-3.5 bg-gradient-to-r from-[#c4b08c] via-[#d4c4a8] to-[#c4b08c] border-t border-[#b09a76]/30 shadow-xs flex items-center justify-between px-2">
+        <div className="w-2 h-1 bg-[#b09a76]/40 rounded-full" />
+        <div className="flex-1 h-[1px] bg-[#e5ddd0]/60 mx-2" />
+        <div className="w-2 h-1 bg-[#b09a76]/40 rounded-full" />
       </div>
     </div>
   );

@@ -243,26 +243,26 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex">
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity" onClick={onClose} />
+      <div className="fixed inset-0 bg-stone-900/40 backdrop-blur-xs transition-opacity" onClick={onClose} />
 
       {/* Slide-out Drawer */}
-      <div className="relative w-full max-w-lg bg-white border-r border-slate-200 h-full shadow-2xl flex flex-col z-50 animate-in slide-in-from-left duration-300">
+      <div className="relative w-full max-w-lg bg-white border-r border-stone-200 h-full shadow-2xl flex flex-col z-50 animate-in slide-in-from-left duration-300">
         {/* Drawer Header */}
-        <div className="p-5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <div className="p-5 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
           <div>
-            <h2 className="text-base font-bold text-slate-900 tracking-wide">Record Registration Drawer</h2>
-            <p className="text-xs text-slate-500">File documents, create magazines, or add standalone binders</p>
+            <h2 className="text-base font-bold text-stone-900 tracking-wide">Record Registration Drawer</h2>
+            <p className="text-xs text-stone-500">File documents, create magazines, or add standalone binders</p>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tab Selection */}
-        <div className="flex border-b border-slate-200 bg-slate-100/80 p-1.5 gap-1 text-xs">
+        <div className="flex border-b border-stone-200 bg-stone-100/70 p-1.5 gap-1 text-xs">
           <button
             type="button"
             onClick={() => {
@@ -270,7 +270,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               setSuccessMsg("");
             }}
             className={`flex-1 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
-              activeTab === "file" ? "bg-amber-500 text-slate-950 shadow-md" : "text-slate-600 hover:text-slate-900"
+              activeTab === "file" ? "bg-white text-stone-900 shadow-sm border border-stone-200" : "text-stone-500 hover:text-stone-800"
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -283,7 +283,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               setSuccessMsg("");
             }}
             className={`flex-1 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
-              activeTab === "magazine" ? "bg-amber-500 text-slate-950 shadow-md" : "text-slate-600 hover:text-slate-900"
+              activeTab === "magazine" ? "bg-white text-stone-900 shadow-sm border border-stone-200" : "text-stone-500 hover:text-stone-800"
             }`}
           >
             <Box className="w-3.5 h-3.5" />
@@ -296,7 +296,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               setSuccessMsg("");
             }}
             className={`flex-1 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
-              activeTab === "folder" ? "bg-amber-500 text-slate-950 shadow-md" : "text-slate-600 hover:text-slate-900"
+              activeTab === "folder" ? "bg-white text-stone-900 shadow-sm border border-stone-200" : "text-stone-500 hover:text-stone-800"
             }`}
           >
             <FolderPlus className="w-3.5 h-3.5" />
@@ -309,7 +309,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               setSuccessMsg("");
             }}
             className={`flex-1 py-2 rounded-lg font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
-              activeTab === "customType" ? "bg-amber-500 text-slate-950 shadow-md" : "text-slate-600 hover:text-slate-900"
+              activeTab === "customType" ? "bg-white text-stone-900 shadow-sm border border-stone-200" : "text-stone-500 hover:text-stone-800"
             }`}
           >
             <Settings2 className="w-3.5 h-3.5" />
@@ -331,7 +331,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
           {activeTab === "file" && (
             <form onSubmit={handleCreateFile} className="space-y-4 text-xs">
               <div>
-                <label className="text-slate-600 uppercase tracking-wider font-bold block mb-1">
+                <label className="text-stone-600 uppercase tracking-wider font-bold block mb-1">
                   Document Template Type
                 </label>
                 <div className="grid grid-cols-3 gap-2">
@@ -342,8 +342,8 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                       onClick={() => setFileType(t)}
                       className={`py-2 rounded-lg border font-bold text-center transition-all cursor-pointer ${
                         fileType === t
-                          ? "bg-amber-100 text-amber-900 border-amber-400"
-                          : "bg-slate-50 text-slate-600 border-slate-300 hover:bg-slate-100"
+                          ? "bg-stone-200 text-stone-900 border-stone-400"
+                          : "bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100"
                       }`}
                     >
                       {t}
@@ -355,109 +355,109 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
 
 
               {/* Template Fields */}
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              <div className="bg-stone-50/60 p-4 rounded-xl border border-stone-200 space-y-3">
                 <div className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
                   {fileType} Cover Page Metadata
                 </div>
                 <div>
-                  <label className="text-slate-600 block mb-1">Employee / Record Name *</label>
+                  <label className="text-stone-600 block mb-1">Employee / Record Name *</label>
                   <input
                     type="text"
                     required
                     placeholder="Full name of employee"
                     value={empName}
                     onChange={(e) => setEmpName(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900"
+                    className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                   />
                 </div>
 
                 {fileType === "TEL" && (
                   <div>
-                    <label className="text-slate-600 block mb-1">Employee No. *</label>
+                    <label className="text-stone-600 block mb-1">Employee No. *</label>
                     <input
                       type="text"
                       required
                       placeholder="e.g. TEL-1082"
                       value={empNo}
                       onChange={(e) => setEmpNo(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-mono"
+                      className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400 font-mono"
                     />
                   </div>
                 )}
 
                 {fileType === "BLL" && (
                   <div>
-                    <label className="text-slate-600 block mb-1">Staff ID *</label>
+                    <label className="text-stone-600 block mb-1">Staff ID *</label>
                     <input
                       type="text"
                       required
                       placeholder="e.g. BLL-ST-5091"
                       value={staffId}
                       onChange={(e) => setStaffId(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-mono"
+                      className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400 font-mono"
                     />
                   </div>
                 )}
 
                 {fileType === "Custom" && (
                   <div>
-                    <label className="text-slate-600 block mb-1">Reference / ID No. (Optional)</label>
+                    <label className="text-stone-600 block mb-1">Reference / ID No. (Optional)</label>
                     <input
                       type="text"
                       placeholder="e.g. ADM-9001"
                       value={empNo}
                       onChange={(e) => setEmpNo(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-mono"
+                      className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400 font-mono"
                     />
                   </div>
                 )}
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-slate-600 block mb-1">Designation</label>
+                    <label className="text-stone-600 block mb-1">Designation</label>
                     <input
                       type="text"
                       placeholder="e.g. Area Sales Officer"
                       value={designation}
                       onChange={(e) => setDesignation(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900"
+                      className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                     />
                   </div>
                   <div>
-                    <label className="text-slate-600 block mb-1">Department</label>
+                    <label className="text-stone-600 block mb-1">Department</label>
                     <input
                       type="text"
                       placeholder="e.g. Consumer Electronics"
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900"
+                      className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Employee Personal File Checklist Button */}
-              <div className="bg-amber-50/70 p-4 rounded-xl border border-amber-200 space-y-3">
+              <div className="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-bold shrink-0 shadow-2xs">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500 text-stone-950 flex items-center justify-center font-bold shrink-0 shadow-2xs">
                       <ClipboardList className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="text-xs font-bold uppercase tracking-wider text-amber-950">
+                      <div className="text-xs font-bold uppercase tracking-wider text-stone-900">
                         Personal File Checklist
                       </div>
-                      <div className="text-[11px] text-amber-800">
+                      <div className="text-[11px] text-stone-600">
                         Transcom Electronics Limited (19 Documents)
                       </div>
                     </div>
                   </div>
-                  <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-white text-amber-900 border border-amber-300 font-bold shadow-2xs">
+                  <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-white text-stone-800 border border-stone-300 font-bold shadow-2xs">
                     Official Index
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between pt-1 border-t border-amber-200/60">
+                <div className="flex items-center justify-between pt-1 border-t border-stone-200/60">
                   <div className="flex items-center gap-1.5 font-mono text-[11px]">
                     <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold">
                       ✓ {checklist.filter((i) => i.status === "YES").length} Yes
@@ -470,7 +470,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsChecklistModalOpen(true)}
-                    className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                    className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs rounded-lg shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <ClipboardList className="w-3.5 h-3.5" />
                     <span>Open Checklist Form</span>
@@ -480,7 +480,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
 
               {/* Physical Destination */}
               <div>
-                <label className="text-slate-600 uppercase tracking-wider font-bold block mb-1.5">
+                <label className="text-stone-600 uppercase tracking-wider font-bold block mb-1.5">
                   Physical Storage Destination
                 </label>
                 <div className="grid grid-cols-2 gap-2 mb-2">
@@ -489,8 +489,8 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                     onClick={() => setFileDestination("shelf")}
                     className={`py-2 rounded-lg border font-semibold flex items-center justify-center gap-1.5 cursor-pointer ${
                       fileDestination === "shelf"
-                        ? "bg-amber-100 text-amber-900 border-amber-400"
-                        : "bg-slate-50 text-slate-600 border-slate-300"
+                        ? "bg-stone-200 text-stone-900 border-stone-400"
+                        : "bg-stone-50 text-stone-600 border-stone-200"
                     }`}
                   >
                     <FileText className="w-3.5 h-3.5" />
@@ -501,8 +501,8 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                     onClick={() => setFileDestination("magazine")}
                     className={`py-2 rounded-lg border font-semibold flex items-center justify-center gap-1.5 cursor-pointer ${
                       fileDestination === "magazine"
-                        ? "bg-amber-100 text-amber-900 border-amber-400"
-                        : "bg-slate-50 text-slate-600 border-slate-300"
+                        ? "bg-stone-200 text-stone-900 border-stone-400"
+                        : "bg-stone-50 text-stone-600 border-stone-200"
                     }`}
                   >
                     <Box className="w-3.5 h-3.5" />
@@ -512,11 +512,11 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
 
                 {fileDestination === "shelf" ? (
                   <div>
-                    <label className="text-slate-600 block mb-1">Select Shelf</label>
+                    <label className="text-stone-600 block mb-1">Select Shelf</label>
                     <select
                       value={fileShelfId}
                       onChange={(e) => setFileShelfId(Number(e.target.value))}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900"
+                      className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                     >
                       {shelves.map((s) => (
                         <option key={`s-opt-${s.id}`} value={s.id}>
@@ -527,11 +527,11 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                   </div>
                 ) : (
                   <div>
-                    <label className="text-slate-600 block mb-1">Select Magazine Box</label>
+                    <label className="text-stone-600 block mb-1">Select Magazine Box</label>
                     <select
                       value={fileMagazineId}
                       onChange={(e) => setFileMagazineId(Number(e.target.value))}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900"
+                      className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                     >
                       {magazines.map((m) => (
                         <option key={`m-opt-${m.id}`} value={m.id}>
@@ -544,14 +544,14 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               </div>
 
               {/* Digital Twin Attachment */}
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div className="bg-stone-50/60 p-4 rounded-xl border border-stone-200">
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-slate-800 font-bold flex items-center gap-1.5">
-                    <Paperclip className="w-3.5 h-3.5 text-amber-600" />
+                  <label className="text-stone-800 font-bold flex items-center gap-1.5">
+                    <Paperclip className="w-3.5 h-3.5 text-stone-600" />
                     Digital Twin Picture(s) & Scan(s)
                   </label>
                   {fileAttachments.length > 0 && (
-                    <span className="text-[11px] font-mono font-semibold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300">
+                    <span className="text-[11px] font-mono font-semibold text-stone-800 bg-stone-100 px-2 py-0.5 rounded-full border border-stone-300">
                       {fileAttachments.length} {fileAttachments.length === 1 ? "page" : "pages"}
                     </span>
                   )}
@@ -561,16 +561,16 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                   multiple
                   accept="image/*,application/pdf"
                   onChange={(e) => handleFileUpload(e, "file")}
-                  className="w-full text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer"
+                  className="w-full text-stone-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-stone-200 file:text-stone-900 hover:file:bg-stone-300 cursor-pointer"
                 />
                 {fileAttachments.length > 0 && (
                   <div className="mt-2.5 space-y-1.5 max-h-36 overflow-y-auto">
                     {fileAttachments.map((att, idx) => (
                       <div
                         key={`new-att-${idx}`}
-                        className="flex items-center justify-between bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 text-[11px]"
+                        className="flex items-center justify-between bg-white px-2.5 py-1.5 rounded-lg border border-stone-200 text-[11px]"
                       >
-                        <span className="font-mono text-slate-700 truncate max-w-[260px]">
+                        <span className="font-mono text-stone-700 truncate max-w-[260px]">
                           {idx + 1}. {att.name}
                         </span>
                         <button
@@ -589,9 +589,8 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow-lg transition-all cursor-pointer"
+                className="w-full py-2.5 bg-stone-800 hover:bg-stone-700 text-white font-semibold rounded-lg shadow-sm transition-all cursor-pointer"
               >
-                {loading ? "Registering File..." : "Register File on Wall 1"}
                 {loading ? "Registering File..." : "Register File Record"}
               </button>
             </form>
@@ -601,31 +600,31 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
           {activeTab === "magazine" && (
             <form onSubmit={handleCreateMagazine} className="space-y-4 text-xs">
               <div>
-                <label className="text-slate-700 font-bold block mb-1">Magazine Display Name *</label>
+                <label className="text-stone-700 font-bold block mb-1">Magazine Display Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Legal Leases & Plant Deeds"
                   value={magName}
                   onChange={(e) => setMagName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900"
+                  className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-slate-700 font-bold block mb-1">Unique Code *</label>
+                  <label className="text-stone-700 font-bold block mb-1">Unique Code *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. MAG-LEG-01"
                     value={magCode}
                     onChange={(e) => setMagCode(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 font-mono"
+                    className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400 font-mono"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-700 font-bold block mb-1">Spine Color</label>
+                  <label className="text-stone-700 font-bold block mb-1">Spine Color</label>
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
@@ -637,19 +636,18 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                       type="text"
                       value={magColor}
                       onChange={(e) => setMagColor(e.target.value)}
-                      className="w-full px-2 py-2 bg-slate-50 border border-slate-300 rounded-lg font-mono text-slate-900"
+                      className="w-full px-2 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400 font-mono"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="text-slate-700 font-bold block mb-1">Shelf Location (Wall 1)</label>
-                <label className="text-slate-700 font-bold block mb-1">Shelf Location</label>
+                <label className="text-stone-700 font-bold block mb-1">Shelf Location</label>
                 <select
                   value={magShelfId}
                   onChange={(e) => setMagShelfId(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900"
+                  className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                 >
                   {shelves.map((s) => (
                     <option key={`m-shelf-${s.id}`} value={s.id}>
@@ -662,7 +660,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow-lg transition-all cursor-pointer"
+                className="w-full py-2.5 bg-stone-800 hover:bg-stone-700 text-white font-semibold rounded-lg shadow-sm transition-all cursor-pointer"
               >
                 {loading ? "Creating..." : "Place Magazine on Shelf"}
               </button>
@@ -673,31 +671,31 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
           {activeTab === "folder" && (
             <form onSubmit={handleCreateFolder} className="space-y-4 text-xs">
               <div>
-                <label className="text-slate-700 font-bold block mb-1">Folder Binder Name *</label>
+                <label className="text-stone-700 font-bold block mb-1">Folder Binder Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. NBR Tax Assessment Binder"
                   value={fldName}
                   onChange={(e) => setFldName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900"
+                  className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-slate-700 font-bold block mb-1">Unique Code *</label>
+                  <label className="text-stone-700 font-bold block mb-1">Unique Code *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. FLD-TAX-2025"
                     value={fldCode}
                     onChange={(e) => setFldCode(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 font-mono"
+                    className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400 font-mono"
                   />
                 </div>
                 <div>
-                  <label className="text-slate-700 font-bold block mb-1">Spine Color</label>
+                  <label className="text-stone-700 font-bold block mb-1">Spine Color</label>
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
@@ -709,19 +707,18 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                       type="text"
                       value={fldColor}
                       onChange={(e) => setFldColor(e.target.value)}
-                      className="w-full px-2 py-2 bg-slate-50 border border-slate-300 rounded-lg font-mono text-slate-900"
+                      className="w-full px-2 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400 font-mono"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="text-slate-700 font-bold block mb-1">Shelf Location (Wall 1)</label>
-                <label className="text-slate-700 font-bold block mb-1">Shelf Location</label>
+                <label className="text-stone-700 font-bold block mb-1">Shelf Location</label>
                 <select
                   value={fldShelfId}
                   onChange={(e) => setFldShelfId(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900"
+                  className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                 >
                   {shelves.map((s) => (
                     <option key={`f-shelf-${s.id}`} value={s.id}>
@@ -731,19 +728,19 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                 </select>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <label className="text-slate-800 font-bold block mb-1 flex items-center gap-1.5">
-                  <Paperclip className="w-3.5 h-3.5 text-amber-600" />
+              <div className="bg-stone-50/60 p-4 rounded-xl border border-stone-200">
+                <label className="text-stone-800 font-bold block mb-1 flex items-center gap-1.5">
+                  <Paperclip className="w-3.5 h-3.5 text-stone-600" />
                   Digital Twin Attachment (Photo or PDF)
                 </label>
                 <input
                   type="file"
                   accept="image/*,application/pdf"
                   onChange={(e) => handleFileUpload(e, "folder")}
-                  className="w-full text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer"
+                  className="w-full text-stone-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-stone-200 file:text-stone-900 hover:file:bg-stone-300 cursor-pointer"
                 />
                 {fldAttachmentName && (
-                  <div className="mt-2 text-amber-800 font-mono text-[11px] truncate">
+                  <div className="mt-2 text-stone-800 font-mono text-[11px] truncate">
                     Attached: {fldAttachmentName}
                   </div>
                 )}
@@ -752,7 +749,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow-lg transition-all cursor-pointer"
+                className="w-full py-2.5 bg-stone-800 hover:bg-stone-700 text-white font-semibold rounded-lg shadow-sm transition-all cursor-pointer"
               >
                 {loading ? "Creating..." : "Place Folder on Shelf"}
               </button>
@@ -763,30 +760,30 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
           {activeTab === "customType" && (
             <form onSubmit={handleCreateCustomType} className="space-y-4 text-xs">
               <div>
-                <label className="text-slate-700 font-bold block mb-1">Custom Document Type Name *</label>
+                <label className="text-stone-700 font-bold block mb-1">Custom Document Type Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Audit Confirmation, Legal Notice"
                   value={customTypeName}
                   onChange={(e) => setCustomTypeName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900"
+                  className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                 />
               </div>
 
               <div>
-                <label className="text-slate-700 font-bold block mb-1">Description</label>
+                <label className="text-stone-700 font-bold block mb-1">Description</label>
                 <input
                   type="text"
                   placeholder="Purpose of this document type"
                   value={customTypeDesc}
                   onChange={(e) => setCustomTypeDesc(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900"
+                  className="w-full px-3 py-2 bg-white border border-stone-200 rounded-lg text-stone-900 focus:ring-stone-400/50 focus:border-stone-400"
                 />
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-600">
+              <div className="bg-stone-50/60 p-4 rounded-xl border border-stone-200 space-y-2">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-stone-600">
                   Custom Field Definitions
                 </div>
                 {customFields.map((f, i) => (
@@ -799,7 +796,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                         copy[i].label = e.target.value;
                         setCustomFields(copy);
                       }}
-                      className="flex-1 px-2.5 py-1.5 bg-white border border-slate-300 rounded text-slate-900 text-xs"
+                      className="flex-1 px-2.5 py-1.5 bg-white border border-stone-200 rounded text-stone-900 focus:ring-stone-400/50 focus:border-stone-400 text-xs"
                     />
                     <select
                       value={f.type}
@@ -808,7 +805,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                         copy[i].type = e.target.value;
                         setCustomFields(copy);
                       }}
-                      className="px-2 py-1.5 bg-white border border-slate-300 rounded text-slate-900 text-xs"
+                      className="px-2 py-1.5 bg-white border border-stone-200 rounded text-stone-900 focus:ring-stone-400/50 focus:border-stone-400 text-xs"
                     >
                       <option value="text">Text</option>
                       <option value="date">Date</option>
@@ -821,7 +818,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow-lg transition-all cursor-pointer"
+                className="w-full py-2.5 bg-stone-800 hover:bg-stone-700 text-white font-semibold rounded-lg shadow-sm transition-all cursor-pointer"
               >
                 {loading ? "Registering Schema..." : "Save Custom Type Definition"}
               </button>

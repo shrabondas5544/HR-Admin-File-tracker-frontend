@@ -68,18 +68,18 @@ export const FolderSpine: React.FC<FolderSpineProps> = ({
       </div>
 
       {/* Hover Quick Action Buttons */}
-      <div className="absolute -top-7 left-1/2 -translate-x-1/2 hidden group-hover:flex items-center gap-1 bg-white border border-slate-300 px-1.5 py-0.5 rounded shadow-lg z-40">
+      <div className="absolute -top-7 left-1/2 -translate-x-1/2 hidden group-hover:flex items-center gap-1 bg-white border border-stone-200 shadow-md px-1.5 py-0.5 rounded z-40">
         <button
           onClick={onMove}
           title="Move Folder to another shelf"
-          className="p-1 text-slate-500 hover:text-amber-700 transition-colors"
+          className="p-1 text-stone-400 hover:text-amber-700 transition-colors"
         >
           <MoveRight className="w-3 h-3" />
         </button>
         <button
           onClick={onDelete}
           title="Delete Folder (Move to Trash)"
-          className="p-1 text-slate-500 hover:text-red-600 transition-colors"
+          className="p-1 text-stone-400 hover:text-red-600 transition-colors"
         >
           <Trash2 className="w-3 h-3" />
         </button>
