@@ -87,9 +87,9 @@ body {
   background-image:
     /* Satin sheen highlight */
     linear-gradient(110deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.06) 38%, transparent 60%, rgba(0, 0, 0, 0.05) 100%),
-    /* Primary cathedral arch wood grain curves (top to bottom) */
+    /* Primary cathedral arch wood grain curves */
     radial-gradient(ellipse at 50% -12%, rgba(165, 138, 105, 0.35) 0%, rgba(165, 138, 105, 0.22) 18%, transparent 20%, transparent 32%, rgba(150, 123, 90, 0.25) 35%, transparent 37%, transparent 50%, rgba(160, 133, 100, 0.2) 53%, transparent 55%),
-    /* Secondary cathedral arch curves (lower panel) */
+    /* Secondary cathedral arch curves */
     radial-gradient(ellipse at 50% 112%, rgba(155, 128, 95, 0.25) 0%, rgba(155, 128, 95, 0.15) 25%, transparent 28%, transparent 45%, rgba(165, 138, 105, 0.2) 48%, transparent 51%),
     /* Vertical wood grain fibers & fine streaks */
     repeating-linear-gradient(
