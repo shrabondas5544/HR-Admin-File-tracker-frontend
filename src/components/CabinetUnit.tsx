@@ -46,17 +46,8 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
       className="flex-shrink-0 w-80 sm:w-84 md:w-96 flex flex-col bg-slate-200 border-2 border-slate-300 rounded-lg overflow-hidden shadow-xl relative transition-all duration-300"
     >
       {/* Cabinet Header Plaque */}
-      <div className="bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 border-b border-slate-300 px-4 py-2.5 flex items-center justify-between shadow-xs">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-amber-500/20 border border-amber-600/40 text-amber-900 flex items-center justify-center font-mono font-bold text-xs">
-            0{cabinet.cabinetNumber}
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-800 tracking-wide">{cabinet.name}</h3>
-          </div>
-        </div>
-
-
+      <div className="bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 border-b border-slate-300 px-4 py-2.5 flex items-center justify-center shadow-xs">
+        <h3 className="text-sm font-bold text-slate-800 tracking-wide text-center">{cabinet.name}</h3>
       </div>
 
       {/* UPPER SECTION */}

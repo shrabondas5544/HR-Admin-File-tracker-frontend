@@ -79,8 +79,8 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* Brand & Digital Twin Tag */}
         <div className="flex items-center gap-3 shrink-0">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-yellow-400 shadow-md shadow-amber-500/20 text-slate-950 font-black tracking-wider text-xl">
-            CM
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-slate-900 text-white shadow-md p-1.5">
+            <img src="/logo.png" alt="CabinetMap Logo" className="w-full h-full object-contain invert" />
           </div>
           <div>
             <h1 className="text-lg font-bold tracking-tight text-slate-900">
