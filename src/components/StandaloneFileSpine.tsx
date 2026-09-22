@@ -33,17 +33,17 @@ export const StandaloneFileSpine: React.FC<StandaloneFileSpineProps> = ({
           : "border-stone-200 hover:border-amber-400"
       }`}
       style={{
-        backgroundColor: "#ffffff",
+        backgroundColor: "#51C4EC",
         boxShadow: "inset 1px 0 2px rgba(255,255,255,0.8), inset -1px 0 2px rgba(0,0,0,0.1), 1px 2px 4px rgba(0,0,0,0.15)"
       }}
     >
-      <div className="w-full bg-stone-700 text-white text-[7px] font-mono font-bold py-0.5 rounded-t text-center truncate">
+      <div className="w-full bg-slate-900 text-white text-[7px] font-mono font-bold py-0.5 rounded-t text-center truncate">
         {file.code.slice(-5)}
       </div>
 
       <div className="flex-1 flex items-center justify-center overflow-hidden py-1">
         <span
-          className="text-[9px] font-semibold text-stone-700 tracking-wider whitespace-nowrap truncate"
+          className="text-[9px] font-semibold text-slate-950 font-bold tracking-wider whitespace-nowrap truncate"
           style={{
             writingMode: "vertical-rl",
             transform: "rotate(180deg)",
@@ -54,7 +54,7 @@ export const StandaloneFileSpine: React.FC<StandaloneFileSpineProps> = ({
         </span>
       </div>
 
-      <div className="flex items-center justify-center pb-0.5 text-stone-400">
+      <div className="flex items-center justify-center pb-0.5 text-slate-900">
         {file.attachmentUrl ? (
           <Paperclip className="w-2.5 h-2.5 text-amber-600" />
         ) : (
@@ -66,14 +66,14 @@ export const StandaloneFileSpine: React.FC<StandaloneFileSpineProps> = ({
         <button
           onClick={onMove}
           title="Move File"
-          className="p-0.5 text-stone-400 hover:text-amber-600 transition-colors"
+          className="p-0.5 text-slate-900 hover:text-amber-600 transition-colors"
         >
           <MoveRight className="w-2.5 h-2.5" />
         </button>
         <button
           onClick={onDelete}
           title="Delete File (Move to Trash)"
-          className="p-0.5 text-stone-400 hover:text-red-600 transition-colors"
+          className="p-0.5 text-slate-900 hover:text-red-600 transition-colors"
         >
           <Trash2 className="w-2.5 h-2.5" />
         </button>
