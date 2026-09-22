@@ -548,7 +548,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-stone-800 font-bold flex items-center gap-1.5">
                     <Paperclip className="w-3.5 h-3.5 text-stone-600" />
-                    Digital Twin Picture(s) & Scan(s)
+                    Attach Scans & Picture(s)
                   </label>
                   {fileAttachments.length > 0 && (
                     <span className="text-[11px] font-mono font-semibold text-stone-800 bg-stone-100 px-2 py-0.5 rounded-full border border-stone-300">
@@ -731,7 +731,7 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               <div className="bg-stone-50/60 p-4 rounded-xl border border-stone-200">
                 <label className="text-stone-800 font-bold block mb-1 flex items-center gap-1.5">
                   <Paperclip className="w-3.5 h-3.5 text-stone-600" />
-                  Digital Twin Attachment (Photo or PDF)
+                  Attachment (Photo or PDF)
                 </label>
                 <input
                   type="file"
