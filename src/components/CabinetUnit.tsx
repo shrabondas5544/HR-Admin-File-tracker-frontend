@@ -79,7 +79,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           onClick={onToggleUpper}
         >
           <div
-            className={`w-1/2 h-full cabinet-door-texture border-r border-stone-400/50 flex items-center justify-end pr-2 origin-left transition-transform duration-700 ease-in-out transform-style-3d ${
+            className={`w-1/2 h-full cabinet-door-texture border-r border-stone-400/50 flex items-end justify-end pr-2 pb-10 origin-left transition-transform duration-700 ease-in-out transform-style-3d ${
               isUpperOpen ? "-rotate-y-90 scale-x-0" : "rotate-y-0 scale-x-100"
             }`}
           >
@@ -87,7 +87,7 @@ export const CabinetUnit: React.FC<CabinetUnitProps> = ({
           </div>
 
           <div
-            className={`w-1/2 h-full cabinet-door-texture border-l border-[#d4c4a8]/30 flex items-center justify-start pl-2 origin-right transition-transform duration-700 ease-in-out transform-style-3d ${
+            className={`w-1/2 h-full cabinet-door-texture border-l border-[#d4c4a8]/30 flex items-end justify-start pl-2 pb-10 origin-right transition-transform duration-700 ease-in-out transform-style-3d ${
               isUpperOpen ? "rotate-y-90 scale-x-0" : "rotate-y-0 scale-x-100"
             }`}
           >
