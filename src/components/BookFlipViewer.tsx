@@ -15,8 +15,9 @@ import {
   X,
   FileText,
   CheckCircle2,
-  RotateCw,
-  Layers
+  BookOpen,
+  Layers,
+  RotateCw
 } from "lucide-react";
 
 interface BookFlipViewerProps {
@@ -121,6 +122,28 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
       {/* Top Navigation & Controls Bar */}
       <div className="flex items-center justify-between gap-2 border-b border-stone-200/80 pb-2">
         <div className="flex items-center gap-2">
+          <BookOpen className="w-4 h-4 text-stone-700" />
+          <span className="text-xs font-bold uppercase tracking-wider text-stone-800">
+            Flipbook View
+          </span>
+          {totalPages > 0 && (
+            <span
+              className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full text-white"
+              style={{ backgroundColor: folderColor }}
+            >
+              {totalPages} {totalPages === 1 ? "Page" : "Pages"}
+            </span>
+          )}
+          {saveStatus && (
+            <span className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1 ml-2">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              {saveStatus}
+            </span>
+          )}
+        </div>
+
+        {/* Action Controls & Upload Button */}
+        <div className="flex items-center gap-2">
           {totalPages > 0 && (
             <div className="flex items-center bg-white rounded-lg border border-stone-200 px-3 py-1 shadow-2xs text-xs font-mono text-stone-700">
               <span className="font-bold text-stone-900">
@@ -131,28 +154,21 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
             </div>
           )}
 
-          {saveStatus && (
-            <span className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              {saveStatus}
-            </span>
+          {/* Upload Button */}
+          {onUploadPages && (
+            <label className="cursor-pointer text-xs font-bold text-white bg-stone-800 hover:bg-stone-700 px-3 py-1.5 rounded-lg shadow-2xs flex items-center gap-1.5 transition-colors">
+              <Plus className="w-3.5 h-3.5" />
+              <span>+ Add Picture(s)</span>
+              <input
+                type="file"
+                multiple
+                accept="image/*,application/pdf"
+                onChange={onUploadPages}
+                className="hidden"
+              />
+            </label>
           )}
         </div>
-
-        {/* Upload Button */}
-        {onUploadPages && (
-          <label className="cursor-pointer text-xs font-bold text-white bg-stone-800 hover:bg-stone-700 px-3 py-1.5 rounded-lg shadow-2xs flex items-center gap-1.5 transition-colors">
-            <Plus className="w-3.5 h-3.5" />
-            <span>+ Add Picture(s)</span>
-            <input
-              type="file"
-              multiple
-              accept="image/*,application/pdf"
-              onChange={onUploadPages}
-              className="hidden"
-            />
-          </label>
-        )}
       </div>
 
       {uploading && (
@@ -163,6 +179,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
 
       {/* Main Folder Stage Styled in the Exact File Color */}
       <div className="relative w-full overflow-hidden flex flex-col items-center">
+        {/* Navigation Floating Arrows */}
         {/* Previous Page Arrow */}
         <button
           onClick={handlePrevFlip}
@@ -217,6 +234,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
               {leftPageAttachment ? (
                 /* Scanned Document Page on Left Leaf */
                 <div className="flex-1 flex flex-col justify-between relative group">
+                  {/* Page Top Header Bar */}
                   <div className="flex items-center justify-between pb-2 border-b border-stone-200 text-xs text-stone-600 font-mono">
                     <span className="font-bold px-2 py-0.5 rounded bg-stone-100 border border-stone-200 text-stone-800">
                       Page {leftPageIndex! + 1}
@@ -250,6 +268,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
                     </div>
                   </div>
 
+                  {/* Document Leaf Canvas */}
                   <div
                     onClick={handlePrevFlip}
                     title="Click left page to flip backward"
@@ -283,6 +302,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
               ) : (
                 /* Inside Front Cover Info */
                 <div className="flex-1 flex flex-col justify-between select-none">
+                  {/* Upper Folder Information Header */}
                   <div className="p-3 bg-stone-50/80 rounded-xl border border-stone-200/80">
                     <div className="flex items-center gap-2 mb-2">
                       <div
@@ -321,46 +341,24 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
                       backgroundColor: folderColor,
                       backgroundImage:
                         "linear-gradient(to bottom, rgba(255,255,255,0.35) 0%, rgba(0,0,0,0.08) 100%)",
-                      borderColor: "rgba(0,0,0,0.1)",
-                      boxShadow:
-                        "0 -4px 10px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6)"
+                      borderColor: "rgba(0,0,0,0.1)"
                     }}
                   >
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-black/10 shadow-inner" />
-
-                    {onUploadPages && (
-                      <label className="cursor-pointer text-[11px] font-bold text-stone-900 bg-white hover:bg-stone-50 px-3 py-1.5 rounded-lg border border-stone-300 shadow-2xs flex items-center gap-1 transition-all">
-                        <Plus className="w-3 h-3" />
-                        <span>Insert Scan</span>
-                        <input
-                          type="file"
-                          multiple
-                          accept="image/*,application/pdf"
-                          onChange={onUploadPages}
-                          className="hidden"
-                        />
-                      </label>
-                    )}
+                    <div className="flex items-center gap-1.5 text-white/90 text-[11px] font-semibold bg-black/15 px-2.5 py-1 rounded-md border border-white/20 shadow-2xs">
+                      <Layers className="w-3.5 h-3.5" />
+                      <span>Document Leaf</span>
+                    </div>
                   </div>
                 </div>
               )}
-
-              {/* Bottom pocket lip in file color */}
-              <div
-                className="w-full h-3 -mb-4 -mx-4 rounded-bl-xl border-t"
-                style={{
-                  backgroundColor: folderColor,
-                  filter: "brightness(0.92)",
-                  borderColor: "rgba(0,0,0,0.1)"
-                }}
-              />
             </div>
 
             {/* ---------------- RIGHT PANEL ---------------- */}
-            <div className="flex-1 min-h-[350px] md:min-h-[420px] flex flex-col justify-between relative rounded-r-xl p-3 md:p-4 bg-white/95 shadow-inner overflow-hidden">
+            <div className="flex-1 min-h-[350px] md:min-h-[420px] flex flex-col justify-between relative rounded-r-xl p-3 md:p-4 bg-white/95 border-l border-stone-200/80 shadow-inner overflow-hidden">
               {rightPageAttachment ? (
                 /* Scanned Document Page on Right Leaf */
                 <div className="flex-1 flex flex-col justify-between relative group">
+                  {/* Page Top Header Bar */}
                   <div className="flex items-center justify-between pb-2 border-b border-stone-200 text-xs text-stone-600 font-mono">
                     <span className="font-bold px-2 py-0.5 rounded bg-stone-100 border border-stone-200 text-stone-800">
                       Page {rightPageIndex! + 1}
@@ -394,6 +392,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
                     </div>
                   </div>
 
+                  {/* Document Leaf Canvas */}
                   <div
                     onClick={handleNextFlip}
                     title="Click right page to flip forward"
@@ -425,79 +424,66 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
                   </div>
                 </div>
               ) : (
-                /* Inside Back Cover / End Pocket */
-                <div className="flex-1 flex flex-col items-center justify-center text-center p-6 select-none">
-                  <div className="w-12 h-12 rounded-2xl bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-400 mb-2.5 shadow-2xs">
-                    <Layers className="w-6 h-6 text-stone-400" />
+                /* Inside Back Cover Info / End of Pages */
+                <div className="flex-1 flex flex-col justify-between select-none">
+                  <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+                    <div
+                      className="w-12 h-12 rounded-full flex items-center justify-center text-white mb-3 shadow-sm"
+                      style={{ backgroundColor: folderColor }}
+                    >
+                      <BookOpen className="w-6 h-6" />
+                    </div>
+                    <h5 className="font-bold text-sm text-stone-800 mb-1">
+                      {totalPages === 0 ? "No Scanned Pages Yet" : "End of Folder Pages"}
+                    </h5>
+                    <p className="text-xs text-stone-500 max-w-[220px]">
+                      {totalPages === 0
+                        ? "Click '+ Add Picture(s)' above to attach pages into this folder."
+                        : "You have reached the end of the scanned pages."}
+                    </p>
                   </div>
-                  <h4 className="font-bold text-sm text-stone-800 mb-1">End of Pages</h4>
-                  <p className="text-xs text-stone-500 max-w-[200px] mb-3">
-                    All {totalPages} attached pages have been displayed.
-                  </p>
 
-                  {onUploadPages && (
-                    <label className="cursor-pointer text-xs font-bold text-stone-900 bg-stone-100 hover:bg-stone-200 px-3 py-1.5 rounded-lg border border-stone-300 shadow-2xs flex items-center gap-1.5 transition-all">
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>Attach More</span>
-                      <input
-                        type="file"
-                        multiple
-                        accept="image/*,application/pdf"
-                        onChange={onUploadPages}
-                        className="hidden"
-                      />
-                    </label>
-                  )}
+                  {/* Right Pocket in Matching File Color */}
+                  <div
+                    className="relative w-full rounded-xl p-3 mt-4 border flex items-center justify-start overflow-hidden"
+                    style={{
+                      height: "90px",
+                      backgroundColor: folderColor,
+                      backgroundImage:
+                        "linear-gradient(to bottom, rgba(255,255,255,0.35) 0%, rgba(0,0,0,0.08) 100%)",
+                      borderColor: "rgba(0,0,0,0.1)"
+                    }}
+                  >
+                    <div className="flex items-center gap-1.5 text-white/90 text-[11px] font-semibold bg-black/15 px-2.5 py-1 rounded-md border border-white/20 shadow-2xs">
+                      <Layers className="w-3.5 h-3.5" />
+                      <span>Document Leaf</span>
+                    </div>
+                  </div>
                 </div>
               )}
-
-              {/* Bottom pocket lip in file color */}
-              <div
-                className="w-full h-3 -mb-4 -mx-4 rounded-br-xl border-t"
-                style={{
-                  backgroundColor: folderColor,
-                  filter: "brightness(0.92)",
-                  borderColor: "rgba(0,0,0,0.1)"
-                }}
-              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Leaf Strip Quick-Jumper */}
+      {/* Bottom Leaf Strip / Thumbnails Navigation */}
       {totalPages > 0 && (
-        <div className="pt-2 border-t border-stone-200/80">
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+        <div className="mt-1 pt-2 border-t border-stone-200/80">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 px-1 custom-scrollbar">
             {attachments.map((att, idx) => {
-              const isCurrentRight = idx === rightPageIndex;
-              const isCurrentLeft = idx === leftPageIndex;
-              const isActiveInSpread = isCurrentRight || isCurrentLeft;
-
+              const isActive = idx === rightPageIndex || idx === leftPageIndex;
               return (
                 <button
-                  key={`thumb-leaf-${idx}-${att.url}`}
+                  key={`${att.url}-${idx}`}
                   onClick={() => handleJumpToPage(idx)}
-                  className={`group relative shrink-0 w-14 h-18 rounded-lg border-2 overflow-hidden cursor-pointer transition-all bg-white flex flex-col justify-between p-1 ${
-                    isActiveInSpread
-                      ? "border-stone-800 ring-2 ring-stone-400/50 shadow-md scale-105"
-                      : "border-stone-200 opacity-60 hover:opacity-100 hover:border-stone-400"
+                  className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-mono transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-stone-800 text-white border-stone-800 font-bold shadow-xs"
+                      : "bg-white text-stone-700 border-stone-200 hover:bg-stone-100"
                   }`}
                 >
-                  <div className="w-full flex-1 overflow-hidden flex items-center justify-center bg-stone-50 rounded">
-                    {att.url.match(/\.(jpeg|jpg|png|webp|gif)$/i) ? (
-                      <img
-                        src={getFileUrl(att.url)}
-                        alt={`Page ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <FileText className="w-4 h-4 text-stone-400" />
-                    )}
-                  </div>
-                  <div className="mt-0.5 text-center font-mono font-bold text-[9px] text-stone-700 truncate">
-                    P.{idx + 1}
-                  </div>
+                  <span className="opacity-75">P.{idx + 1}</span>
+                  <span className="truncate max-w-[90px] text-[11px]">{att.name}</span>
                 </button>
               );
             })}
@@ -505,79 +491,87 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
         </div>
       )}
 
-      {/* Lightbox Fullscreen Viewer */}
+      {/* Lightbox / Zoom Modal */}
       {zoomPage && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col p-4 animate-in fade-in duration-200">
-          <div className="flex items-center justify-between text-white border-b border-white/15 pb-3 mb-3">
+        <div className="fixed inset-0 z-50 bg-stone-900/90 backdrop-blur-xs flex flex-col items-center justify-between p-4">
+          {/* Lightbox Header Bar */}
+          <div className="w-full max-w-5xl flex items-center justify-between text-white pb-3 border-b border-stone-700">
             <div className="flex items-center gap-3">
-              <span className="px-2.5 py-1 rounded bg-white text-black font-mono font-bold text-xs">
-                Page {zoomPage.pageNum} of {totalPages}
+              <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-stone-700 border border-stone-600">
+                Page {zoomPage.pageNum}
               </span>
-              <span className="text-sm font-medium text-stone-200 font-mono truncate max-w-md">
+              <span className="font-medium text-sm truncate max-w-sm">
                 {zoomPage.name}
               </span>
             </div>
 
+            {/* Controls */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setZoomScale((s) => Math.max(0.5, s - 0.25))}
                 title="Zoom Out"
-                className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+                className="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 cursor-pointer border border-stone-700"
               >
                 <ZoomOut className="w-4 h-4" />
               </button>
-              <span className="font-mono text-xs text-stone-300 min-w-[45px] text-center">
+              <span className="text-xs font-mono w-12 text-center text-stone-300">
                 {Math.round(zoomScale * 100)}%
               </span>
               <button
                 onClick={() => setZoomScale((s) => Math.min(3, s + 0.25))}
                 title="Zoom In"
-                className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+                className="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 cursor-pointer border border-stone-700"
               >
                 <ZoomIn className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setZoomRotation((r) => (r + 90) % 360)}
-                title="Rotate 90°"
-                className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+                title="Rotate Clockwise"
+                className="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 cursor-pointer border border-stone-700 ml-1"
               >
                 <RotateCw className="w-4 h-4" />
               </button>
-
-              <a
-                href={getFileUrl(zoomPage.url)}
-                target="_blank"
-                rel="noreferrer"
-                title="Open in new window"
-                className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+              <button
+                onClick={() => {
+                  setZoomScale(1);
+                  setZoomRotation(0);
+                }}
+                className="text-xs px-2 py-1 rounded bg-stone-800 hover:bg-stone-700 text-stone-300 cursor-pointer border border-stone-700 ml-1"
               >
-                <ExternalLink className="w-4 h-4" />
-              </a>
-
+                Reset
+              </button>
               <button
                 onClick={() => {
                   setZoomPage(null);
                   setZoomScale(1);
                   setZoomRotation(0);
                 }}
-                title="Close Fullscreen"
-                className="p-2 rounded-lg bg-red-600 hover:bg-red-700 text-white cursor-pointer ml-2"
+                className="p-1.5 rounded-lg bg-stone-700 hover:bg-stone-600 text-white cursor-pointer ml-3"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
           </div>
 
-          <div className="flex-1 overflow-auto flex items-center justify-center p-4">
-            <img
-              src={getFileUrl(zoomPage.url)}
-              alt={zoomPage.name}
-              style={{
-                transform: `scale(${zoomScale}) rotate(${zoomRotation}deg)`,
-                transition: "transform 0.2s ease-out"
-              }}
-              className="max-h-full max-w-full object-contain rounded-lg shadow-2xl"
-            />
+          {/* Lightbox Content Area */}
+          <div className="flex-1 w-full max-w-5xl flex items-center justify-center overflow-auto p-4">
+            {zoomPage.url.match(/\.(jpeg|jpg|png|webp|gif)$/i) ? (
+              <img
+                src={getFileUrl(zoomPage.url)}
+                alt={zoomPage.name}
+                style={{
+                  transform: `scale(${zoomScale}) rotate(${zoomRotation}deg)`,
+                  transition: "transform 0.15s ease-out"
+                }}
+                className="max-h-[80vh] max-w-full object-contain rounded shadow-2xl"
+              />
+            ) : (
+              <iframe
+                src={getFileUrl(zoomPage.url)}
+                title={zoomPage.name}
+                className="w-full h-[80vh] rounded-lg border border-stone-700 bg-white"
+              />
+            )}
           </div>
         </div>
       )}
