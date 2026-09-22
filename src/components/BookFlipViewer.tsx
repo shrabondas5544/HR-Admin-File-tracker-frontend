@@ -324,7 +324,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
                     )}
                   </div>
 
-                  {/* Clean Visual Folder Pocket Accent at the Bottom (Matching Reference Image) */}
+                  {/* Clean Visual Folder Pocket Accent at the Bottom */}
                   <div
                     className="relative w-full rounded-xl p-3 mt-4 border border-stone-300/80 flex items-center justify-end overflow-hidden"
                     style={{

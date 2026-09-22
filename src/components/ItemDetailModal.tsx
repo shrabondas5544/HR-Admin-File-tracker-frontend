@@ -484,7 +484,182 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           )}
 
 
+          {/* Digital Twin Snapshot / Multi-Page Scan Section */}
+          <div className="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-stone-200 pb-2.5">
+              <div className="flex items-center gap-2">
+                <Paperclip className="w-4 h-4 text-amber-600" />
+                <span className="text-xs font-bold uppercase tracking-wider text-stone-800">
+                  Digital Twin Scans & Pictures
+                </span>
+                {attachments.length > 0 && (
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-mono font-semibold">
+                    {attachments.length} {attachments.length === 1 ? "Page" : "Pages"}
+                  </span>
+                )}
+                {saveStatus && (
+                  <span className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1 animate-in fade-in">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    {saveStatus}
+                  </span>
+                )}
+              </div>
 
+              {/* Add Page / Multiple Pages Button */}
+              <label className="cursor-pointer text-xs font-semibold text-amber-800 hover:text-amber-900 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg border border-amber-300 flex items-center gap-1.5 transition-colors shadow-2xs">
+                <Plus className="w-3.5 h-3.5" />
+                <span>+ Add Picture(s) / Page(s)</span>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*,application/pdf"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+              </label>
+            </div>
+
+            {uploading ? (
+              <div className="py-8 text-center text-xs text-amber-700">Uploading digital copy...</div>
+            ) : attachments.length > 0 ? (
+              <div className="space-y-3">
+                {/* Active Page Navigation Bar */}
+                <div className="flex flex-wrap items-center justify-between bg-white p-3 rounded-lg border border-stone-200 shadow-2xs gap-2">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setActivePageIndex((prev) => Math.max(0, prev - 1))}
+                      disabled={activePageIndex <= 0}
+                      className="p-1 rounded-md border border-stone-200 text-stone-600 hover:bg-stone-100 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                      title="Previous Page"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+
+                    <span className="text-xs font-mono font-bold text-stone-800 bg-stone-100 px-2 py-1 rounded border border-stone-200">
+                      Page {activePageIndex + 1} of {attachments.length}
+                    </span>
+
+                    <button
+                      onClick={() => setActivePageIndex((prev) => Math.min(attachments.length - 1, prev + 1))}
+                      disabled={activePageIndex >= attachments.length - 1}
+                      className="p-1 rounded-md border border-stone-200 text-stone-600 hover:bg-stone-100 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                      title="Next Page"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+
+                    <span className="text-xs text-stone-700 font-mono truncate max-w-xs ml-2">
+                      {currentPage?.name || `Page ${activePageIndex + 1}`}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {currentPage && (
+                      <a
+                        href={getFileUrl(currentPage.url)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-1 text-xs text-amber-700 hover:underline font-semibold px-2 py-1 bg-amber-50 rounded border border-amber-200"
+                      >
+                        <span>View Full Scan</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+
+                    <button
+                      onClick={() => handleDeletePage(activePageIndex)}
+                      title="Delete this page"
+                      className="flex items-center gap-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded border border-red-200 transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Page</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Main Preview for Active Page */}
+                {currentPage && (
+                  <div className="rounded-xl overflow-hidden border border-stone-200 bg-stone-100 flex flex-col items-center justify-center p-3 min-h-[220px] max-h-[360px]">
+                    {currentPage.url.match(/\.(jpeg|jpg|png|webp|gif)$/i) ? (
+                      <img
+                        src={getFileUrl(currentPage.url)}
+                        alt={`Page ${activePageIndex + 1}`}
+                        className="object-contain max-h-[340px] rounded-lg shadow-xs"
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center gap-2 py-10">
+                        <FileText className="w-12 h-12 text-amber-600" />
+                        <span className="text-xs text-stone-700 font-medium font-mono">{currentPage.name}</span>
+                        <a
+                          href={getFileUrl(currentPage.url)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-2 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg shadow-xs"
+                        >
+                          Open Document in New Tab
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Thumbnail Filmstrip if multiple pages attached */}
+                {attachments.length > 1 && (
+                  <div className="pt-2 border-t border-stone-200">
+                    <div className="text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-2">
+                      All Attached Pages ({attachments.length}):
+                    </div>
+                    <div className="flex items-center gap-2.5 overflow-x-auto pb-2 no-scrollbar">
+                      {attachments.map((att, idx) => {
+                        const isActive = idx === activePageIndex;
+                        return (
+                          <div
+                            key={`thumb-${idx}-${att.url}`}
+                            onClick={() => setActivePageIndex(idx)}
+                            className={`relative shrink-0 w-20 h-24 rounded-lg border-2 overflow-hidden cursor-pointer transition-all bg-white flex flex-col justify-between p-1 ${
+                              isActive
+                                ? "border-amber-500 ring-2 ring-amber-300 shadow-md scale-102"
+                                : "border-stone-200 opacity-70 hover:opacity-100 hover:border-slate-400"
+                            }`}
+                          >
+                            <div className="w-full flex-1 overflow-hidden flex items-center justify-center bg-stone-50 rounded">
+                              {att.url.match(/\.(jpeg|jpg|png|webp|gif)$/i) ? (
+                                <img
+                                  src={getFileUrl(att.url)}
+                                  alt={`Page ${idx + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <FileText className="w-6 h-6 text-stone-400" />
+                              )}
+                            </div>
+                            <div className="mt-1 text-center font-mono font-bold text-[9px] text-stone-700 truncate">
+                              Page {idx + 1}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-10 text-stone-400 text-xs border border-dashed border-stone-200 rounded-lg bg-white flex flex-col items-center gap-2">
+                <ImageIcon className="w-8 h-8 text-slate-300" />
+                <span className="font-medium text-stone-600">No pictures or pages attached yet.</span>
+                <label className="cursor-pointer text-xs font-semibold text-amber-800 hover:underline bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 transition-colors">
+                  Click here to select and attach multiple pictures / pages
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*,application/pdf"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+            )}
+          </div>
           {/* Interactive Open Folder & Book Flipbook Scan Viewer */}
           <BookFlipViewer
             attachments={attachments}
