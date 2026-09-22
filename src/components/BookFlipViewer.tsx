@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { FileAttachment } from "@/lib/types";
 import { getFileUrl } from "@/lib/api";
 import {
@@ -15,7 +15,6 @@ import {
   X,
   FileText,
   CheckCircle2,
-  Sparkles,
   BookOpen,
   Layers,
   RotateCw
@@ -47,16 +46,12 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
   itemType = "File",
   checklistSummary
 }) => {
-  // activePageIndex: 0 corresponds to first page on right panel, with left panel showing folder pocket
-  // index 1: Page 1 on left, Page 2 on right, etc.
   const [activeTurnIndex, setActiveTurnIndex] = useState<number>(0);
-  const [flipDirection, setFlipDirection] = useState<"forward" | "backward" | null>(null);
   const [isFlipping, setIsFlipping] = useState<boolean>(false);
   const [zoomPage, setZoomPage] = useState<{ url: string; name: string; pageNum: number } | null>(null);
   const [zoomScale, setZoomScale] = useState<number>(1);
   const [zoomRotation, setZoomRotation] = useState<number>(0);
 
-  // Clamp activeTurnIndex if attachments length changes
   useEffect(() => {
     if (attachments.length === 0) {
       setActiveTurnIndex(0);
@@ -65,10 +60,10 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
     }
   }, [attachments.length]);
 
-  // Keyboard navigation (Left / Right arrow keys)
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (zoomPage) return; // Ignore when full-screen zoom is open
+      if (zoomPage) return;
       if (e.key === "ArrowRight") {
         handleNextFlip();
       } else if (e.key === "ArrowLeft") {
@@ -79,65 +74,38 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeTurnIndex, attachments.length, isFlipping, zoomPage]);
 
-  // Flip forward: turns current right page over to left
   const handleNextFlip = () => {
     if (isFlipping) return;
     if (activeTurnIndex >= attachments.length) return;
 
     setIsFlipping(true);
-    setFlipDirection("forward");
-
     setTimeout(() => {
       setActiveTurnIndex((prev) => Math.min(attachments.length, prev + 1));
       setIsFlipping(false);
-      setFlipDirection(null);
-    }, 450);
+    }, 350);
   };
 
-  // Flip backward: turns current left page back over to right
   const handlePrevFlip = () => {
     if (isFlipping) return;
     if (activeTurnIndex <= 0) return;
 
     setIsFlipping(true);
-    setFlipDirection("backward");
-
     setTimeout(() => {
       setActiveTurnIndex((prev) => Math.max(0, prev - 1));
       setIsFlipping(false);
-      setFlipDirection(null);
-    }, 450);
+    }, 350);
   };
 
-  // Jump to specific page index
   const handleJumpToPage = (targetIdx: number) => {
     if (isFlipping) return;
     if (targetIdx === activeTurnIndex) return;
 
-    const dir = targetIdx > activeTurnIndex ? "forward" : "backward";
     setIsFlipping(true);
-    setFlipDirection(dir);
-
     setTimeout(() => {
       setActiveTurnIndex(targetIdx);
       setIsFlipping(false);
-      setFlipDirection(null);
-    }, 350);
+    }, 250);
   };
-
-  // Left page and right page determination:
-  // If activeTurnIndex === 0:
-  //   Left: Inside Front Folder Cover & Pocket
-  //   Right: Page 1 (attachments[0])
-  // If activeTurnIndex === 1:
-  //   Left: Page 1 (attachments[0])
-  //   Right: Page 2 (attachments[1])
-  // If activeTurnIndex === k:
-  //   Left: Page k (attachments[k-1])
-  //   Right: Page k+1 (attachments[k])
-  // If activeTurnIndex === attachments.length:
-  //   Left: Page N (attachments[N-1])
-  //   Right: Inside Back Folder Cover & Pocket
 
   const leftPageIndex = activeTurnIndex > 0 ? activeTurnIndex - 1 : null;
   const rightPageIndex = activeTurnIndex < attachments.length ? activeTurnIndex : null;
@@ -150,29 +118,19 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
   return (
     <div className="bg-stone-100/70 p-4 rounded-2xl border border-stone-200/90 shadow-inner flex flex-col gap-3 select-none">
       {/* Top Header / Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200/80 pb-3">
-        <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-lg bg-white shadow-2xs border border-stone-200 text-amber-800">
-            <BookOpen className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-stone-800">
-                Interactive Folder & Flipbook
-              </span>
-              {totalPages > 0 && (
-                <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
-                  {totalPages} {totalPages === 1 ? "Page" : "Pages"}
-                </span>
-              )}
-            </div>
-            <p className="text-[10px] text-stone-500 font-medium">
-              Click page edges or arrows to flip through scanned sheets
-            </p>
-          </div>
-
+      <div className="flex items-center justify-between gap-2 border-b border-stone-200/80 pb-2.5">
+        <div className="flex items-center gap-2">
+          <BookOpen className="w-4 h-4 text-amber-700" />
+          <span className="text-xs font-bold uppercase tracking-wider text-stone-800">
+            Flipbook View
+          </span>
+          {totalPages > 0 && (
+            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+              {totalPages} {totalPages === 1 ? "Page" : "Pages"}
+            </span>
+          )}
           {saveStatus && (
-            <span className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1 ml-2 animate-in fade-in">
+            <span className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1 ml-2">
               <CheckCircle2 className="w-3.5 h-3.5" />
               {saveStatus}
             </span>
@@ -182,7 +140,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
         {/* Action Controls & Upload Button */}
         <div className="flex items-center gap-2">
           {totalPages > 0 && (
-            <div className="flex items-center bg-white rounded-lg border border-stone-200 px-2 py-1 shadow-2xs text-xs font-mono text-stone-700">
+            <div className="flex items-center bg-white rounded-lg border border-stone-200 px-2.5 py-1 shadow-2xs text-xs font-mono text-stone-700">
               <span className="font-bold text-stone-900">
                 {rightPageIndex !== null ? `Page ${rightPageIndex + 1}` : "End"}
               </span>
@@ -191,7 +149,6 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
             </div>
           )}
 
-          {/* Add Page Button */}
           {onUploadPages && (
             <label className="cursor-pointer text-xs font-semibold text-amber-900 hover:text-amber-950 bg-amber-200/80 hover:bg-amber-200 px-3 py-1.5 rounded-lg border border-amber-300 flex items-center gap-1.5 transition-colors shadow-2xs">
               <Plus className="w-3.5 h-3.5" />
@@ -209,7 +166,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
       </div>
 
       {uploading && (
-        <div className="py-4 text-center text-xs font-semibold text-amber-800 bg-amber-50 rounded-xl border border-amber-200 animate-pulse">
+        <div className="py-3 text-center text-xs font-semibold text-amber-800 bg-amber-50 rounded-xl border border-amber-200 animate-pulse">
           Uploading digital scan leaf... Please wait.
         </div>
       )}
@@ -247,7 +204,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
           <div
             className="relative w-full rounded-2xl p-3 md:p-5 flex flex-col md:flex-row items-stretch justify-center gap-0 border border-stone-300/80 shadow-2xl transition-all duration-300"
             style={{
-              backgroundColor: "#f5f3ef", // Clean natural corporate presentation folder cardstock
+              backgroundColor: "#f5f3ef",
               backgroundImage:
                 "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.7) 0%, rgba(235,230,220,0.5) 100%)",
               boxShadow:
@@ -266,7 +223,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
             {/* ---------------- LEFT PANEL ---------------- */}
             <div className="flex-1 min-h-[360px] md:min-h-[440px] flex flex-col justify-between relative rounded-l-xl p-3 md:p-4 bg-white/60 border-r border-stone-300/60 shadow-inner overflow-hidden">
               {leftPageAttachment ? (
-                /* Active Scanned Document Page on the Left Leaf */
+                /* Scanned Document Page on the Left Leaf */
                 <div className="flex-1 flex flex-col justify-between relative group">
                   {/* Page Top Header Bar */}
                   <div className="flex items-center justify-between pb-2 border-b border-stone-200 text-xs text-stone-600 font-mono">
@@ -334,7 +291,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
                   </div>
                 </div>
               ) : (
-                /* Inside Front Folder Pocket (Matching Image 1 Reference) */
+                /* Inside Front Folder Pocket */
                 <div className="flex-1 flex flex-col justify-between select-none">
                   {/* Upper Folder Information Header */}
                   <div className="p-3 bg-white/80 rounded-xl border border-stone-200/80 shadow-2xs">
@@ -367,11 +324,11 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
                     )}
                   </div>
 
-                  {/* Visual Folder Pocket Accent at the Bottom (Matching Reference 1) */}
+                  {/* Clean Visual Folder Pocket Accent at the Bottom (Matching Reference Image) */}
                   <div
-                    className="relative w-full rounded-xl p-3.5 mt-4 border border-stone-300/80 flex flex-col justify-end overflow-hidden"
+                    className="relative w-full rounded-xl p-3 mt-4 border border-stone-300/80 flex items-center justify-end overflow-hidden"
                     style={{
-                      height: "120px",
+                      height: "100px",
                       backgroundColor: "#ebe6dc",
                       backgroundImage:
                         "linear-gradient(to bottom, #f2ece1 0%, #e5ded2 100%)",
@@ -379,50 +336,39 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
                         "0 -4px 10px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)"
                     }}
                   >
-                    {/* Angled pocket top edge silhouette */}
                     <div className="absolute top-0 left-0 right-0 h-1 bg-stone-400/20 shadow-inner" />
 
-                    <div className="relative z-10 flex items-center justify-between">
-                      <div className="text-[11px] font-mono text-stone-600">
-                        <span className="font-bold uppercase text-stone-800">Folder Pocket</span>
-                        <p className="text-[10px] text-stone-500">Document Leaf Sleeve</p>
-                      </div>
-
-                      {onUploadPages && (
-                        <label className="cursor-pointer text-[11px] font-bold text-stone-800 bg-white hover:bg-stone-50 px-3 py-1.5 rounded-lg border border-stone-300 shadow-2xs flex items-center gap-1 transition-all">
-                          <Plus className="w-3 h-3" />
-                          <span>Insert Scan</span>
-                          <input
-                            type="file"
-                            multiple
-                            accept="image/*,application/pdf"
-                            onChange={onUploadPages}
-                            className="hidden"
-                          />
-                        </label>
-                      )}
-                    </div>
+                    {onUploadPages && (
+                      <label className="cursor-pointer text-[11px] font-bold text-stone-800 bg-white hover:bg-stone-50 px-3 py-1.5 rounded-lg border border-stone-300 shadow-2xs flex items-center gap-1 transition-all">
+                        <Plus className="w-3 h-3" />
+                        <span>Insert Scan</span>
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*,application/pdf"
+                          onChange={onUploadPages}
+                          className="hidden"
+                        />
+                      </label>
+                    )}
                   </div>
                 </div>
               )}
 
-              {/* Bottom physical pocket lip simulation */}
+              {/* Clean Bottom pocket lip */}
               <div
-                className="w-full h-8 -mb-4 -mx-4 rounded-bl-xl border-t border-stone-300/60 flex items-center justify-between px-4 text-[10px] font-mono text-stone-500"
+                className="w-full h-4 -mb-4 -mx-4 rounded-bl-xl border-t border-stone-300/60"
                 style={{
                   backgroundColor: "#e2dad0",
                   boxShadow: "0 -2px 6px rgba(0,0,0,0.05)"
                 }}
-              >
-                <span>Inside Left Leaf</span>
-                <span>Transcom HR Archive</span>
-              </div>
+              />
             </div>
 
             {/* ---------------- RIGHT PANEL ---------------- */}
             <div className="flex-1 min-h-[360px] md:min-h-[440px] flex flex-col justify-between relative rounded-r-xl p-3 md:p-4 bg-white/60 shadow-inner overflow-hidden">
               {rightPageAttachment ? (
-                /* Active Scanned Document Page on the Right Leaf */
+                /* Scanned Document Page on the Right Leaf */
                 <div className="flex-1 flex flex-col justify-between relative group">
                   {/* Page Top Header Bar */}
                   <div className="flex items-center justify-between pb-2 border-b border-stone-200 text-xs text-stone-600 font-mono">
@@ -497,7 +443,7 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
                   </div>
                   <h4 className="font-bold text-sm text-stone-800 mb-1">End of Scanned Pages</h4>
                   <p className="text-xs text-stone-500 max-w-[220px] mb-4">
-                    All {totalPages} attached document pages in this folder have been displayed.
+                    All {totalPages} attached document pages have been displayed.
                   </p>
 
                   {onUploadPages && (
@@ -516,17 +462,14 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
                 </div>
               )}
 
-              {/* Bottom physical pocket lip simulation */}
+              {/* Clean Bottom pocket lip */}
               <div
-                className="w-full h-8 -mb-4 -mx-4 rounded-br-xl border-t border-stone-300/60 flex items-center justify-between px-4 text-[10px] font-mono text-stone-500"
+                className="w-full h-4 -mb-4 -mx-4 rounded-br-xl border-t border-stone-300/60"
                 style={{
                   backgroundColor: "#e2dad0",
                   boxShadow: "0 -2px 6px rgba(0,0,0,0.05)"
                 }}
-              >
-                <span>Inside Right Leaf</span>
-                <span>Document Pocket</span>
-              </div>
+              />
             </div>
           </div>
         </div>
@@ -584,7 +527,6 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
       {/* Lightbox Fullscreen Scan Viewer */}
       {zoomPage && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col p-4 animate-in fade-in duration-200">
-          {/* Header Bar */}
           <div className="flex items-center justify-between text-white border-b border-white/15 pb-3 mb-3">
             <div className="flex items-center gap-3">
               <span className="px-2.5 py-1 rounded bg-amber-500 text-black font-mono font-bold text-xs">
@@ -645,7 +587,6 @@ export const BookFlipViewer: React.FC<BookFlipViewerProps> = ({
             </div>
           </div>
 
-          {/* Large Image Canvas */}
           <div className="flex-1 overflow-auto flex items-center justify-center p-4">
             <img
               src={getFileUrl(zoomPage.url)}

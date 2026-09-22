@@ -484,6 +484,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           )}
 
 
+
           {/* Interactive Open Folder & Book Flipbook Scan Viewer */}
           <BookFlipViewer
             attachments={attachments}
