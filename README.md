@@ -1,6 +1,6 @@
 # 🗄️ CabinetMap - HR & Admin File Tracker System
 
-Welcome to **CabinetMap**! This is a complete enterprise HR & Admin document tracking system with interactive 3D cabinet wall elevations, drag-and-drop file management, universal search, archive transfer boxes, and trash bin recovery.
+Welcome to **CabinetMap**! This is a complete enterprise HR & Admin document tracking system with interactive 3D cabinet wall elevations, drag-and-drop file management, universal search (`Ctrl+K`), archive transfer boxes, and trash bin recovery.
 
 ---
 
@@ -20,143 +20,157 @@ CabinetMap helps HR and Admin teams visually organize physical files, folders, a
 
 ---
 
-## 👶 Windows Beginner Installation Guide (Step-by-Step for Kids & Beginners)
+## 👶 Complete Windows Setup Guide using VS Code Terminal (Step-by-Step for Beginners)
 
-Even if you have **never installed software development tools before**, follow these easy steps to get CabinetMap running on your Windows computer!
-
----
-
-### 📥 Step 1: Install Git (The Project Downloader)
-
-1. Open your web browser (Google Chrome or Microsoft Edge).
-2. Go to this website: **[https://git-scm.com/download/win](https://git-scm.com/download/win)**
-3. Click **"64-bit Git for Windows Setup"** to download the installer.
-4. Open the downloaded file (`Git-2.xx.x-64-bit.exe`).
-5. Keep clicking **"Next"** on every screen without changing anything, then click **"Install"**.
-6. When finished, click **"Finish"**.
+Even if you have **never installed programming tools before**, follow these step-by-step instructions using **Visual Studio Code**!
 
 ---
 
-### 🟢 Step 2: Install Node.js (Runs the Frontend Web Page)
+### 📥 Step 1: Install Required Tools
 
-1. Go to this website: **[https://nodejs.org/](https://nodejs.org/)**
-2. Click the big green button that says **"LTS (Recommended For Most Users)"**.
-3. Open the downloaded `.msi` file.
-4. Click **"Next"**, check the box for *"I accept the terms in the License Agreement"*, then click **"Next"** -> **"Next"** -> **"Install"**.
-5. If Windows asks for permission, click **"Yes"**.
-6. Click **"Finish"**.
+Before starting, download and install these 4 free tools on your Windows computer:
 
----
+1. **Git (Repository Downloader)**:
+   - Go to: **[https://git-scm.com/download/win](https://git-scm.com/download/win)**
+   - Click **"64-bit Git for Windows Setup"**.
+   - Open the installer and click **"Next"** on every screen until installed, then click **"Finish"**.
 
-### 🟣 Step 3: Install .NET SDK (Runs the Backend Database & Server)
+2. **Node.js (Runs the Frontend Web Page)**:
+   - Go to: **[https://nodejs.org/](https://nodejs.org/)**
+   - Click the green button **"LTS (Recommended For Most Users)"**.
+   - Open the downloaded `.msi` file, click **"Next"**, check *"I accept the agreement"*, and click **"Install"**.
 
-1. Go to this website: **[https://dotnet.microsoft.com/download/dotnet/10.0](https://dotnet.microsoft.com/download/dotnet/10.0)** (or version 9.0/8.0).
-2. Look for **"SDK 10.0.xxx"** under the **Windows** column and click **x64**.
-3. Open the downloaded installer file.
-4. Click **"Install"**, then click **"Yes"** if Windows asks for permission.
-5. Once completed, click **"Close"**.
+3. **.NET SDK (Runs the Backend Database & API)**:
+   - Go to: **[https://dotnet.microsoft.com/download/dotnet/10.0](https://dotnet.microsoft.com/download/dotnet/10.0)** (or version 9.0/8.0).
+   - Under **Windows**, click **SDK x64** to download.
+   - Open installer, click **"Install"**, then click **"Close"** when finished.
 
----
-
-### 💙 Step 4: Install Visual Studio Code (Code Editor)
-
-1. Go to this website: **[https://code.visualstudio.com/](https://code.visualstudio.com/)**
-2. Click the big blue button **"Download for Windows"**.
-3. Open the downloaded installer file (`VSCodeUserSetup-x64-x.xx.x.exe`).
-4. Select *"I accept the agreement"*, click **"Next"**.
-5. Check the box **"Add to PATH"** and click **"Next"** -> **"Install"**.
-6. Click **"Finish"**.
+4. **Visual Studio Code (VS Code Editor)**:
+   - Go to: **[https://code.visualstudio.com/](https://code.visualstudio.com/)**
+   - Click **"Download for Windows"**.
+   - Open the installer, select *"I accept"*, check **"Add to PATH"**, and click **"Install"**.
 
 ---
 
-### 📂 Step 5: Download the CabinetMap Code
+### 📂 Step 2: Create a Main Folder on Your Computer
 
-1. Click the Windows **Start Menu** at the bottom of your screen.
-2. Type **`cmd`** and press **Enter** to open the **Command Prompt** (the black window).
-3. Type the following command and press **Enter**:
+1. Open your Windows **File Explorer** (yellow folder icon on taskbar).
+2. Go to your **Desktop** or **Documents** folder.
+3. Right-click in an empty space -> **New** -> **Folder**.
+4. Name the new folder: **`HR-Admin-File-tracker`**
+
+---
+
+### 💻 Step 3: Open Your Project Folder in VS Code
+
+1. Open **Visual Studio Code** from your desktop or Windows Start Menu.
+2. Click **File** (top-left menu) -> **Open Folder...**
+3. Select the **`HR-Admin-File-tracker`** folder you created on your Desktop and click **Select Folder**.
+4. If VS Code asks *"Do you trust the authors of the files in this folder?"*, click **"Yes, I trust the authors"**.
+
+---
+
+### 🖥️ Step 4: Open the VS Code Integrated Terminal
+
+1. At the top menu of VS Code, click **Terminal** -> **New Terminal** (or press **`Ctrl + ~`** on your keyboard).
+2. A terminal panel will open at the bottom of VS Code!
+
+---
+
+### 📥 Step 5: Clone BOTH Frontend & Backend Repositories
+
+In the VS Code terminal window at the bottom of your screen, copy and run these two commands **one by one**:
+
+1. **Clone Frontend Repository**:
    ```cmd
-   git clone https://github.com/shrabondas5544/HR-Admin-File-tracker-frontend.git HR-Admin-File-tracker
+   git clone https://github.com/shrabondas5544/HR-Admin-File-tracker-frontend.git frontend
    ```
-4. Now enter the project folder by typing:
+   *(Press **Enter** and wait until it finishes downloading).*
+
+2. **Clone Backend Repository**:
    ```cmd
-   cd HR-Admin-File-tracker
+   git clone https://github.com/shrabondas5544/HR-Admin-File-tracker-Backend-.git backend
    ```
+   *(Press **Enter** and wait until it finishes downloading).*
+
+Now you will see two sub-folders inside your VS Code file sidebar: **`frontend`** and **`backend`**!
 
 ---
 
 ### ⚙️ Step 6: Install Frontend Packages
 
-1. Inside your Command Prompt, move into the `frontend` folder:
+1. In the VS Code terminal, enter the `frontend` directory:
    ```cmd
    cd frontend
    ```
-2. Type this command to download all required frontend libraries:
+2. Download all required packages:
    ```cmd
    npm install
    ```
-3. Wait 1 to 2 minutes until it finishes downloading.
+3. Wait 1 to 2 minutes until installation completes.
 
 ---
 
-### 🖥️ Step 7: Start the Backend Server (Database & API)
+### 🚀 Step 7: Run Backend & Frontend in VS Code
 
-1. Open a **SECOND** Command Prompt window:
-   - Press **Windows Key + R**, type `cmd`, and press **Enter**.
-2. In this new black window, navigate to your project's `backend` directory:
+You can run both servers side-by-side using VS Code's split terminal windows!
+
+#### A. Start Backend Server (Database & API):
+1. In the VS Code terminal, move from `frontend` to `backend`:
    ```cmd
-   cd HR-Admin-File-tracker\backend
+   cd ..\backend
    ```
-3. Start the backend server by typing:
+2. Start the backend:
    ```cmd
    dotnet run
    ```
-4. You will see text ending with:
+3. You will see:
    `Now listening on: http://localhost:5000`
-   *(Keep this window open! It is your database server).*
 
----
-
-### 🌐 Step 8: Start the Frontend App
-
-1. Go back to your **FIRST** Command Prompt window (the one inside the `frontend` folder).
-2. Type this command to start the web app:
+#### B. Start Frontend Web Server:
+1. In the VS Code terminal panel (top-right corner of the terminal window), click the **`+`** icon (or split terminal icon) to open a **second terminal tab**.
+2. In the new terminal tab, navigate to the `frontend` folder:
+   ```cmd
+   cd frontend
+   ```
+3. Start the frontend web server:
    ```cmd
    npm run dev
    ```
-3. You will see:
+4. You will see:
    `- Local: http://localhost:3000`
 
 ---
 
-### 🎉 Step 9: Open CabinetMap in Your Browser!
+### 🎉 Step 8: Open CabinetMap in Your Browser!
 
 1. Open **Google Chrome** or **Microsoft Edge**.
-2. Type `http://localhost:3000` in the address bar at the top and press **Enter**.
-3. **Woohoo! 🥳 CabinetMap is now running live on your computer!**
+2. Go to: **[http://localhost:3000](http://localhost:3000)**
+3. **Congratulations! 🥳 CabinetMap is now live on your computer!**
 
 ---
 
-## 🛠️ Quick Command Summary for Windows
+## 🛠️ VS Code Terminal Commands Cheatsheet
 
-| Action | Open Terminal 1 (`frontend`) | Open Terminal 2 (`backend`) |
+| Action | Terminal 1 (Backend Server) | Terminal 2 (Frontend Server) |
 | :--- | :--- | :--- |
-| **Go to Folder** | `cd HR-Admin-File-tracker\frontend` | `cd HR-Admin-File-tracker\backend` |
-| **Start Server** | `npm run dev` | `dotnet run` |
-| **Web Address** | `http://localhost:3000` | `http://localhost:5000` |
+| **Navigate to Folder** | `cd backend` | `cd frontend` |
+| **Start Command** | `dotnet run` | `npm run dev` |
+| **Local URL** | `http://localhost:5000` | `http://localhost:3000` |
 
 ---
 
-## 🏗️ Project Architecture
+## 🏗️ Repository Structure
 
 ```
 HR-Admin-File-tracker/
-├── frontend/                     # Next.js 16 + React + Tailwind CSS Web App
+├── frontend/                     # https://github.com/shrabondas5544/HR-Admin-File-tracker-frontend.git
 │   ├── src/
 │   │   ├── app/                  # Next.js App Router (page.tsx)
 │   │   ├── components/           # Cabinet, Shelf, Drag & Drop, Search & Modal components
 │   │   └── lib/                  # TypeScript interfaces and API handlers
 │   └── package.json
-└── backend/                      # ASP.NET Core 10 Web API + Entity Framework Core
+└── backend/                      # https://github.com/shrabondas5544/HR-Admin-File-tracker-Backend-.git
     ├── Controllers/              # REST API Endpoints (Cabinets, Files, Search, Trash)
     ├── Data/                     # DbContext and DbInitializer (Auto Seed Data)
     ├── Models/                   # C# Data Models (Cabinet, Shelf, Magazine, Folder, File)
@@ -165,12 +179,12 @@ HR-Admin-File-tracker/
 
 ---
 
-## 🤝 Troubleshooting & Help
+## 🤝 Troubleshooting
 
-- **Question**: *Why is my page blank or showing network error?*
-  - **Fix**: Make sure both `dotnet run` (in backend) and `npm run dev` (in frontend) are running at the same time in separate command prompt windows!
-- **Question**: *How do I stop the servers when I am done?*
-  - **Fix**: Click on the black Command Prompt window and press `Ctrl + C` on your keyboard.
+- **Question**: *Why does frontend show connection error?*
+  - **Fix**: Ensure the backend `dotnet run` terminal is running on `http://localhost:5000` before opening `http://localhost:3000`.
+- **Question**: *How do I stop the servers in VS Code?*
+  - **Fix**: Click on the terminal window in VS Code and press `Ctrl + C` on your keyboard.
 
 ---
 
