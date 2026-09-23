@@ -110,31 +110,36 @@ export const W2CabinetUnit: React.FC<W2CabinetUnitProps> = ({
     }));
   }
 
-  // Helper to render a compartment's shelf stack
+  // Helper to render a compartment's shelf stack with explicit door identification
   const renderShelfStack = (
     shelves: Shelf[],
     compact: boolean,
-    onToggle: () => void
+    onToggle: () => void,
+    doorLabel?: string
   ) => (
     <div className="w-full h-full flex flex-col justify-between shelf-interior-texture py-1">
-      {shelves.map((shelf) => (
-        <ShelfRow
-          key={`w2-shelf-${shelf.id}`}
-          shelf={shelf}
-          compact={compact}
-          shelfLabel={shelf.shelfCode.replace(" (2-Door)", "").replace(" (1-Door)", "")}
-          highlightedItem={highlightedItem}
-          onOpenMagazine={onOpenMagazine}
-          onInspectFolder={onInspectFolder}
-          onInspectFile={onInspectFile}
-          onMoveItem={onMoveItem}
-          onDeleteItem={onDeleteItem}
-          onDropOnShelf={onDropOnShelf}
-          onDropInsideMagazine={onDropInsideMagazine}
-          onReorderShelf={onReorderShelf}
-          onToggleSection={onToggle}
-        />
-      ))}
+      {shelves.map((shelf) => {
+        const baseCode = shelf.shelfCode.replace(" (2-Door)", "").replace(" (1-Door)", "");
+        const label = doorLabel ? `${baseCode} (${doorLabel})` : baseCode;
+        return (
+          <ShelfRow
+            key={`w2-shelf-${shelf.id}`}
+            shelf={shelf}
+            compact={compact}
+            shelfLabel={label}
+            highlightedItem={highlightedItem}
+            onOpenMagazine={onOpenMagazine}
+            onInspectFolder={onInspectFolder}
+            onInspectFile={onInspectFile}
+            onMoveItem={onMoveItem}
+            onDeleteItem={onDeleteItem}
+            onDropOnShelf={onDropOnShelf}
+            onDropInsideMagazine={onDropInsideMagazine}
+            onReorderShelf={onReorderShelf}
+            onToggleSection={onToggle}
+          />
+        );
+      })}
     </div>
   );
 
@@ -248,11 +253,11 @@ export const W2CabinetUnit: React.FC<W2CabinetUnitProps> = ({
       {/* UPPER SECTION: Dual-Compartment Interior */}
       <div className="relative border-b-2 border-stone-300/60 bg-white perspective-1000 min-h-[512px] flex">
         {isLeftDouble ? (
-          /* Cabinet 1: Left = 2-Door Module (2/3), Right = 1-Door Module (1/3) */
+          /* Cabinet 1: Left = 2-Door Module (Doors 1 & 2), Right = 1-Door Module (Door 3) */
           <>
             {/* Left 2-Door Module */}
             <div className="relative w-2/3 h-full flex flex-col">
-              {renderShelfStack(doubleUpper, false, handleToggleUpperDouble)}
+              {renderShelfStack(doubleUpper, false, handleToggleUpperDouble, "Door 1-2")}
               {renderDoubleUpperDoors()}
             </div>
 
@@ -261,16 +266,16 @@ export const W2CabinetUnit: React.FC<W2CabinetUnitProps> = ({
 
             {/* Right 1-Door Module */}
             <div className="relative w-1/3 h-full flex flex-col">
-              {renderShelfStack(singleUpper, true, handleToggleUpperSingle)}
+              {renderShelfStack(singleUpper, true, handleToggleUpperSingle, "Door 3")}
               {renderSingleUpperDoor(true)}
             </div>
           </>
         ) : (
-          /* Cabinet 2: Left = 1-Door Module (1/3), Right = 2-Door Module (2/3) */
+          /* Cabinet 2: Left = 1-Door Module (Door 1), Right = 2-Door Module (Doors 2 & 3) */
           <>
             {/* Left 1-Door Module */}
             <div className="relative w-1/3 h-full flex flex-col">
-              {renderShelfStack(singleUpper, true, handleToggleUpperSingle)}
+              {renderShelfStack(singleUpper, true, handleToggleUpperSingle, "Door 1")}
               {renderSingleUpperDoor(false)}
             </div>
 
@@ -279,7 +284,7 @@ export const W2CabinetUnit: React.FC<W2CabinetUnitProps> = ({
 
             {/* Right 2-Door Module */}
             <div className="relative w-2/3 h-full flex flex-col">
-              {renderShelfStack(doubleUpper, false, handleToggleUpperDouble)}
+              {renderShelfStack(doubleUpper, false, handleToggleUpperDouble, "Door 2-3")}
               {renderDoubleUpperDoors()}
             </div>
           </>
@@ -289,11 +294,11 @@ export const W2CabinetUnit: React.FC<W2CabinetUnitProps> = ({
       {/* LOWER SECTION: Dual-Compartment Interior */}
       <div className="relative bg-white perspective-1000 min-h-[260px] flex">
         {isLeftDouble ? (
-          /* Cabinet 1: Left = 2-Door Module (2/3), Right = 1-Door Module (1/3) */
+          /* Cabinet 1: Left = 2-Door Module (Doors 1 & 2), Right = 1-Door Module (Door 3) */
           <>
             {/* Left 2-Door Module */}
             <div className="relative w-2/3 h-full flex flex-col">
-              {renderShelfStack(doubleLower, false, handleToggleLowerDouble)}
+              {renderShelfStack(doubleLower, false, handleToggleLowerDouble, "Door 1-2")}
               {renderDoubleLowerDoors()}
             </div>
 
@@ -302,16 +307,16 @@ export const W2CabinetUnit: React.FC<W2CabinetUnitProps> = ({
 
             {/* Right 1-Door Module */}
             <div className="relative w-1/3 h-full flex flex-col">
-              {renderShelfStack(singleLower, true, handleToggleLowerSingle)}
+              {renderShelfStack(singleLower, true, handleToggleLowerSingle, "Door 3")}
               {renderSingleLowerDoor(true)}
             </div>
           </>
         ) : (
-          /* Cabinet 2: Left = 1-Door Module (1/3), Right = 2-Door Module (2/3) */
+          /* Cabinet 2: Left = 1-Door Module (Door 1), Right = 2-Door Module (Doors 2 & 3) */
           <>
             {/* Left 1-Door Module */}
             <div className="relative w-1/3 h-full flex flex-col">
-              {renderShelfStack(singleLower, true, handleToggleLowerSingle)}
+              {renderShelfStack(singleLower, true, handleToggleLowerSingle, "Door 1")}
               {renderSingleLowerDoor(false)}
             </div>
 
@@ -320,7 +325,7 @@ export const W2CabinetUnit: React.FC<W2CabinetUnitProps> = ({
 
             {/* Right 2-Door Module */}
             <div className="relative w-2/3 h-full flex flex-col">
-              {renderShelfStack(doubleLower, false, handleToggleLowerDouble)}
+              {renderShelfStack(doubleLower, false, handleToggleLowerDouble, "Door 2-3")}
               {renderDoubleLowerDoors()}
             </div>
           </>

@@ -214,7 +214,7 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
             if (onToggleSection) onToggleSection();
           }}
           title={onToggleSection ? "Click to Close Cabinet Doors" : undefined}
-          className={`rounded font-mono font-bold tracking-widest uppercase shadow-xs border transition-all cursor-pointer hover:scale-105 active:scale-95 ${
+          className={`rounded font-mono font-bold tracking-wide uppercase shadow-xs border transition-all cursor-pointer hover:scale-105 active:scale-95 ${
             compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-0.5 text-[10px]"
           } ${
             isDragOverShelf
