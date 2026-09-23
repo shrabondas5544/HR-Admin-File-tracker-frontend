@@ -252,3 +252,4 @@ export const W2CabinetUnit: React.FC<W2CabinetUnitProps> = ({
     </div>
   );
 };
+

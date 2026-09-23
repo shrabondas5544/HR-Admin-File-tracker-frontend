@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { Cabinet, Magazine, Folder, RecordFile, WallId } from "@/lib/types";
 import { CabinetUnit } from "./CabinetUnit";
 import { W2CabinetUnit } from "./W2CabinetUnit";
+import { ToiletDoor } from "./ToiletDoor";
 import { Layers } from "lucide-react";
 
 interface WallElevationProps {
@@ -105,88 +106,94 @@ export const WallElevation: React.FC<WallElevationProps> = ({
         </div>
 
         {/* Wall 2 Elevation Canvas */}
+        {/* Wall 2 Elevation Canvas - Centered with Restroom Door */}
         <div
           ref={wallScrollRef}
-          className="flex-1 overflow-x-auto overflow-y-auto p-6 flex items-start gap-8 bg-white scroll-smooth"
+          className="flex-1 overflow-x-auto overflow-y-auto p-6 md:p-8 flex items-center justify-center bg-stone-50/30 scroll-smooth"
           style={{ minHeight: "calc(100vh - 100px)" }}
         >
-          {/* Cabinet 1 (W2): Double door Left + Single door Right */}
-          <W2CabinetUnit
-            key="w2-cab-7"
-            cabinet={{
-              ...cab1,
-              name: cab1.name.includes("W2") ? cab1.name : "Cabinet 1"
-            }}
-            variant="3door-left-double"
-            isUpperOpen={doorState1.upper}
-            isLowerOpen={doorState1.lower}
-            onToggleUpper={() =>
-              setOpenDoorsState((prev) => ({
-                ...prev,
-                7: {
-                  ...doorState1,
-                  upper: !doorState1.upper
-                }
-              }))
-            }
-            onToggleLower={() =>
-              setOpenDoorsState((prev) => ({
-                ...prev,
-                7: {
-                  ...doorState1,
-                  lower: !doorState1.lower
-                }
-              }))
-            }
-            highlightedItem={highlightedItem}
-            onOpenMagazine={onOpenMagazine}
-            onInspectFolder={onInspectFolder}
-            onInspectFile={onInspectFile}
-            onMoveItem={onMoveItem}
-            onDeleteItem={onDeleteItem}
-            onDropOnShelf={onDropOnShelf}
-            onDropInsideMagazine={onDropInsideMagazine}
-            onReorderShelf={onReorderShelf}
-          />
+          <div className="flex items-end justify-center gap-6 sm:gap-8 md:gap-10 min-w-fit mx-auto pb-4">
+            {/* Cabinet 1 (W2): Double door Left + Single door Right */}
+            <W2CabinetUnit
+              key="w2-cab-7"
+              cabinet={{
+                ...cab1,
+                name: cab1.name.includes("W2") ? cab1.name : "Cabinet 1"
+              }}
+              variant="3door-left-double"
+              isUpperOpen={doorState1.upper}
+              isLowerOpen={doorState1.lower}
+              onToggleUpper={() =>
+                setOpenDoorsState((prev) => ({
+                  ...prev,
+                  7: {
+                    ...doorState1,
+                    upper: !doorState1.upper
+                  }
+                }))
+              }
+              onToggleLower={() =>
+                setOpenDoorsState((prev) => ({
+                  ...prev,
+                  7: {
+                    ...doorState1,
+                    lower: !doorState1.lower
+                  }
+                }))
+              }
+              highlightedItem={highlightedItem}
+              onOpenMagazine={onOpenMagazine}
+              onInspectFolder={onInspectFolder}
+              onInspectFile={onInspectFile}
+              onMoveItem={onMoveItem}
+              onDeleteItem={onDeleteItem}
+              onDropOnShelf={onDropOnShelf}
+              onDropInsideMagazine={onDropInsideMagazine}
+              onReorderShelf={onReorderShelf}
+            />
 
-          {/* Cabinet 2 (W2): Single door Left + Double door Right */}
-          <W2CabinetUnit
-            key="w2-cab-8"
-            cabinet={{
-              ...cab2,
-              name: cab2.name.includes("W2") ? cab2.name : "Cabinet 2"
-            }}
-            variant="3door-right-double"
-            isUpperOpen={doorState2.upper}
-            isLowerOpen={doorState2.lower}
-            onToggleUpper={() =>
-              setOpenDoorsState((prev) => ({
-                ...prev,
-                8: {
-                  ...doorState2,
-                  upper: !doorState2.upper
-                }
-              }))
-            }
-            onToggleLower={() =>
-              setOpenDoorsState((prev) => ({
-                ...prev,
-                8: {
-                  ...doorState2,
-                  lower: !doorState2.lower
-                }
-              }))
-            }
-            highlightedItem={highlightedItem}
-            onOpenMagazine={onOpenMagazine}
-            onInspectFolder={onInspectFolder}
-            onInspectFile={onInspectFile}
-            onMoveItem={onMoveItem}
-            onDeleteItem={onDeleteItem}
-            onDropOnShelf={onDropOnShelf}
-            onDropInsideMagazine={onDropInsideMagazine}
-            onReorderShelf={onReorderShelf}
-          />
+            {/* Toilet / Restroom Short Door (Right-Handed Handle, Non-opening) */}
+            <ToiletDoor />
+
+            {/* Cabinet 2 (W2): Single door Left + Double door Right */}
+            <W2CabinetUnit
+              key="w2-cab-8"
+              cabinet={{
+                ...cab2,
+                name: cab2.name.includes("W2") ? cab2.name : "Cabinet 2"
+              }}
+              variant="3door-right-double"
+              isUpperOpen={doorState2.upper}
+              isLowerOpen={doorState2.lower}
+              onToggleUpper={() =>
+                setOpenDoorsState((prev) => ({
+                  ...prev,
+                  8: {
+                    ...doorState2,
+                    upper: !doorState2.upper
+                  }
+                }))
+              }
+              onToggleLower={() =>
+                setOpenDoorsState((prev) => ({
+                  ...prev,
+                  8: {
+                    ...doorState2,
+                    lower: !doorState2.lower
+                  }
+                }))
+              }
+              highlightedItem={highlightedItem}
+              onOpenMagazine={onOpenMagazine}
+              onInspectFolder={onInspectFolder}
+              onInspectFile={onInspectFile}
+              onMoveItem={onMoveItem}
+              onDeleteItem={onDeleteItem}
+              onDropOnShelf={onDropOnShelf}
+              onDropInsideMagazine={onDropInsideMagazine}
+              onReorderShelf={onReorderShelf}
+            />
+          </div>
         </div>
       </div>
     );
@@ -221,6 +228,7 @@ export const WallElevation: React.FC<WallElevationProps> = ({
             </div>
             <h2 className="text-lg font-bold text-stone-800 mb-1">{info.name} is Empty</h2>
             <p className="text-sm text-stone-500 leading-relaxed">
+              No cabinets are installed on this wall yet. All 6 active archive cabinets are located on <strong className="text-stone-700 font-semibold">Wall 1 (W1)</strong>.
               No cabinets are installed on this wall yet. Active archive cabinets are located on <strong className="text-stone-700 font-semibold">Wall 1 (W1)</strong> and <strong className="text-stone-700 font-semibold">Wall 2 (W2)</strong>.
             </p>
           </div>
