@@ -41,7 +41,9 @@ export default function Home() {
     3: { upper: true, lower: true },
     4: { upper: true, lower: true },
     5: { upper: true, lower: true },
-    6: { upper: true, lower: true }
+    6: { upper: true, lower: true },
+    7: { upper: true, lower: true },
+    8: { upper: true, lower: true }
   });
 
   const [highlightedItem, setHighlightedItem] = useState<{ type: string; id: number } | null>(null);
@@ -115,7 +117,11 @@ export default function Home() {
   const allMagazines = cabinets.flatMap((c) => c.shelves || []).flatMap((s) => s.magazines || []);
 
   const handleSelectSearchResult = (result: SearchResult) => {
-    setSelectedWall("W1");
+    if (result.cabinetNumber === 7 || result.cabinetNumber === 8) {
+      setSelectedWall("W2");
+    } else {
+      setSelectedWall("W1");
+    }
 
     setOpenDoorsState((prev) => ({
       ...prev,
@@ -339,7 +345,7 @@ export default function Home() {
   const handleToggleAllDoors = () => {
     const shouldOpen = !areAllDoorsOpen;
     const newState: Record<number, { upper: boolean; lower: boolean }> = {};
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 8; i++) {
       newState[i] = { upper: shouldOpen, lower: shouldOpen };
     }
     setOpenDoorsState(newState);
