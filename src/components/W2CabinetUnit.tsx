@@ -52,16 +52,10 @@ export const W2CabinetUnit: React.FC<W2CabinetUnitProps> = ({
       className="flex-shrink-0 w-[360px] sm:w-[440px] md:w-[500px] flex flex-col bg-stone-100 border border-stone-300/80 rounded-lg overflow-hidden shadow-lg relative transition-all duration-300"
     >
       {/* Cabinet Header Plaque */}
-      <div className="cabinet-header-texture border-b border-[#b09a76]/40 px-4 py-2.5 flex items-center justify-between shadow-xs">
-        <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-amber-100/80 text-amber-900 border border-amber-300/60">
-          Wall 2
-        </span>
-        <h3 className="text-sm font-semibold text-stone-800 tracking-wide text-center drop-shadow-sm flex-1 mx-2">
+      <div className="cabinet-header-texture border-b border-[#b09a76]/40 px-4 py-2.5 flex items-center justify-center shadow-xs">
+        <h3 className="text-sm font-semibold text-stone-800 tracking-wide text-center drop-shadow-sm">
           {cabinet.name}
         </h3>
-        <span className="text-[10px] text-stone-600 font-medium">
-          3-Door Modular
-        </span>
       </div>
 
       {/* UPPER SECTION */}

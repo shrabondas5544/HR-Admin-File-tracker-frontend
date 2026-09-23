@@ -88,29 +88,11 @@ export const WallElevation: React.FC<WallElevationProps> = ({
 
     return (
       <div className="flex-1 flex flex-col h-full overflow-hidden bg-white">
-        {/* Top Wall Indicator */}
-        <div className="w-full flex items-center justify-between border-b border-stone-200 px-6 py-2.5 bg-stone-50/60 select-none">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-600" />
-            <span className="text-xs font-bold text-stone-800 uppercase tracking-wider">
-              Wall 2 (W2)
-            </span>
-            <span className="text-stone-300">•</span>
-            <span className="text-xs text-stone-500">
-              3-Door Modular Archive Units (Double & Single Leaves)
-            </span>
-          </div>
-          <span className="text-[11px] font-mono text-stone-600 font-semibold px-2 py-0.5 rounded bg-white border border-stone-200 shadow-2xs">
-            2 Units • 6 Shelves Each
-          </span>
-        </div>
-
-        {/* Wall 2 Elevation Canvas */}
         {/* Wall 2 Elevation Canvas - Centered with Restroom Door */}
         <div
           ref={wallScrollRef}
           className="flex-1 overflow-x-auto overflow-y-auto p-6 md:p-8 flex items-center justify-center bg-stone-50/30 scroll-smooth"
-          style={{ minHeight: "calc(100vh - 100px)" }}
+          style={{ minHeight: "calc(100vh - 56px)" }}
         >
           <div className="flex items-end justify-center gap-6 sm:gap-8 md:gap-10 min-w-fit mx-auto pb-4">
             {/* Cabinet 1 (W2): Double door Left + Single door Right */}
@@ -118,7 +100,7 @@ export const WallElevation: React.FC<WallElevationProps> = ({
               key="w2-cab-7"
               cabinet={{
                 ...cab1,
-                name: cab1.name.includes("W2") ? cab1.name : "Cabinet 1"
+                name: "Cabinet 1 (W2)"
               }}
               variant="3door-left-double"
               isUpperOpen={doorState1.upper}
@@ -160,7 +142,7 @@ export const WallElevation: React.FC<WallElevationProps> = ({
               key="w2-cab-8"
               cabinet={{
                 ...cab2,
-                name: cab2.name.includes("W2") ? cab2.name : "Cabinet 2"
+                name: "Cabinet 2 (W2)"
               }}
               variant="3door-right-double"
               isUpperOpen={doorState2.upper}
