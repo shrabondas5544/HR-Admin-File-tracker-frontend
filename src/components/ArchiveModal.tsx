@@ -1,17 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import { ArchiveHeldItem, FlatShelf } from "@/lib/types";
+import React, { useState, useEffect, useMemo } from "react";
+import { ArchiveHeldItem, FlatShelf, WallId } from "@/lib/types";
 import {
   X,
   FileText,
   Box,
   Folder as FolderIcon,
   GripVertical,
-  CheckCircle,
   RotateCcw,
-  Sparkles,
-  ArrowRight
+  Sparkles
 } from "lucide-react";
 
 // Custom Archive Storage Box Icon matching real archive transfer box
@@ -36,6 +34,7 @@ interface ArchiveModalProps {
   onClose: () => void;
   items: ArchiveHeldItem[];
   flatShelves: FlatShelf[];
+  selectedWall?: WallId;
   onPlaceItem: (item: ArchiveHeldItem, targetShelfId: number) => Promise<void>;
   onReturnItem: (item: ArchiveHeldItem) => Promise<void>;
 }
@@ -45,28 +44,38 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
   onClose,
   items,
   flatShelves,
+  selectedWall = "W1",
   onPlaceItem,
   onReturnItem
 }) => {
-  const [selectedShelves, setSelectedShelves] = useState<Record<string, number>>({});
   const [placingId, setPlacingId] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Window dragend listener ensures isDragging resets reliably
+  useEffect(() => {
+    const handleDragEnd = () => setIsDragging(false);
+    window.addEventListener("dragend", handleDragEnd);
+    return () => window.removeEventListener("dragend", handleDragEnd);
+  }, []);
+
+  // Filter shelves to ONLY show shelves belonging to the active wall
+  const wallFilteredShelves = useMemo(() => {
+    if (selectedWall === "W1") {
+      return flatShelves.filter((s) => s.cabinetNumber >= 1 && s.cabinetNumber <= 6);
+    }
+    if (selectedWall === "W2") {
+      return flatShelves.filter((s) => s.cabinetNumber === 7 || s.cabinetNumber === 8);
+    }
+    if (selectedWall === "W3R" || selectedWall === "W3L") {
+      return [];
+    }
+    return flatShelves;
+  }, [flatShelves, selectedWall]);
 
   if (!isOpen) return null;
 
-  const handleShelfChange = (itemKey: string, shelfId: number) => {
-    setSelectedShelves((prev) => ({
-      ...prev,
-      [itemKey]: shelfId
-    }));
-  };
-
-  const handlePlace = async (item: ArchiveHeldItem) => {
+  const handlePlace = async (item: ArchiveHeldItem, targetShelfId: number) => {
     const itemKey = `${item.type}-${item.id}`;
-    const targetShelfId = selectedShelves[itemKey] || flatShelves[0]?.id;
-    if (!targetShelfId) {
-      alert("Please select a target shelf first.");
-      return;
-    }
     setPlacingId(itemKey);
     try {
       await onPlaceItem(item, targetShelfId);
@@ -91,14 +100,24 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-end p-4 sm:p-6 pointer-events-none">
-      {/* Light Backdrop - Click outside to close (allows seeing background shelves) */}
+      {/* Light Backdrop - Click outside to close. During drag, completely click-through so shelves receive drag events */}
       <div
-        className="fixed inset-0 bg-stone-900/20 backdrop-blur-[1px] transition-opacity pointer-events-auto"
+        className={`fixed inset-0 transition-all duration-200 ${
+          isDragging
+            ? "opacity-0 pointer-events-none"
+            : "bg-stone-900/20 backdrop-blur-[1px] pointer-events-auto"
+        }`}
         onClick={onClose}
       />
 
-      {/* Floating Transfer Panel */}
-      <div className="relative w-full max-w-lg bg-white border border-stone-200 rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col pointer-events-auto animate-in slide-in-from-top-4 duration-300 max-h-[90vh]">
+      {/* Floating Transfer Panel - When dragging, becomes semi-transparent & click-through so shelves underneath are droppable */}
+      <div
+        className={`relative w-full max-w-lg bg-white border border-stone-200 rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col transition-all duration-200 max-h-[90vh] ${
+          isDragging
+            ? "opacity-20 pointer-events-none scale-95"
+            : "opacity-100 pointer-events-auto scale-100"
+        }`}
+      >
         {/* Header */}
         <div className="px-5 py-4 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -127,7 +146,7 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
         <div className="bg-amber-50/70 border-b border-amber-200/60 px-5 py-2.5 flex items-center gap-2 text-xs text-amber-900">
           <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
           <span>
-            <strong>How to place:</strong> Drag any item card below directly onto a shelf, or pick a shelf and click <strong>Place</strong>.
+            <strong>How to place on {selectedWall}:</strong> Drag any card directly onto a shelf, or select a shelf in the dropdown.
           </span>
         </div>
 
@@ -147,13 +166,13 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
             items.map((item) => {
               const itemKey = `${item.type}-${item.id}`;
               const isProcessing = placingId === itemKey;
-              const currentShelf = selectedShelves[itemKey] || flatShelves[0]?.id;
 
               return (
                 <div
                   key={itemKey}
                   draggable={!isProcessing}
                   onDragStart={(e) => {
+                    setIsDragging(true);
                     e.dataTransfer.setData(
                       "application/json",
                       JSON.stringify({
@@ -163,6 +182,9 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
                       })
                     );
                     e.dataTransfer.effectAllowed = "move";
+                  }}
+                  onDragEnd={() => {
+                    setIsDragging(false);
                   }}
                   className="bg-stone-50/80 hover:bg-stone-50 border border-stone-200 hover:border-amber-400/80 rounded-xl p-3.5 shadow-2xs transition-all flex flex-col gap-3 group cursor-grab active:cursor-grabbing"
                 >
@@ -192,57 +214,55 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
                         </div>
                         {item.originLocationName && (
                           <div className="text-[11px] text-stone-500 mt-0.5">
-                            Original location: {item.originLocationName}
+                            Original location: <span className="font-medium text-stone-700">{item.originLocationName}</span>
                           </div>
                         )}
                       </div>
                     </div>
-
-                    {/* Return button */}
-                    {item.originShelfId && (
-                      <button
-                        type="button"
-                        onClick={() => handleReturn(item)}
-                        disabled={isProcessing}
-                        title="Return to original shelf"
-                        className="px-2 py-1 text-[11px] font-medium text-stone-500 hover:text-stone-800 bg-white hover:bg-stone-100 border border-stone-200 rounded-lg flex items-center gap-1 cursor-pointer"
-                      >
-                        <RotateCcw className="w-3 h-3" />
-                        <span>Return</span>
-                      </button>
-                    )}
                   </div>
 
-                  {/* Target Shelf Selector + Place Button */}
-                  <div className="flex items-center gap-2 pt-1 border-t border-stone-200/60">
+                  {/* Bottom Bar: Target Shelf Selector (Filtered by Current Wall) + Return Button */}
+                  <div className="flex items-center gap-2 pt-2 border-t border-stone-200/60">
                     <div className="flex-1">
                       <select
-                        value={currentShelf}
-                        onChange={(e) => handleShelfChange(itemKey, Number(e.target.value))}
-                        disabled={isProcessing}
-                        className="w-full px-2.5 py-1.5 text-xs bg-white border border-stone-200 rounded-lg text-stone-800 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                        defaultValue=""
+                        value=""
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val) {
+                            handlePlace(item, Number(val));
+                          }
+                        }}
+                        disabled={isProcessing || wallFilteredShelves.length === 0}
+                        className="w-full px-2.5 py-1.5 text-xs bg-white border border-stone-200 rounded-lg text-stone-800 focus:outline-none focus:ring-1 focus:ring-amber-500 font-medium cursor-pointer"
                       >
-                        {flatShelves.map((s) => (
+                        <option value="" disabled>
+                          {wallFilteredShelves.length > 0
+                            ? `Move to shelf on ${selectedWall}...`
+                            : `No shelves available on ${selectedWall}`}
+                        </option>
+                        {wallFilteredShelves.map((s) => (
                           <option key={`opt-${itemKey}-${s.id}`} value={s.id}>
                             {s.displayName}
                           </option>
                         ))}
                       </select>
                     </div>
+
+                    {/* Return Button (Restores item back to where it was taken from) */}
                     <button
                       type="button"
-                      onClick={() => handlePlace(item)}
-                      disabled={isProcessing}
-                      className="px-3.5 py-1.5 bg-stone-800 hover:bg-stone-700 text-white font-bold text-xs rounded-lg shadow-xs transition-all flex items-center gap-1 cursor-pointer shrink-0 hover:scale-[1.02] active:scale-[0.98]"
+                      onClick={() => handleReturn(item)}
+                      disabled={isProcessing || !item.originShelfId}
+                      title={
+                        item.originLocationName
+                          ? `Return to: ${item.originLocationName}`
+                          : "Return to where this file was taken from"
+                      }
+                      className="px-3 py-1.5 bg-stone-800 hover:bg-stone-700 text-white font-bold text-xs rounded-lg shadow-xs transition-all flex items-center gap-1.5 cursor-pointer shrink-0 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                      {isProcessing ? (
-                        <span>Placing...</span>
-                      ) : (
-                        <>
-                          <span>Place on Shelf</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </>
-                      )}
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Return</span>
                     </button>
                   </div>
                 </div>
@@ -253,7 +273,7 @@ export const ArchiveModal: React.FC<ArchiveModalProps> = ({
 
         {/* Footer */}
         <div className="px-5 py-3 bg-stone-50 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500">
-          <span>Items remain held until placed on a shelf</span>
+          <span>Items remain held until placed on a shelf or returned</span>
           <button
             onClick={onClose}
             className="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold rounded-lg transition-colors cursor-pointer"

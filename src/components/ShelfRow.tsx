@@ -85,6 +85,7 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
 
   const handleShelfDragOver = (e: React.DragEvent) => {
     e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
     setIsDragOverShelf(true);
   };
 
@@ -106,6 +107,7 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
   const handleSlotDragOver = (e: React.DragEvent, slotIndex: number) => {
     e.preventDefault();
     e.stopPropagation();
+    e.dataTransfer.dropEffect = "move";
     setIsDragOverShelf(true);
     setDragOverSlot(slotIndex);
   };

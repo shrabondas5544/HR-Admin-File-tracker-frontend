@@ -691,6 +691,7 @@ export default function Home() {
         onClose={() => setIsArchiveModalOpen(false)}
         items={archiveHeldItems}
         flatShelves={flatShelves}
+        selectedWall={selectedWall}
         onPlaceItem={handlePlaceFromArchive}
         onReturnItem={handleReturnFromArchive}
       />
