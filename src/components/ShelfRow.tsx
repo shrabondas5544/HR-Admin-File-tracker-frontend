@@ -8,6 +8,8 @@ import { StandaloneFileSpine } from "./StandaloneFileSpine";
 
 interface ShelfRowProps {
   shelf: Shelf;
+  compact?: boolean;
+  shelfLabel?: string;
   highlightedItem?: { type: string; id: number } | null;
   onOpenMagazine: (magazine: Magazine) => void;
   onInspectFolder: (folder: Folder) => void;
@@ -27,6 +29,8 @@ type ShelfItem =
 
 export const ShelfRow: React.FC<ShelfRowProps> = ({
   shelf,
+  compact = false,
+  shelfLabel,
   highlightedItem,
   onOpenMagazine,
   onInspectFolder,
@@ -208,7 +212,9 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
             if (onToggleSection) onToggleSection();
           }}
           title={onToggleSection ? "Click to Close Cabinet Doors" : undefined}
-          className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-widest uppercase shadow-xs border transition-all cursor-pointer hover:scale-105 active:scale-95 ${
+          className={`rounded font-mono font-bold tracking-widest uppercase shadow-xs border transition-all cursor-pointer hover:scale-105 active:scale-95 ${
+            compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-0.5 text-[10px]"
+          } ${
             isDragOverShelf
               ? "bg-amber-500 text-white border-amber-600 ring-2 ring-amber-400"
               : isShelfHighlighted
@@ -216,16 +222,16 @@ export const ShelfRow: React.FC<ShelfRowProps> = ({
               : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50 hover:text-stone-800 hover:border-stone-300"
           }`}
         >
-          Shelf {shelf.shelfCode} {isDragOverShelf && "• Drag & Arrange"}
+          Shelf {shelfLabel || shelf.shelfCode} {isDragOverShelf && (compact ? "• Drop" : "• Drag & Arrange")}
         </button>
       </div>
       <div className="relative w-full h-3.5 bg-gradient-to-r from-[#c4b08c] via-[#d4c4a8] to-[#c4b08c] border-t border-[#b09a76]/30 shadow-xs" />
 
       {/* Upright Interleaved Items Container Track */}
-      <div className="flex items-end overflow-x-auto pb-1.5 pt-6 pl-22 z-20 no-scrollbar">
+      <div className={`flex items-end overflow-x-auto pb-1.5 pt-6 z-20 no-scrollbar ${compact ? "pl-16" : "pl-22"}`}>
         {allItems.length === 0 ? (
-          <div className="w-full text-center text-[11px] text-stone-400 font-mono tracking-wide py-6 select-none italic">
-            — Empty Shelf Track (Drag & Drop Items Here) —
+          <div className={`w-full text-center text-stone-400 font-mono tracking-wide py-6 select-none italic ${compact ? "text-[10px]" : "text-[11px]"}`}>
+            {compact ? "— Empty —" : "— Empty Shelf Track (Drag & Drop Items Here) —"}
           </div>
         ) : (
           <>

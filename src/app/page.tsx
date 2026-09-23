@@ -34,16 +34,16 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  // Door states per cabinet
-  const [openDoorsState, setOpenDoorsState] = useState<Record<number, { upper: boolean; lower: boolean }>>({
+  // Door states per cabinet (supports independent 2-Door and 1-Door modules for Wall 2)
+  const [openDoorsState, setOpenDoorsState] = useState<Record<number, { upper: boolean; lower: boolean; upperSingle?: boolean; lowerSingle?: boolean }>>({
     1: { upper: true, lower: true },
     2: { upper: true, lower: true },
     3: { upper: true, lower: true },
     4: { upper: true, lower: true },
     5: { upper: true, lower: true },
     6: { upper: true, lower: true },
-    7: { upper: true, lower: true },
-    8: { upper: true, lower: true }
+    7: { upper: true, lower: true, upperSingle: true, lowerSingle: true },
+    8: { upper: true, lower: true, upperSingle: true, lowerSingle: true }
   });
 
   const [highlightedItem, setHighlightedItem] = useState<{ type: string; id: number } | null>(null);
@@ -123,13 +123,25 @@ export default function Home() {
       setSelectedWall("W1");
     }
 
-    setOpenDoorsState((prev) => ({
-      ...prev,
-      [result.cabinetNumber]: {
-        ...prev[result.cabinetNumber],
-        [result.section.toLowerCase()]: true
-      }
-    }));
+    setOpenDoorsState((prev) => {
+      const current = prev[result.cabinetNumber] || { upper: true, lower: true, upperSingle: true, lowerSingle: true };
+      const isSingle = result.shelfCode?.includes("1-Door");
+      const isUpper = result.section?.toLowerCase() === "upper";
+      return {
+        ...prev,
+        [result.cabinetNumber]: {
+          ...current,
+          [result.section.toLowerCase()]: true,
+          ...(isSingle
+            ? isUpper
+              ? { upperSingle: true }
+              : { lowerSingle: true }
+            : isUpper
+            ? { upper: true }
+            : { lower: true })
+        }
+      };
+    });
 
     setHighlightedItem({ type: result.type, id: result.id });
 
@@ -340,13 +352,24 @@ export default function Home() {
     );
   }
 
-  const areAllDoorsOpen = Object.values(openDoorsState).every((d) => d.upper && d.lower);
+  const areAllDoorsOpen = Object.values(openDoorsState).every(
+    (d) =>
+      d.upper &&
+      d.lower &&
+      (d.upperSingle === undefined || d.upperSingle) &&
+      (d.lowerSingle === undefined || d.lowerSingle)
+  );
 
   const handleToggleAllDoors = () => {
     const shouldOpen = !areAllDoorsOpen;
-    const newState: Record<number, { upper: boolean; lower: boolean }> = {};
+    const newState: Record<number, { upper: boolean; lower: boolean; upperSingle?: boolean; lowerSingle?: boolean }> = {};
     for (let i = 1; i <= 8; i++) {
-      newState[i] = { upper: shouldOpen, lower: shouldOpen };
+      newState[i] = {
+        upper: shouldOpen,
+        lower: shouldOpen,
+        upperSingle: shouldOpen,
+        lowerSingle: shouldOpen
+      };
     }
     setOpenDoorsState(newState);
   };

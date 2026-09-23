@@ -7,11 +7,18 @@ import { W2CabinetUnit } from "./W2CabinetUnit";
 import { ToiletDoor } from "./ToiletDoor";
 import { Layers } from "lucide-react";
 
+export type CabinetDoorState = {
+  upper: boolean;
+  lower: boolean;
+  upperSingle?: boolean;
+  lowerSingle?: boolean;
+};
+
 interface WallElevationProps {
   selectedWall?: WallId;
   cabinets: Cabinet[];
-  openDoorsState: Record<number, { upper: boolean; lower: boolean }>;
-  setOpenDoorsState: React.Dispatch<React.SetStateAction<Record<number, { upper: boolean; lower: boolean }>>>;
+  openDoorsState: Record<number, CabinetDoorState>;
+  setOpenDoorsState: React.Dispatch<React.SetStateAction<Record<number, CabinetDoorState>>>;
   highlightedItem?: { type: string; id: number } | null;
   onOpenMagazine: (magazine: Magazine) => void;
   onInspectFolder: (folder: Folder) => void;
@@ -34,29 +41,45 @@ const DEFAULT_W2_CABINETS: Cabinet[] = [
   {
     id: 7,
     cabinetNumber: 7,
-    name: "Cabinet 1",
+    name: "Cabinet 1 (W2)",
     description: "Wall 2 - 3-Door Unit 1",
     shelves: [
-      { id: 701, cabinetId: 7, section: "Upper", shelfCode: "U1", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
-      { id: 702, cabinetId: 7, section: "Upper", shelfCode: "U2", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
-      { id: 703, cabinetId: 7, section: "Upper", shelfCode: "U3", orderIndex: 3, magazines: [], folders: [], standaloneFiles: [] },
-      { id: 704, cabinetId: 7, section: "Upper", shelfCode: "U4", orderIndex: 4, magazines: [], folders: [], standaloneFiles: [] },
-      { id: 705, cabinetId: 7, section: "Lower", shelfCode: "L1", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
-      { id: 706, cabinetId: 7, section: "Lower", shelfCode: "L2", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
+      // 2-Door Section (Left)
+      { id: 43, cabinetId: 7, section: "Upper", shelfCode: "U1 (2-Door)", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 44, cabinetId: 7, section: "Upper", shelfCode: "U2 (2-Door)", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 45, cabinetId: 7, section: "Upper", shelfCode: "U3 (2-Door)", orderIndex: 3, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 46, cabinetId: 7, section: "Upper", shelfCode: "U4 (2-Door)", orderIndex: 4, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 47, cabinetId: 7, section: "Lower", shelfCode: "L1 (2-Door)", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 48, cabinetId: 7, section: "Lower", shelfCode: "L2 (2-Door)", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
+      // 1-Door Section (Right)
+      { id: 55, cabinetId: 7, section: "Upper", shelfCode: "U1 (1-Door)", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 56, cabinetId: 7, section: "Upper", shelfCode: "U2 (1-Door)", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 57, cabinetId: 7, section: "Upper", shelfCode: "U3 (1-Door)", orderIndex: 3, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 58, cabinetId: 7, section: "Upper", shelfCode: "U4 (1-Door)", orderIndex: 4, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 59, cabinetId: 7, section: "Lower", shelfCode: "L1 (1-Door)", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 60, cabinetId: 7, section: "Lower", shelfCode: "L2 (1-Door)", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
     ]
   },
   {
     id: 8,
     cabinetNumber: 8,
-    name: "Cabinet 2",
+    name: "Cabinet 2 (W2)",
     description: "Wall 2 - 3-Door Unit 2",
     shelves: [
-      { id: 801, cabinetId: 8, section: "Upper", shelfCode: "U1", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
-      { id: 802, cabinetId: 8, section: "Upper", shelfCode: "U2", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
-      { id: 803, cabinetId: 8, section: "Upper", shelfCode: "U3", orderIndex: 3, magazines: [], folders: [], standaloneFiles: [] },
-      { id: 804, cabinetId: 8, section: "Upper", shelfCode: "U4", orderIndex: 4, magazines: [], folders: [], standaloneFiles: [] },
-      { id: 805, cabinetId: 8, section: "Lower", shelfCode: "L1", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
-      { id: 806, cabinetId: 8, section: "Lower", shelfCode: "L2", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
+      // 1-Door Section (Left)
+      { id: 49, cabinetId: 8, section: "Upper", shelfCode: "U1 (1-Door)", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 50, cabinetId: 8, section: "Upper", shelfCode: "U2 (1-Door)", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 51, cabinetId: 8, section: "Upper", shelfCode: "U3 (1-Door)", orderIndex: 3, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 52, cabinetId: 8, section: "Upper", shelfCode: "U4 (1-Door)", orderIndex: 4, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 53, cabinetId: 8, section: "Lower", shelfCode: "L1 (1-Door)", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 54, cabinetId: 8, section: "Lower", shelfCode: "L2 (1-Door)", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
+      // 2-Door Section (Right)
+      { id: 61, cabinetId: 8, section: "Upper", shelfCode: "U1 (2-Door)", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 62, cabinetId: 8, section: "Upper", shelfCode: "U2 (2-Door)", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 63, cabinetId: 8, section: "Upper", shelfCode: "U3 (2-Door)", orderIndex: 3, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 64, cabinetId: 8, section: "Upper", shelfCode: "U4 (2-Door)", orderIndex: 4, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 65, cabinetId: 8, section: "Lower", shelfCode: "L1 (2-Door)", orderIndex: 1, magazines: [], folders: [], standaloneFiles: [] },
+      { id: 66, cabinetId: 8, section: "Lower", shelfCode: "L2 (2-Door)", orderIndex: 2, magazines: [], folders: [], standaloneFiles: [] },
     ]
   }
 ];
@@ -83,12 +106,22 @@ export const WallElevation: React.FC<WallElevationProps> = ({
     const cab1 = cabinets.find((c) => c.cabinetNumber === 7) || DEFAULT_W2_CABINETS[0];
     const cab2 = cabinets.find((c) => c.cabinetNumber === 8) || DEFAULT_W2_CABINETS[1];
 
-    const doorState1 = openDoorsState[7] || { upper: true, lower: true };
-    const doorState2 = openDoorsState[8] || { upper: true, lower: true };
+    const doorState1 = openDoorsState[7] || { upper: true, lower: true, upperSingle: true, lowerSingle: true };
+    const doorState2 = openDoorsState[8] || { upper: true, lower: true, upperSingle: true, lowerSingle: true };
+
+    const upper1Double = doorState1.upper;
+    const upper1Single = doorState1.upperSingle ?? doorState1.upper;
+    const lower1Double = doorState1.lower;
+    const lower1Single = doorState1.lowerSingle ?? doorState1.lower;
+
+    const upper2Double = doorState2.upper;
+    const upper2Single = doorState2.upperSingle ?? doorState2.upper;
+    const lower2Double = doorState2.lower;
+    const lower2Single = doorState2.lowerSingle ?? doorState2.lower;
 
     return (
       <div className="flex-1 flex flex-col h-full overflow-hidden bg-white">
-        {/* Wall 2 Elevation Canvas - Centered with Restroom Door */}
+        {/* Wall 2 Elevation Canvas - Centered with Toilet Door */}
         <div
           ref={wallScrollRef}
           className="flex-1 overflow-x-auto overflow-y-auto p-6 md:p-8 flex items-center justify-center bg-stone-50/30 scroll-smooth"
@@ -103,23 +136,43 @@ export const WallElevation: React.FC<WallElevationProps> = ({
                 name: "Cabinet 1 (W2)"
               }}
               variant="3door-left-double"
-              isUpperOpen={doorState1.upper}
-              isLowerOpen={doorState1.lower}
-              onToggleUpper={() =>
+              isUpperDoubleOpen={upper1Double}
+              isUpperSingleOpen={upper1Single}
+              isLowerDoubleOpen={lower1Double}
+              isLowerSingleOpen={lower1Single}
+              onToggleUpperDouble={() =>
                 setOpenDoorsState((prev) => ({
                   ...prev,
                   7: {
-                    ...doorState1,
-                    upper: !doorState1.upper
+                    ...prev[7],
+                    upper: !upper1Double
                   }
                 }))
               }
-              onToggleLower={() =>
+              onToggleUpperSingle={() =>
                 setOpenDoorsState((prev) => ({
                   ...prev,
                   7: {
-                    ...doorState1,
-                    lower: !doorState1.lower
+                    ...prev[7],
+                    upperSingle: !upper1Single
+                  }
+                }))
+              }
+              onToggleLowerDouble={() =>
+                setOpenDoorsState((prev) => ({
+                  ...prev,
+                  7: {
+                    ...prev[7],
+                    lower: !lower1Double
+                  }
+                }))
+              }
+              onToggleLowerSingle={() =>
+                setOpenDoorsState((prev) => ({
+                  ...prev,
+                  7: {
+                    ...prev[7],
+                    lowerSingle: !lower1Single
                   }
                 }))
               }
@@ -134,7 +187,7 @@ export const WallElevation: React.FC<WallElevationProps> = ({
               onReorderShelf={onReorderShelf}
             />
 
-            {/* Toilet / Restroom Short Door (Right-Handed Handle, Non-opening) */}
+            {/* Toilet / Restroom Door (Right-Handed Handle, Non-opening) */}
             <ToiletDoor />
 
             {/* Cabinet 2 (W2): Single door Left + Double door Right */}
@@ -145,23 +198,43 @@ export const WallElevation: React.FC<WallElevationProps> = ({
                 name: "Cabinet 2 (W2)"
               }}
               variant="3door-right-double"
-              isUpperOpen={doorState2.upper}
-              isLowerOpen={doorState2.lower}
-              onToggleUpper={() =>
+              isUpperDoubleOpen={upper2Double}
+              isUpperSingleOpen={upper2Single}
+              isLowerDoubleOpen={lower2Double}
+              isLowerSingleOpen={lower2Single}
+              onToggleUpperDouble={() =>
                 setOpenDoorsState((prev) => ({
                   ...prev,
                   8: {
-                    ...doorState2,
-                    upper: !doorState2.upper
+                    ...prev[8],
+                    upper: !upper2Double
                   }
                 }))
               }
-              onToggleLower={() =>
+              onToggleUpperSingle={() =>
                 setOpenDoorsState((prev) => ({
                   ...prev,
                   8: {
-                    ...doorState2,
-                    lower: !doorState2.lower
+                    ...prev[8],
+                    upperSingle: !upper2Single
+                  }
+                }))
+              }
+              onToggleLowerDouble={() =>
+                setOpenDoorsState((prev) => ({
+                  ...prev,
+                  8: {
+                    ...prev[8],
+                    lower: !lower2Double
+                  }
+                }))
+              }
+              onToggleLowerSingle={() =>
+                setOpenDoorsState((prev) => ({
+                  ...prev,
+                  8: {
+                    ...prev[8],
+                    lowerSingle: !lower2Single
                   }
                 }))
               }
@@ -210,7 +283,6 @@ export const WallElevation: React.FC<WallElevationProps> = ({
             </div>
             <h2 className="text-lg font-bold text-stone-800 mb-1">{info.name} is Empty</h2>
             <p className="text-sm text-stone-500 leading-relaxed">
-              No cabinets are installed on this wall yet. All 6 active archive cabinets are located on <strong className="text-stone-700 font-semibold">Wall 1 (W1)</strong>.
               No cabinets are installed on this wall yet. Active archive cabinets are located on <strong className="text-stone-700 font-semibold">Wall 1 (W1)</strong> and <strong className="text-stone-700 font-semibold">Wall 2 (W2)</strong>.
             </p>
           </div>
