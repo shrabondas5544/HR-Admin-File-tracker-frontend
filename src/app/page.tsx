@@ -9,7 +9,8 @@ import { ItemDetailModal } from "@/components/ItemDetailModal";
 import { MoveItemModal } from "@/components/MoveItemModal";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { TrashModal } from "@/components/TrashModal";
-import { Cabinet, FlatShelf, Magazine, Folder, RecordFile, DocumentType, SearchResult, WallId } from "@/lib/types";
+import { ArchiveModal } from "@/components/ArchiveModal";
+import { Cabinet, FlatShelf, Magazine, Folder, RecordFile, DocumentType, SearchResult, WallId, ArchiveHeldItem } from "@/lib/types";
 import {
   fetchCabinets,
   fetchFlatShelves,
@@ -51,6 +52,8 @@ export default function Home() {
   // Modals & Drawers
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isTrashOpen, setIsTrashOpen] = useState(false);
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+  const [archiveHeldItems, setArchiveHeldItems] = useState<ArchiveHeldItem[]>([]);
   const [activeMagazine, setActiveMagazine] = useState<Magazine | null>(null);
   const [detailItem, setDetailItem] = useState<{ type: "File" | "Folder"; data: RecordFile | Folder } | null>(null);
   const [movingItem, setMovingItem] = useState<{ type: "Magazine" | "Folder" | "File"; id: number } | null>(null);
@@ -112,7 +115,32 @@ export default function Home() {
 
   useEffect(() => {
     loadData(true);
+    try {
+      const stored = localStorage.getItem("cabinetmap_archive_held_items");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) setArchiveHeldItems(parsed);
+      }
+    } catch {}
   }, []);
+
+  // Filter out any items currently held in the Archive Transfer Box
+  const activeCabinets = React.useMemo(() => {
+    if (archiveHeldItems.length === 0) return cabinets;
+    const heldFileIds = new Set(archiveHeldItems.filter((i) => i.type === "File").map((i) => i.id));
+    const heldFolderIds = new Set(archiveHeldItems.filter((i) => i.type === "Folder").map((i) => i.id));
+    const heldMagIds = new Set(archiveHeldItems.filter((i) => i.type === "Magazine").map((i) => i.id));
+
+    return cabinets.map((cab) => ({
+      ...cab,
+      shelves: (cab.shelves || []).map((s) => ({
+        ...s,
+        magazines: (s.magazines || []).filter((m) => !heldMagIds.has(m.id)),
+        folders: (s.folders || []).filter((f) => !heldFolderIds.has(f.id)),
+        standaloneFiles: (s.standaloneFiles || []).filter((f) => !heldFileIds.has(f.id))
+      }))
+    }));
+  }, [cabinets, archiveHeldItems]);
 
   const allMagazines = cabinets.flatMap((c) => c.shelves || []).flatMap((s) => s.magazines || []);
 
@@ -200,6 +228,130 @@ export default function Home() {
     handleDeletePrompt(type, id, name, fileCount);
   };
 
+  // Drag to Archive Transfer Box Handler
+  const handleDropOnArchive = (type: "Magazine" | "Folder" | "File", id: number) => {
+    if (archiveHeldItems.some((it) => it.type === type && it.id === id)) {
+      setIsArchiveModalOpen(true);
+      return;
+    }
+
+    let title = `${type} #${id}`;
+    let code = `${type}-${id}`;
+    let colorHex = "#3b82f6";
+    let originShelfId: number | undefined = undefined;
+    let originLocationName = "";
+    let itemData: any = null;
+
+    if (type === "File") {
+      const file = cabinets
+        .flatMap((c) => c.shelves || [])
+        .flatMap((s) => [
+          ...(s.standaloneFiles || []),
+          ...(s.magazines || []).flatMap((m) => m.files || [])
+        ])
+        .find((f) => f.id === id);
+      if (file) {
+        title = file.title;
+        code = file.code;
+        originShelfId = file.shelfId;
+        itemData = file;
+      }
+    } else if (type === "Folder") {
+      const folder = cabinets
+        .flatMap((c) => c.shelves || [])
+        .flatMap((s) => s.folders || [])
+        .find((f) => f.id === id);
+      if (folder) {
+        title = folder.name;
+        code = folder.code;
+        colorHex = folder.colorHex;
+        originShelfId = folder.shelfId;
+        itemData = folder;
+      }
+    } else if (type === "Magazine") {
+      const mag = cabinets
+        .flatMap((c) => c.shelves || [])
+        .flatMap((s) => s.magazines || [])
+        .find((m) => m.id === id);
+      if (mag) {
+        title = mag.name;
+        code = mag.code;
+        colorHex = mag.colorHex;
+        originShelfId = mag.shelfId;
+        itemData = mag;
+      }
+    }
+
+    if (originShelfId) {
+      const originShelf = flatShelves.find((s) => s.id === originShelfId);
+      if (originShelf) {
+        originLocationName = originShelf.displayName;
+      }
+    }
+
+    const newItem: ArchiveHeldItem = {
+      type,
+      id,
+      title,
+      code,
+      colorHex,
+      originShelfId,
+      originLocationName,
+      itemData: itemData || { id, code, title },
+      heldAt: new Date().toISOString()
+    };
+
+    setArchiveHeldItems((prev) => {
+      const updated = [newItem, ...prev];
+      try {
+        localStorage.setItem("cabinetmap_archive_held_items", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  const handlePlaceFromArchive = async (item: ArchiveHeldItem, targetShelfId: number) => {
+    if (item.type === "File") {
+      await moveFile(item.id, { targetShelfId });
+    } else if (item.type === "Folder") {
+      await moveFolder(item.id, { targetShelfId });
+    } else if (item.type === "Magazine") {
+      await moveMagazine(item.id, { targetShelfId });
+    }
+
+    setArchiveHeldItems((prev) => {
+      const updated = prev.filter((it) => !(it.type === item.type && it.id === item.id));
+      try {
+        localStorage.setItem("cabinetmap_archive_held_items", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
+    await loadData();
+  };
+
+  const handleReturnFromArchive = async (item: ArchiveHeldItem) => {
+    if (item.originShelfId) {
+      if (item.type === "File") {
+        await moveFile(item.id, { targetShelfId: item.originShelfId });
+      } else if (item.type === "Folder") {
+        await moveFolder(item.id, { targetShelfId: item.originShelfId });
+      } else if (item.type === "Magazine") {
+        await moveMagazine(item.id, { targetShelfId: item.originShelfId });
+      }
+    }
+
+    setArchiveHeldItems((prev) => {
+      const updated = prev.filter((it) => !(it.type === item.type && it.id === item.id));
+      try {
+        localStorage.setItem("cabinetmap_archive_held_items", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
+    await loadData();
+  };
+
   // Drag & Drop Handlers
   const handleDropOnShelf = async (e: React.DragEvent, shelfId: number, targetIndex?: number) => {
     const rawData = e.dataTransfer.getData("application/json");
@@ -215,6 +367,18 @@ export default function Home() {
       } else if (parsed.type === "Magazine") {
         await moveMagazine(parsed.id, { targetShelfId: shelfId, orderIndex: targetOrderIndex });
       }
+
+      // If dragged from Archive Transfer Box, remove from held list
+      if (parsed.fromArchive || archiveHeldItems.some((it) => it.type === parsed.type && it.id === parsed.id)) {
+        setArchiveHeldItems((prev) => {
+          const updated = prev.filter((it) => !(it.type === parsed.type && it.id === parsed.id));
+          try {
+            localStorage.setItem("cabinetmap_archive_held_items", JSON.stringify(updated));
+          } catch {}
+          return updated;
+        });
+      }
+
       await loadData();
     } catch (err) {
       console.error("Drop failed:", err);
@@ -382,6 +546,9 @@ export default function Home() {
         onOpenSidebar={() => setIsSidebarOpen(true)}
         onOpenTrash={() => setIsTrashOpen(true)}
         onDropTrash={handleDropOnTrash}
+        onOpenArchive={() => setIsArchiveModalOpen(true)}
+        onDropArchive={handleDropOnArchive}
+        archiveCount={archiveHeldItems.length}
         refreshTrigger={refreshTrigger}
         allDoorsOpen={areAllDoorsOpen}
         onToggleAllDoors={handleToggleAllDoors}
@@ -408,7 +575,7 @@ export default function Home() {
       {/* Main Interactive Wall Elevation with Drag & Drop */}
       <WallElevation
         selectedWall={selectedWall}
-        cabinets={cabinets}
+        cabinets={activeCabinets}
         openDoorsState={openDoorsState}
         setOpenDoorsState={setOpenDoorsState}
         highlightedItem={highlightedItem}
@@ -516,6 +683,16 @@ export default function Home() {
         isOpen={isTrashOpen}
         onClose={() => setIsTrashOpen(false)}
         onItemRestored={loadData}
+      />
+
+      {/* Archive Transfer Box Modal / Drawer */}
+      <ArchiveModal
+        isOpen={isArchiveModalOpen}
+        onClose={() => setIsArchiveModalOpen(false)}
+        items={archiveHeldItems}
+        flatShelves={flatShelves}
+        onPlaceItem={handlePlaceFromArchive}
+        onReturnItem={handleReturnFromArchive}
       />
     </main>
   );

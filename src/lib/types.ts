@@ -131,6 +131,18 @@ export interface TrashItem {
   originalLocation: string;
 }
 
+export interface ArchiveHeldItem {
+  type: "File" | "Magazine" | "Folder";
+  id: number;
+  title: string;
+  code: string;
+  colorHex?: string;
+  originShelfId?: number;
+  originLocationName?: string;
+  itemData: RecordFile | Magazine | Folder;
+  heldAt: string;
+}
+
 export interface ChecklistSubItem {
   name: string;
   checked: boolean;

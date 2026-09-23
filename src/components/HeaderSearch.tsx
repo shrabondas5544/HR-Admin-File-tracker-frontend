@@ -5,11 +5,34 @@ import { Search, MapPin, FileText, Folder as FolderIcon, Box, X, Loader2, Sparkl
 import { searchArchive, fetchTrash } from "@/lib/api";
 import { SearchResult, WallId, WALL_OPTIONS } from "@/lib/types";
 
+// Custom Archive Storage Box Icon matching real archive transfer box
+const ArchiveBoxIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    {/* Lid */}
+    <rect x="2.5" y="3" width="19" height="5" rx="1.5" />
+    {/* Box Body */}
+    <path d="M4.5 8v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V8" />
+    {/* Center Handle Slot */}
+    <rect x="9.5" y="12" width="5" height="2" rx="1" strokeWidth="1.5" fill="currentColor" />
+  </svg>
+);
+
 interface HeaderSearchProps {
   onSelectResult: (result: SearchResult) => void;
   onOpenSidebar: () => void;
   onOpenTrash: () => void;
   onDropTrash?: (type: "Magazine" | "Folder" | "File", id: number) => void;
+  onOpenArchive: () => void;
+  onDropArchive?: (type: "Magazine" | "Folder" | "File", id: number) => void;
+  archiveCount?: number;
   refreshTrigger?: number;
   allDoorsOpen?: boolean;
   onToggleAllDoors?: () => void;
@@ -22,12 +45,16 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
   onOpenSidebar,
   onOpenTrash,
   onDropTrash,
+  onOpenArchive,
+  onDropArchive,
+  archiveCount = 0,
   refreshTrigger,
   allDoorsOpen = true,
   onToggleAllDoors,
   selectedWall = "W1",
   onSelectWall
 }) => {
+  const [isDragOverArchive, setIsDragOverArchive] = useState(false);
   const [isDragOverTrash, setIsDragOverTrash] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -199,8 +226,70 @@ export const HeaderSearch: React.FC<HeaderSearchProps> = ({
           )}
         </div>
 
-        {/* Action Buttons: Trash (Icon + Count only), Door Toggle Icon, & Add Record */}
+        {/* Action Buttons: Archive Box, Trash (Icon + Count only), Door Toggle Icon, & Add Record */}
         <div className="flex items-center gap-2.5 shrink-0">
+          {/* Archive Transfer Box (Drop Target for Wall-to-Wall Item Transfer) */}
+          <button
+            onClick={onOpenArchive}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+              setIsDragOverArchive(true);
+            }}
+            onDragLeave={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                setIsDragOverArchive(false);
+              }
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragOverArchive(false);
+              const rawData = e.dataTransfer.getData("application/json");
+              if (!rawData) return;
+              try {
+                const parsed = JSON.parse(rawData);
+                if (parsed.type && parsed.id && onDropArchive) {
+                  onDropArchive(parsed.type, parsed.id);
+                }
+              } catch (err) {
+                console.error("Drop to archive failed:", err);
+              }
+            }}
+            title={
+              isDragOverArchive
+                ? "Drop here to Hold in Archive Transfer Box"
+                : `Archive Transfer Box (${archiveCount} held) • Drag items here to transfer between walls`
+            }
+            className={`flex items-center gap-1.5 px-2.5 py-2 font-semibold text-xs rounded-xl border shadow-2xs transition-all cursor-pointer ${
+              isDragOverArchive
+                ? "bg-amber-600 text-white border-amber-700 ring-4 ring-amber-300 scale-110 shadow-lg animate-pulse"
+                : archiveCount > 0
+                ? "bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300 ring-1 ring-amber-400/40"
+                : "bg-stone-50 hover:bg-stone-100 text-stone-700 border-stone-200"
+            }`}
+          >
+            <ArchiveBoxIcon
+              className={`w-4 h-4 ${
+                isDragOverArchive
+                  ? "text-white animate-bounce"
+                  : archiveCount > 0
+                  ? "text-amber-700"
+                  : "text-stone-600"
+              }`}
+            />
+            {isDragOverArchive ? (
+              <span className="font-bold text-[10px] uppercase tracking-wider text-white">Drop to Archive</span>
+            ) : (
+              <span
+                className={`px-1.5 py-0.5 font-mono text-[10px] font-bold rounded-full ${
+                  archiveCount > 0 ? "bg-amber-600 text-white" : "bg-stone-200 text-stone-600"
+                }`}
+              >
+                {archiveCount}
+              </span>
+            )}
+          </button>
+
           {/* Trash Icon + Count (Drop Target for Deletion) */}
           <button
             onClick={onOpenTrash}
