@@ -97,7 +97,7 @@ export async function fetchDocumentTypes(): Promise<DocumentType[]> {
 export async function createDocumentType(data: { name: string; description: string; fieldsJson: string }): Promise<DocumentType> {
   const res = await fetch(`${API_BASE}/api/documenttypes`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(data)
   });
   if (!res.ok) {
@@ -386,16 +386,17 @@ export async function loginUser(payload: LoginPayload): Promise<AuthResponse> {
   return res.json();
 }
 
-export async function changePassword(payload: ChangePasswordPayload): Promise<void> {
+export async function changePassword(payload: ChangePasswordPayload): Promise<{ message: string }> {
   const res = await fetch(`${API_BASE}/api/auth/change-password`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(payload)
   });
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ message: "Password change failed" }));
-    throw new Error(err.message || "Password change failed");
+    const err = await res.json().catch(() => ({ message: "Change password failed" }));
+    throw new Error(err.message || "Change password failed");
   }
+  return res.json();
 }
 
 export async function forgotPassword(payload: ForgotPasswordPayload): Promise<{ message: string; resetCode?: string }> {
@@ -405,42 +406,43 @@ export async function forgotPassword(payload: ForgotPasswordPayload): Promise<{ 
     body: JSON.stringify(payload)
   });
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ message: "Password reset request failed" }));
-    throw new Error(err.message || "Password reset request failed");
+    const err = await res.json().catch(() => ({ message: "Forgot password request failed" }));
+    throw new Error(err.message || "Forgot password request failed");
   }
   return res.json();
 }
 
-export async function resetPassword(payload: ResetPasswordPayload): Promise<void> {
+export async function resetPassword(payload: ResetPasswordPayload): Promise<{ message: string }> {
   const res = await fetch(`${API_BASE}/api/auth/reset-password`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ message: "Reset password failed" }));
-    throw new Error(err.message || "Reset password failed");
+    const err = await res.json().catch(() => ({ message: "Password reset failed" }));
+    throw new Error(err.message || "Password reset failed");
   }
+  return res.json();
 }
 
 export async function fetchCurrentUser(): Promise<User> {
   const res = await fetch(`${API_BASE}/api/auth/me`, {
-    headers: getAuthHeaders(),
-    cache: "no-store"
+    headers: getAuthHeaders()
   });
-  if (!res.ok) throw new Error("Failed to fetch current user profile");
+  if (!res.ok) throw new Error("Failed to fetch user");
   return res.json();
 }
 
-// Activity Logs (Audit Trail) API Endpoint
-export async function fetchActivityLogs(search?: string, actionType?: string): Promise<ActivityLog[]> {
+// Activity Audit Log API Endpoints
+export async function fetchActivityLogs(search?: string, actionType?: string, limit: number = 100): Promise<ActivityLog[]> {
   const params = new URLSearchParams();
-  if (search) params.append("search", search);
-  if (actionType) params.append("actionType", actionType);
+  if (search && search.trim()) params.append("search", search.trim());
+  if (actionType && actionType.trim()) params.append("actionType", actionType.trim());
+  if (limit) params.append("limit", String(limit));
 
   const res = await fetch(`${API_BASE}/api/activitylogs?${params.toString()}`, {
-    headers: getAuthHeaders(),
-    cache: "no-store"
+    cache: "no-store",
+    headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error("Failed to fetch activity logs");
   return res.json();
