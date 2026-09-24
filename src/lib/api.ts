@@ -98,7 +98,7 @@ export async function createFile(payload: {
 }): Promise<RecordFile> {
   const res = await fetch(`${API_BASE}/api/files`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(payload)
   });
   if (!res.ok) {
@@ -121,7 +121,7 @@ export async function updateFile(id: number, payload: {
 }): Promise<RecordFile> {
   const res = await fetch(`${API_BASE}/api/files/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(payload)
   });
   if (!res.ok) {
@@ -133,7 +133,8 @@ export async function updateFile(id: number, payload: {
 
 export async function deleteFile(id: number): Promise<void> {
   const res = await fetch(`${API_BASE}/api/files/${id}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error("Failed to delete file");
 }
@@ -141,7 +142,7 @@ export async function deleteFile(id: number): Promise<void> {
 export async function moveFile(id: number, target: { targetShelfId?: number; targetMagazineId?: number; orderIndex?: number }): Promise<RecordFile> {
   const res = await fetch(`${API_BASE}/api/files/${id}/move`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(target)
   });
   if (!res.ok) throw new Error("Failed to move file");
@@ -151,7 +152,7 @@ export async function moveFile(id: number, target: { targetShelfId?: number; tar
 export async function moveMagazine(id: number, target: { targetShelfId?: number; orderIndex?: number }): Promise<Magazine> {
   const res = await fetch(`${API_BASE}/api/magazines/${id}/move`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(target)
   });
   if (!res.ok) throw new Error("Failed to move magazine");
@@ -161,7 +162,7 @@ export async function moveMagazine(id: number, target: { targetShelfId?: number;
 export async function moveFolder(id: number, target: { targetShelfId?: number; orderIndex?: number }): Promise<Folder> {
   const res = await fetch(`${API_BASE}/api/folders/${id}/move`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(target)
   });
   if (!res.ok) throw new Error("Failed to move folder");
@@ -174,7 +175,7 @@ export async function reorderShelfItems(
 ): Promise<void> {
   const res = await fetch(`${API_BASE}/api/cabinets/shelves/${shelfId}/reorder`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify({ items })
   });
   if (!res.ok) {
@@ -191,7 +192,7 @@ export async function createMagazine(payload: {
 }): Promise<Magazine> {
   const res = await fetch(`${API_BASE}/api/magazines`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(payload)
   });
   if (!res.ok) {
@@ -209,7 +210,7 @@ export async function updateMagazine(id: number, payload: {
 }): Promise<Magazine> {
   const res = await fetch(`${API_BASE}/api/magazines/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(payload)
   });
   if (!res.ok) {
@@ -221,7 +222,8 @@ export async function updateMagazine(id: number, payload: {
 
 export async function deleteMagazine(id: number, deleteContents: boolean = true): Promise<void> {
   const res = await fetch(`${API_BASE}/api/magazines/${id}?deleteContents=${deleteContents}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error("Failed to delete magazine");
 }
@@ -237,7 +239,7 @@ export async function createFolder(payload: {
 }): Promise<Folder> {
   const res = await fetch(`${API_BASE}/api/folders`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(payload)
   });
   if (!res.ok) {
@@ -258,7 +260,7 @@ export async function updateFolder(id: number, payload: {
 }): Promise<Folder> {
   const res = await fetch(`${API_BASE}/api/folders/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify(payload)
   });
   if (!res.ok) {
@@ -270,7 +272,8 @@ export async function updateFolder(id: number, payload: {
 
 export async function deleteFolder(id: number): Promise<void> {
   const res = await fetch(`${API_BASE}/api/folders/${id}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error("Failed to delete folder");
 }
@@ -280,6 +283,7 @@ export async function uploadAttachment(file: globalThis.File): Promise<{ url: st
   formData.append("file", file);
   const res = await fetch(`${API_BASE}/api/attachments/upload`, {
     method: "POST",
+    headers: getAuthHeaders(),
     body: formData
   });
   if (!res.ok) throw new Error("Failed to upload file");
@@ -301,14 +305,16 @@ export async function fetchTrash(): Promise<TrashItem[]> {
 
 export async function restoreTrashItem(type: string, id: number): Promise<void> {
   const res = await fetch(`${API_BASE}/api/trash/restore/${type}/${id}`, {
-    method: "POST"
+    method: "POST",
+    headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error("Failed to restore item");
 }
 
 export async function permanentlyDeleteTrashItem(type: string, id: number): Promise<void> {
   const res = await fetch(`${API_BASE}/api/trash/permanent/${type}/${id}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error("Failed to permanently delete item");
 }
