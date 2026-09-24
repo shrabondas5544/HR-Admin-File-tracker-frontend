@@ -30,15 +30,44 @@ export function getAuthHeaders(): Record<string, string> {
     if (userStr) {
       try {
         const u = JSON.parse(userStr);
-        if (u.id) headers["X-User-Id"] = String(u.id);
-        if (u.fullName) headers["X-User-Name"] = u.fullName;
-        if (u.email) headers["X-User-Email"] = u.email;
-        if (u.designation) headers["X-User-Designation"] = u.designation;
-        if (u.gender) headers["X-User-Gender"] = u.gender;
+        const id = u.id ?? u.Id;
+        const name = u.fullName || u.FullName || u.name || u.userName;
+        const email = u.email || u.Email;
+        const desig = u.designation || u.Designation;
+        const gender = u.gender || u.Gender;
+
+        if (id) headers["X-User-Id"] = String(id);
+        if (name) headers["X-User-Name"] = encodeURIComponent(String(name));
+        if (email) headers["X-User-Email"] = encodeURIComponent(String(email));
+        if (desig) headers["X-User-Designation"] = encodeURIComponent(String(desig));
+        if (gender) headers["X-User-Gender"] = String(gender);
       } catch {}
     }
   }
   return headers;
+}
+
+export function getUserPayload(): { userName?: string; userEmail?: string; userDesignation?: string; userGender?: string } {
+  if (typeof window !== "undefined") {
+    const userStr = localStorage.getItem("cabinetmap_user");
+    if (userStr) {
+      try {
+        const u = JSON.parse(userStr);
+        const name = u.fullName || u.FullName || u.name || u.userName;
+        const email = u.email || u.Email;
+        const desig = u.designation || u.Designation;
+        const gender = u.gender || u.Gender;
+
+        return {
+          userName: name ? String(name) : undefined,
+          userEmail: email ? String(email) : undefined,
+          userDesignation: desig ? String(desig) : undefined,
+          userGender: gender ? String(gender) : "Male"
+        };
+      } catch {}
+    }
+  }
+  return {};
 }
 
 export async function fetchCabinets(): Promise<Cabinet[]> {
@@ -140,30 +169,33 @@ export async function deleteFile(id: number): Promise<void> {
 }
 
 export async function moveFile(id: number, target: { targetShelfId?: number; targetMagazineId?: number; orderIndex?: number }): Promise<RecordFile> {
+  const body = { ...target, ...getUserPayload() };
   const res = await fetch(`${API_BASE}/api/files/${id}/move`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-    body: JSON.stringify(target)
+    body: JSON.stringify(body)
   });
   if (!res.ok) throw new Error("Failed to move file");
   return res.json();
 }
 
 export async function moveMagazine(id: number, target: { targetShelfId?: number; orderIndex?: number }): Promise<Magazine> {
+  const body = { ...target, ...getUserPayload() };
   const res = await fetch(`${API_BASE}/api/magazines/${id}/move`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-    body: JSON.stringify(target)
+    body: JSON.stringify(body)
   });
   if (!res.ok) throw new Error("Failed to move magazine");
   return res.json();
 }
 
 export async function moveFolder(id: number, target: { targetShelfId?: number; orderIndex?: number }): Promise<Folder> {
+  const body = { ...target, ...getUserPayload() };
   const res = await fetch(`${API_BASE}/api/folders/${id}/move`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-    body: JSON.stringify(target)
+    body: JSON.stringify(body)
   });
   if (!res.ok) throw new Error("Failed to move folder");
   return res.json();
