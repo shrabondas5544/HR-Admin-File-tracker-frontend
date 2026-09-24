@@ -215,3 +215,62 @@ export const WALL_OPTIONS: WallOption[] = [
   { id: "W3R", label: "W3R", fullName: "Wall 3 Right" },
   { id: "W3L", label: "W3L", fullName: "Wall 3 Left" },
 ];
+
+export type GenderType = "Male" | "Female" | "Other";
+
+export interface User {
+  id: number;
+  fullName: string;
+  email: string;
+  designation: string;
+  gender: GenderType;
+  role: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: User;
+}
+
+export interface ActivityLog {
+  id: number;
+  userId?: number;
+  userName: string;
+  userEmail: string;
+  userDesignation: string;
+  userGender: GenderType;
+  actionType: string;
+  entityType: string;
+  entityId?: number;
+  entityTitle: string;
+  details: string;
+  timestamp: string;
+}
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export interface RegisterPayload {
+  fullName: string;
+  email: string;
+  password: string;
+  designation: string;
+  gender: GenderType;
+}
+
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  email: string;
+  resetCode: string;
+  newPassword: string;
+}

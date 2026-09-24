@@ -10,6 +10,9 @@ import { MoveItemModal } from "@/components/MoveItemModal";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { TrashModal } from "@/components/TrashModal";
 import { ArchiveModal } from "@/components/ArchiveModal";
+import { AuthModal } from "@/components/AuthModal";
+import { ActivityLogModal } from "@/components/ActivityLogModal";
+import { AuthProvider } from "@/context/AuthContext";
 import { Cabinet, FlatShelf, Magazine, Folder, RecordFile, DocumentType, SearchResult, WallId, ArchiveHeldItem } from "@/lib/types";
 import {
   fetchCabinets,
@@ -27,7 +30,7 @@ import {
 } from "@/lib/api";
 import { Loader2 } from "lucide-react";
 
-export default function Home() {
+function MainApp() {
   const [selectedWall, setSelectedWall] = useState<WallId>("W1");
   const [cabinets, setCabinets] = useState<Cabinet[]>([]);
   const [flatShelves, setFlatShelves] = useState<FlatShelf[]>([]);
@@ -49,10 +52,12 @@ export default function Home() {
 
   const [highlightedItem, setHighlightedItem] = useState<{ type: string; id: number } | null>(null);
 
-  // Modals & Drawers
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isTrashOpen, setIsTrashOpen] = useState(false);
   const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<"signin" | "register" | "changepassword">("signin");
+  const [isActivityLogModalOpen, setIsActivityLogModalOpen] = useState(false);
   const [archiveHeldItems, setArchiveHeldItems] = useState<ArchiveHeldItem[]>([]);
   const [activeMagazine, setActiveMagazine] = useState<Magazine | null>(null);
   const [detailItem, setDetailItem] = useState<{ type: "File" | "Folder"; data: RecordFile | Folder } | null>(null);
@@ -554,6 +559,11 @@ export default function Home() {
         onToggleAllDoors={handleToggleAllDoors}
         selectedWall={selectedWall}
         onSelectWall={setSelectedWall}
+        onOpenActivityLogs={() => setIsActivityLogModalOpen(true)}
+        onOpenAuthModal={(mode) => {
+          setAuthModalMode(mode || "signin");
+          setIsAuthModalOpen(true);
+        }}
       />
 
       {/* Backend Disconnection Banner */}
@@ -695,6 +705,27 @@ export default function Home() {
         onPlaceItem={handlePlaceFromArchive}
         onReturnItem={handleReturnFromArchive}
       />
+
+      {/* User Authentication Modal (Sign In / Register / Password Reset / Change Password) */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        initialMode={authModalMode}
+      />
+
+      {/* Audit Activity History Log Modal */}
+      <ActivityLogModal
+        isOpen={isActivityLogModalOpen}
+        onClose={() => setIsActivityLogModalOpen(false)}
+      />
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <AuthProvider>
+      <MainApp />
+    </AuthProvider>
   );
 }
